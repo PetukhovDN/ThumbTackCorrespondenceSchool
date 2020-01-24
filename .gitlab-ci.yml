@@ -1,0 +1,17 @@
+cache:
+  paths:
+    - .m2/
+variables:
+  MAVEN_CLI_OPTS: "--batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=true "
+  MAVEN_OPTS: "-Dmaven.repo.local=.m2"
+.compile_test: &compile_test
+  stage: build
+  script:
+    - 'mvn $MAVEN_CLI_OPTS clean compile test'
+# Validate merge requests using JDK8
+compile_test:jdk8:
+  <<: *compile_test
+  image: maven:3.6.3-jdk-11
+
+  tags:
+      - jdk_11
