@@ -95,8 +95,8 @@ public class Rectangle {
     }
 
     public void stretch(double xRatio, double yRatio) {
-        xRight = xLeft + (int) (getLength() * xRatio);
-        yBottom = yTop + (int) (getWidth() * yRatio);
+        xRight = xLeft + (int) (length * xRatio);
+        yBottom = yTop + (int) (width * yRatio);
     }
 
     public double getArea() {
