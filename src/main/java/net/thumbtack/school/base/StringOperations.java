@@ -1,5 +1,8 @@
 package net.thumbtack.school.base;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 public class StringOperations {
 
     public static int getSummaryLength(String[] strings) {
@@ -24,9 +27,11 @@ public class StringOperations {
     //Просмотр строк ведется от начала.
 
     public static boolean isSameLastCharPosition(String string1, String string2, char character) {
-        String reversedString1 = new StringBuffer(string1).reverse().toString();
-        String reversedString2 = new StringBuffer(string2).reverse().toString();
-        return reversedString1.indexOf(character) == reversedString2.indexOf(character);
+//        String reversedString1 = new StringBuffer(string1).reverse().toString();
+//        String reversedString2 = new StringBuffer(string2).reverse().toString();
+//        return reversedString1.indexOf(character) == reversedString2.indexOf(character);
+        return string1.lastIndexOf(character) == string2.lastIndexOf(character);
+
     }
     //Возвращает true, если в обеих строках первый встреченный символ character находится в одной и той же позиции.
     //Просмотр строк ведется от конца.
@@ -38,9 +43,11 @@ public class StringOperations {
     //Просмотр строк ведется от начала.
 
     public static boolean isSameLastStringPosition(String string1, String string2, String str) {
-        String reversedString1 = new StringBuffer(string1).reverse().toString();
-        String reversedString2 = new StringBuffer(string2).reverse().toString();
-        return reversedString1.indexOf(str) == reversedString2.indexOf(str);
+//        String reversedString1 = new StringBuffer(string1).reverse().toString();
+//        String reversedString2 = new StringBuffer(string2).reverse().toString();
+//        return reversedString1.indexOf(str) == reversedString2.indexOf(str);
+        return string1.lastIndexOf(str) == string2.lastIndexOf(str);
+
     }
     //Возвращает true, если в обеих строках первая встреченная подстрока str начинается в одной и той же позиции.
     //Просмотр строк ведется от конца.
@@ -69,28 +76,31 @@ public class StringOperations {
     //(например, строка “abc” меньше строки “ABCd” в этом смысле).
 
     public static String concat(String string1, String string2) {
-        return string1.concat(string2);
+//        return string1.concat(string2);
+        return string1 + string2;
     }
     //Возвращает строку, полученную путем сцепления двух строк.
 
     public static boolean isSamePrefix(String string1, String string2, String prefix) {
-        if (prefix.length() > string1.length() || prefix.length() > string2.length()) return false;
-        for (int i = 0; i < prefix.length(); i++) {
-            if (string1.charAt(i) != string2.charAt(i) || string1.charAt(i) != prefix.charAt(i)) return false;
-        }
-        return true;
+//        if (prefix.length() > string1.length() || prefix.length() > string2.length()) return false;
+//        for (int i = 0; i < prefix.length(); i++) {
+//            if (string1.charAt(i) != string2.charAt(i) || string1.charAt(i) != prefix.charAt(i)) return false;
+//        }
+//        return true;
+        return string1.startsWith(prefix) && string2.startsWith(prefix);
     }
     //Возвращает true, если обе строки string1 и string2 начинаются с одной и той же подстроки prefix.
 
     public static boolean isSameSuffix(String string1, String string2, String suffix) {
-        if (suffix.length() > string1.length() || suffix.length() > string2.length()) return false;
-        for (int i = 0; i < suffix.length(); i++) {
-            char c = string1.charAt(string1.length() - i - 1);
-            char c1 = string2.charAt(string2.length() - i - 1);
-            char c2 = suffix.charAt(suffix.length() - i - 1);
-            if (c != c1 || c != c2) return false;
-        }
-        return true;
+//        if (suffix.length() > string1.length() || suffix.length() > string2.length()) return false;
+//        for (int i = 0; i < suffix.length(); i++) {
+//            char c = string1.charAt(string1.length() - i - 1);
+//            char c1 = string2.charAt(string2.length() - i - 1);
+//            char c2 = suffix.charAt(suffix.length() - i - 1);
+//            if (c != c1 || c != c2) return false;
+//        }
+//        return true;
+        return string1.endsWith(suffix) && string2.endsWith(suffix);
     }
     //Возвращает true, если обе строки string1 и string2 заканчиваются одной и той же подстрокой suffix.
 
@@ -152,8 +162,8 @@ public class StringOperations {
         return string1.replace(replaceInStr1, replaceByInStr1).equals(string2.replace(replaceInStr2, replaceByInStr2));
 
     }
-    //Возвращает true, если после замены в string1 всех вхождений строки replceInStr1 на replaceByInStr1 и
-    //замены в string2 всех вхождений replceInStr2 на replaceByInStr2 полученные строки равны.
+    //Возвращает true, если после замены в string1 всех вхождений строки replaceInStr1 на replaceByInStr1 и
+    //замены в string2 всех вхождений replaceInStr2 на replaceByInStr2 полученные строки равны.
 
     public static boolean isPalindromeAfterRemovingSpacesIgnoreCase(String string) {
         String string2 = string.replace(" ", "");
@@ -167,40 +177,52 @@ public class StringOperations {
     //Возвращает true, если две строки равны, если не принимать во внимание все пробелы в начале и конце каждой строки.
 
     public static String makeCsvStringFromInts(int[] array) {
-        String[] strings = new String[array.length];
-        for (int i = 0; i < array.length; i++) {
-            strings[i] = String.valueOf(array[i]);
-        }
-        return String.join(",", strings);
+//        String[] strings = new String[array.length];
+//        for (int i = 0; i < array.length; i++) {
+//            strings[i] = String.valueOf(array[i]);
+//        }
+//        return String.join(",", strings);
+        return Arrays.stream(array)
+                .mapToObj(String::valueOf)
+                .collect(Collectors.joining(","));
     }
     //Для заданного массива целых чисел создает текстовую строку, в которой числа разделены знаком “запятая”
     //(т.н. формат CSV - comma separated values). Для пустого массива возвращается пустая строка.
 
     public static String makeCsvStringFromDoubles(double[] array) {
-        String[] strings = new String[array.length];
-        for (int i = 0; i < array.length; i++) {
-            strings[i] = String.format("%.2f", array[i]);
-        }
-        return String.join(",", strings);
+//        String[] strings = new String[array.length];
+//        for (int i = 0; i < array.length; i++) {
+//            strings[i] = String.format("%.2f", array[i]);
+//        }
+//        return String.join(",", strings);
+        return Arrays.stream(array)
+                .mapToObj(v -> String.format("%.2f", v))
+                .collect(Collectors.joining(","));
     }
     //Для заданного массива вещественных чисел создает текстовую строку, в которой числа разделены знаком “запятая”,
     //причем каждое число записывается с двумя знаками после точки. Для пустого массива возвращается пустая строка.
 
     public static StringBuilder makeCsvStringBuilderFromInts(int[] array) {
-        String[] strings = new String[array.length];
-        for (int i = 0; i < array.length; i++) {
-            strings[i] = String.valueOf(array[i]);
-        }
-        return new StringBuilder(String.join(",", strings));
+//        String[] strings = new String[array.length];
+//        for (int i = 0; i < array.length; i++) {
+//            strings[i] = String.valueOf(array[i]);
+//        }
+//        return new StringBuilder(String.join(",", strings));
+        return new StringBuilder(Arrays.stream(array)
+                .mapToObj(String::valueOf)
+                .collect(Collectors.joining(",")));
     }
     //То же, что и в упражнении 25, но возвращает StringBuilder.
 
     public static StringBuilder makeCsvStringBuilderFromDoubles(double[] array) {
-        String[] strings = new String[array.length];
-        for (int i = 0; i < array.length; i++) {
-            strings[i] = String.format("%.2f", array[i]);
-        }
-        return new StringBuilder(String.join(",", strings));
+//        String[] strings = new String[array.length];
+//        for (int i = 0; i < array.length; i++) {
+//            strings[i] = String.format("%.2f", array[i]);
+//        }
+//        return new StringBuilder(String.join(",", strings));
+        return new StringBuilder(Arrays.stream(array)
+                .mapToObj(v -> String.format("%.2f", v))
+                .collect(Collectors.joining(",")));
     }
     //То же, что и в упражнении 26, но возвращает StringBuilder.
 
