@@ -1,4 +1,3 @@
-/*
 package net.thumbtack.school.base;
 
 import org.junit.jupiter.api.Test;
@@ -360,4 +359,3 @@ public class TestStringOperations {
     }
 
 }
-*/
