@@ -7,8 +7,8 @@ public class Rectangle {
     private int yTop;
     private int xRight;
     private int yBottom;
-    private int length;
-    private int width;
+    private int length; // REVU Это значение можно вычислить, когда оно необходимо. Не нужно хранить его в поле класса.
+    private int width; // REVU Это значение можно вычислить, когда оно необходимо. Не нужно хранить его в поле класса.
 
     public int getLength() {
         return xRight - xLeft;
@@ -36,6 +36,10 @@ public class Rectangle {
         return new Point(xRight, yBottom);
     }
 
+    /*
+    REVU На мой взгляд, класс будет выглядеть аккуратнее,
+    если вы поместите конструкторы перед всеми остальными методами
+    */
     public Rectangle(Point topLeft, Point bottomRight) {
         this.xLeft = topLeft.getX();
         this.yTop = topLeft.getY();
@@ -43,7 +47,10 @@ public class Rectangle {
         this.yBottom = bottomRight.getY();
     }
 
-
+    /*
+     REVU Используйте только один конструктор, который присваивает значения полям.
+     Другие конструкторы должны вызывать его с помощью this(параметры);
+     */
     public Rectangle(int xLeft, int yTop, int xRight, int yBottom) {
         this.xLeft = xLeft;
         this.yTop = yTop;
@@ -111,7 +118,7 @@ public class Rectangle {
         return x <= xRight && x >= xLeft && y <= yBottom && y >= yTop;
     }
 
-    public boolean isInside(Point point) {
+    public boolean isInside(Point point) { // REVU Переиспользуйте уже реализованные методы
         return point.getX() <= xRight
                 && point.getX() >= xLeft
                 && point.getY() <= yBottom
@@ -119,9 +126,13 @@ public class Rectangle {
     }
 
     public boolean isIntersects(Rectangle rectangle) {
+        /*
+        REVU Подумайте, как можно реализовать проверку без циклов, используя только
+        значения координат.
+        */
         for (int i = rectangle.xLeft; i < rectangle.xRight ; i++) {
             for (int j = rectangle.yTop; j < rectangle.yBottom; j++) {
-                if (isInside(i,j)) return true;
+                if (isInside(i,j)) return true; // REVU Всегда используйте скобки {} в оформлении условий
             }
         }
         return false;

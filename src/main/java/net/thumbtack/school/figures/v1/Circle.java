@@ -80,7 +80,7 @@ public class Circle {
         return Math.sqrt(Math.pow(x - xCenter, 2) + Math.pow(y - yCenter, 2)) <= radius;
     }
 
-    public boolean isInside(Point point) {
+    public boolean isInside(Point point) { // REVU Переиспользуйте уже реализованные методы
         return Math.sqrt(Math.pow(point.getX() - xCenter, 2) + Math.pow(point.getY() - yCenter, 2)) <= radius;
     }
 
