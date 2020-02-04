@@ -8,13 +8,6 @@ public class Ellipse {
     private int xAxis;
     private int yAxis;
 
-    public Ellipse(Point center, int xAxis, int yAxis) {
-        this.xCenter = center.getX();
-        this.yCenter = center.getY();
-        this.xAxis = xAxis;
-        this.yAxis = yAxis;
-    }
-
     public Ellipse(int xCenter, int yCenter, int xAxis, int yAxis) {
         this.xCenter = xCenter;
         this.yCenter = yCenter;
@@ -22,18 +15,16 @@ public class Ellipse {
         this.yAxis = yAxis;
     }
 
+    public Ellipse(Point center, int xAxis, int yAxis) {
+        this(center.getX(), center.getY(), xAxis, yAxis);
+    }
+
     public Ellipse(int xAxis, int yAxis) {
-        this.xCenter = 0;
-        this.yCenter = 0;
-        this.xAxis = xAxis;
-        this.yAxis = yAxis;
+        this(0, 0, xAxis, yAxis);
     }
 
     public Ellipse() {
-        this.xCenter = 0;
-        this.yCenter = 0;
-        this.xAxis = 1;
-        this.yAxis = 1;
+        this(0, 0, 1, 1);
     }
 
     public Point getCenter() {
@@ -98,13 +89,12 @@ public class Ellipse {
     public boolean isInside(int x, int y) {
         // REVU Здесь вы получаете предупреждение о целочисленном делении в контексте операций с плавающей запятой.
         // Будет ли метод работать корректно для нечётных значений xAxis и yAxis?
-        return Math.pow(x - xCenter, 2) / Math.pow(xAxis / 2, 2)
-                + Math.pow(y - yCenter, 2) / Math.pow(yAxis / 2, 2) <= 1;
+        return Math.pow(x - xCenter, 2) / Math.pow(xAxis / 2.0, 2)
+                + Math.pow(y - yCenter, 2) / Math.pow(yAxis / 2.0, 2) <= 1;
     }
 
     public boolean isInside(Point point) { // REVU Переиспользуйте уже реализованные методы
-        return Math.pow(point.getX() - xCenter, 2) / Math.pow(xAxis / 2.0, 2)
-                + Math.pow(point.getY() - yCenter, 2) / Math.pow(yAxis / 2.0, 2) <= 1;
+        return isInside(point.getX(), point.getY());
     }
 
     @Override

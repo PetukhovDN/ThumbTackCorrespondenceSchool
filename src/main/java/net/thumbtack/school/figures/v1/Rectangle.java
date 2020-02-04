@@ -7,8 +7,35 @@ public class Rectangle {
     private int yTop;
     private int xRight;
     private int yBottom;
-    private int length; // REVU Это значение можно вычислить, когда оно необходимо. Не нужно хранить его в поле класса.
-    private int width; // REVU Это значение можно вычислить, когда оно необходимо. Не нужно хранить его в поле класса.
+    //private int length; // REVU Это значение можно вычислить, когда оно необходимо. Не нужно хранить его в поле класса.
+    //private int width; // REVU Это значение можно вычислить, когда оно необходимо. Не нужно хранить его в поле класса.
+
+    //REVU На мой взгляд, класс будет выглядеть аккуратнее,
+    //если вы поместите конструкторы перед всеми остальными методами
+
+    public Rectangle(int xLeft, int yTop, int xRight, int yBottom) {
+        this.xLeft = xLeft;
+        this.yTop = yTop;
+        this.xRight = xRight;
+        this.yBottom = yBottom;
+        //this.length = xRight - xLeft;
+        //this.width = yBottom - yTop;
+    }
+
+    //REVU Используйте только один конструктор, который присваивает значения полям.
+    //Другие конструкторы должны вызывать его с помощью this(параметры);
+
+    public Rectangle(Point topLeft, Point bottomRight) {
+        this(topLeft.getX(), topLeft.getY(), bottomRight.getX(), bottomRight.getY());
+    }
+
+    public Rectangle(int length, int width) {
+        this(0, -width, length, 0);
+    }
+
+    public Rectangle() {
+        this(0, -1, 1, 0);
+    }
 
     public int getLength() {
         return xRight - xLeft;
@@ -36,57 +63,18 @@ public class Rectangle {
         return new Point(xRight, yBottom);
     }
 
-    /*
-    REVU На мой взгляд, класс будет выглядеть аккуратнее,
-    если вы поместите конструкторы перед всеми остальными методами
-    */
-    public Rectangle(Point topLeft, Point bottomRight) {
-        this.xLeft = topLeft.getX();
-        this.yTop = topLeft.getY();
-        this.xRight = bottomRight.getX();
-        this.yBottom = bottomRight.getY();
-    }
-
-    /*
-     REVU Используйте только один конструктор, который присваивает значения полям.
-     Другие конструкторы должны вызывать его с помощью this(параметры);
-     */
-    public Rectangle(int xLeft, int yTop, int xRight, int yBottom) {
-        this.xLeft = xLeft;
-        this.yTop = yTop;
-        this.xRight = xRight;
-        this.yBottom = yBottom;
-        this.length = xRight - xLeft;
-        this.width = yBottom - yTop;
-
-    }
-
-    public Rectangle(int length, int width) {
-        this.xLeft = 0;
-        this.yBottom = 0;
-        this.yTop = yBottom - width;
-        this.xRight = xLeft + length;
-    }
-
-    public Rectangle() {
-        this.xLeft = 0;
-        this.xRight = 1;
-        this.yBottom = 0;
-        this.yTop = -1;
-    }
-
     public void moveTo(int x, int y) {
+        xRight = getLength() + x;
+        yBottom = getWidth() + y;
         xLeft = x;
         yTop = y;
-        xRight = xLeft + length;
-        yBottom = yTop + width;
     }
 
     public void moveTo(Point point) {
+        xRight = getLength() + point.getX();
+        yBottom = getWidth() + point.getY();
         xLeft = point.getX();
         yTop = point.getY();
-        xRight = length + point.getX();
-        yBottom = width + point.getY();
     }
 
     public void moveRel(int dx, int dy) {
@@ -97,21 +85,21 @@ public class Rectangle {
     }
 
     public void resize(double ratio) {
-        xRight = xLeft + (int) (length * ratio);
-        yBottom = yTop + (int) (width * ratio);
+        xRight = xLeft + (int) (getLength() * ratio);
+        yBottom = yTop + (int) (getWidth() * ratio);
     }
 
     public void stretch(double xRatio, double yRatio) {
-        xRight = xLeft + (int) (length * xRatio);
-        yBottom = yTop + (int) (width * yRatio);
+        xRight = xLeft + (int) (getLength() * xRatio);
+        yBottom = yTop + (int) (getWidth() * yRatio);
     }
 
     public double getArea() {
-        return length * width;
+        return getLength() * getWidth();
     }
 
     public double getPerimeter() {
-        return (length + width) * 2;
+        return (getLength() + getWidth()) * 2;
     }
 
     public boolean isInside(int x, int y) {
@@ -119,24 +107,28 @@ public class Rectangle {
     }
 
     public boolean isInside(Point point) { // REVU Переиспользуйте уже реализованные методы
-        return point.getX() <= xRight
-                && point.getX() >= xLeft
-                && point.getY() <= yBottom
-                && point.getY() >= yTop;
+        return isInside(point.getX(), point.getY());
     }
 
     public boolean isIntersects(Rectangle rectangle) {
-        /*
-        REVU Подумайте, как можно реализовать проверку без циклов, используя только
-        значения координат.
-        */
-        for (int i = rectangle.xLeft; i < rectangle.xRight ; i++) {
-            for (int j = rectangle.yTop; j < rectangle.yBottom; j++) {
-                if (isInside(i,j)) return true; // REVU Всегда используйте скобки {} в оформлении условий
-            }
-        }
-        return false;
+        //REVU Подумайте, как можно реализовать проверку без циклов, используя только
+        //значения координат.
+
+        //Выглядит не очень... но работает.
+        return isInside(rectangle.xRight, rectangle.yBottom) ||
+                isInside(rectangle.xRight, rectangle.yTop) ||
+                isInside(rectangle.xLeft, rectangle.yTop) ||
+                isInside(rectangle.xLeft, rectangle.yBottom) ||
+                rectangle.isInside(this);
     }
+
+//        for (int i = rectangle.xLeft; i < rectangle.xRight; i++) {
+//            for (int j = rectangle.yTop; j < rectangle.yBottom; j++) {
+//                if (isInside(i, j)) {
+//                    return true;
+//                } // REVU Всегда используйте скобки {} в оформлении условий
+//            }
+//        }
 
     public boolean isInside(Rectangle rectangle) {
         return isInside(rectangle.getTopLeft())

@@ -11,11 +11,6 @@ public class Square {
      REVU Используйте только один конструктор, который присваивает значения полям.
      Другие конструкторы должны вызывать его с помощью this(параметры);
     */
-    public Square(Point leftTop, int size) {
-        this.xLeft = leftTop.getX();
-        this.yTop = leftTop.getY();
-        this.size = size;
-    }
 
     public Square(int xLeft, int yTop, int size) {
         this.xLeft = xLeft;
@@ -23,16 +18,16 @@ public class Square {
         this.size = size;
     }
 
+    public Square(Point leftTop, int size) {
+        this(leftTop.getX(), leftTop.getY(), size);
+    }
+
     public Square(int size) {
-        xLeft = 0;
-        yTop = -size;
-        this.size = size;
+        this(0, -size, size);
     }
 
     public Square() {
-        this.xLeft = 0;
-        this.yTop = -1;
-        this.size = 1;
+        this(0, -1, 1);
     }
 
     public Point getTopLeft() {
@@ -84,10 +79,7 @@ public class Square {
     }
 
     public boolean isInside(Point point) {
-        return point.getX() <= xLeft + size
-                && point.getX() >= xLeft
-                && point.getY() <= yTop + size
-                && point.getY() >= yTop;
+        return isInside(point.getX(), point.getY());
     }
 
     public boolean isIntersects(Square square) {
@@ -95,18 +87,23 @@ public class Square {
          REVU Подумайте, как можно реализовать проверку без циклов, используя только
          значения координат.
         */
-        for (int i = square.xLeft; i <= square.xLeft + size; i++) {
-            for (int j = square.yTop; j <= square.yTop + size; j++) {
-                if (isInside(i, j)) return true; // REVU Всегда используйте скобки {} в оформлении условий
-            }
-        }
-        return false;
+
+        return isInside(square.xLeft, square.yTop) ||
+                isInside(square.xLeft + size, square.yTop + size) ||
+                isInside(square.xLeft + size, square.yTop) ||
+                isInside(square.xLeft, square.yTop + size) ||
+                square.isInside(this);
     }
+//        for (int i = square.xLeft; i <= square.xLeft + size; i++) {
+//            for (int j = square.yTop; j <= square.yTop + size; j++) {
+//                if (isInside(i, j)) return true; // REVU Всегда используйте скобки {} в оформлении условий
+//            }
+//        }
+//        return false;
 
     public boolean isInside(Square square) {
-        return square.getTopLeft().getX() >= xLeft
-                && square.getTopLeft().getY() >= yTop
-                && size > square.size;
+        return isInside(square.getTopLeft())
+                && isInside(square.getBottomRight());
     }
 
     @Override

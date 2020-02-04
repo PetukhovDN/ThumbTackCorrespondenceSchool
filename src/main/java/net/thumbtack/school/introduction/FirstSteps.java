@@ -1,7 +1,5 @@
 package net.thumbtack.school.introduction;
 
-import java.util.Arrays;
-
 public class FirstSteps {
     /*
     REVU Условия задания не требуют документирования методов.
@@ -19,32 +17,26 @@ public class FirstSteps {
     public int sum(int x, int y) {
         return x + y;
     }
-    // Возвращает сумму чисел x и y.
 
     public int mul(int x, int y) {
         return x * y;
     }
-    // Возвращает произведение чисел x и y.
 
     public int div(int x, int y) {
         return x / y;
     }
-    // Возвращает частное от деления чисел x и y. Гарантируется, что y != 0.
 
     public int mod(int x, int y) {
         return x % y;
     }
-    // Возвращает остаток от деления чисел x и y. Гарантируется, что y != 0.
 
     public boolean isEqual(int x, int y) {
         return x == y;
     }
-    // Возвращает true, если  x равен y, иначе false.
 
     public boolean isGreater(int x, int y) {
         return x > y;
     }
-    // Возвращает true, если  x больше y, иначе false.
 
     public boolean isInsideRect(int xLeft, int yTop, int xRight, int yBottom, int x, int y) {
         return x <= xRight && x >= xLeft && y <= yBottom && y >= yTop;
@@ -64,14 +56,13 @@ public class FirstSteps {
         }
         return sum;
     }
-    // Возвращает сумму чисел, заданных одномерным массивом array.
-    // Для пустого одномерного массива возвращает 0.
 
     public int mul(int[] array) {
         // REVU Всегда используйте скобки {} в оформлении if/else даже если в
         // скобках будет только один оператор.
-        if (array.length == 0) return 0;
-        else {
+        if (array.length == 0) {
+            return 0;
+        } else {
             int mul = 1;
             for (int value : array) {
                 mul *= value;
@@ -79,8 +70,6 @@ public class FirstSteps {
             return mul;
         }
     }
-    // Возвращает произведение чисел, заданных одномерным массивом array.
-    // Для пустого одномерного массива возвращает 0.
 
     public int min(int[] array) {
         /*
@@ -90,43 +79,22 @@ public class FirstSteps {
         сюрпризом для другого программиста.
         Используйте подход без сортировки.
         */
-        if (array.length == 0) return Integer.MAX_VALUE;
-        else
-            Arrays.sort(array);
-        return array[0];
 
-        /*
-        //Another variant:
         int min = Integer.MAX_VALUE;
         // REVU Используйте вариант цисла foreach вместо цисла со счётчиком
-        for (int i = 0; i < array.length ; i++) {
-            if (array[i] < min) min = array[i];
+        for (int value : array) {
+            if (value < min) min = value;
         }
         return min;
-
-        */
     }
-    // Возвращает минимальное из чисел, заданных одномерным массивом array.
-    // Для пустого одномерного массива возвращает Integer.MAX_VALUE.
 
     public int max(int[] array) {
-        if (array.length == 0) return Integer.MIN_VALUE;
-        else
-            Arrays.sort(array);
-        return array[array.length - 1];
-
-        /*
-        //Another variant:
         int max = Integer.MIN_VALUE;
-        for (int i = 0; i < array.length ; i++) {
-            if (array[i] > max) max = array[i];
+        for (int value : array) {
+            if (value > max) max = value;
         }
         return max;
-
-        */
     }
-    // Возвращает максимальное из чисел, заданных одномерным массивом array.
-    // Для пустого одномерного массива возвращает Integer.MIN_VALUE.
 
     public double average(int[] array) {
         double sum = 0.0;
@@ -140,28 +108,22 @@ public class FirstSteps {
         }
         return sum / (array.length);
     }
-    // Возвращает среднее значение для чисел, заданных одномерным массивом array.
-    // Для пустого одномерного массива возвращает 0.
 
     public boolean isSortedDescendant(int[] array) {
         for (int i = 0; i < array.length - 1; i++) {
             if (array[i] <= array[i + 1]) return false;
         }
         return true;
-
     }
-    // Возвращает true, если одномерный массив array строго упорядочен по убыванию, иначе false.
-    // Пустой одномерный массив считается упорядоченным.
 
     public void cube(int[] array) {
         for (int i = 0; i < array.length; i++) {
             // REVU Используйте простое умножение вместо Math.pow().
             // Простое умножение здесь не требует преобразования типов и целочисленные операции
             // как правило работают быстрее.
-            array[i] = (int) Math.pow(array[i], 3);
+            array[i] = array[i] * array[i] * array[i];
         }
     }
-    // Возводит все элементы одномерного массива array в куб.
 
     public boolean find(int[] array, int value) {
         for (int value2 : array) {
@@ -169,7 +131,6 @@ public class FirstSteps {
         }
         return false;
     }
-    // Возвращает true, если в одномерном массиве array имеется элемент, равный value, иначе false.
 
     public void reverse(int[] array) {
         int tmp;
@@ -179,67 +140,51 @@ public class FirstSteps {
             array[array.length - 1 - i] = tmp;
         }
     }
-    // Переворачивает одномерный массив array, то есть меняет местами 0-й и последний, 1-й и предпоследний и т.д. элементы.
 
     public boolean isPalindrome(int[] array) {
-        if (array.length == 0) return true; // REVU Подумайте о том, можно ли обойтись без этой проверки?
-        for (int i = 0; i < array.length; i++) { // REVU Действительно ли необходимо проверять до i < array.length ?
+        //if (array.length == 0) return true; // REVU Подумайте о том, можно ли обойтись без этой проверки?
+        for (int i = 0; i < array.length / 2; i++) { // REVU Действительно ли необходимо проверять до i < array.length ?
             if (array[i] != array[array.length - i - 1]) {
                 return false;
             }
         }
         return true;
     }
-    // Возвращает true, если одномерный массив является палиндромом, иначе false.
-    // Пустой массив считается палиндромом.
 
     public int sum(int[][] matrix) {
         int sum2 = 0;
-        for (int i = 0; i < matrix.length; i++) { // REVU Используйте цикл foreach.
+        for (int[] ints : matrix) { // REVU Используйте цикл foreach.
             // REVU У вас уже реализован метод для суммы элементов массива. Используйте его.
-            for (int j = 0; j < matrix[i].length; j++) {
-                sum2 += matrix[i][j];
-            }
+            sum2 += sum(ints);
         }
         return sum2;
     }
-    // Возвращает сумму чисел, заданных двумерным массивом matrix.
 
     public int max(int[][] matrix) {
         int max = Integer.MIN_VALUE;
-        for (int i = 0; i < matrix.length; i++) { // REVU Используйте цикл foreach.
-            for (int j = 0; j < matrix[i].length; j++) {
-                // REVU Переиспользуйте методы, уже реализованные вами.
-                if (matrix[i][j] > max) max = matrix[i][j];
+        for (int[] ints : matrix) { // REVU Используйте цикл foreach.
+            // REVU Переиспользуйте методы, уже реализованные вами.
+            if (max(ints) > max) {
+                max = max(ints);
             }
         }
         return max;
     }
-    // Возвращает максимальное из чисел, заданных двумерным массивом matrix.
-    // Для пустого двумерного массива возвращает Integer.MIN_VALUE.
 
     public int diagonalMax(int[][] matrix) {
         int max = Integer.MIN_VALUE;
         for (int i = 0; i < matrix.length; i++) {
             if (matrix[i][i] > max) max = matrix[i][i];
         }
-
         return max;
     }
-    // Возвращает максимальное из чисел, находящихся на главной диагонали квадратного двумерного массива matrix.
-    // Для пустого двумерного массива возвращает Integer.MIN_VALUE.
 
     public boolean isSortedDescendant(int[][] matrix) {
-        for (int i = 0; i < matrix.length; i++) { // REVU Используйте цикл foreach.
-            for (int j = 0; j < matrix[i].length; j++) {
-                if (!isSortedDescendant(matrix[i])) return false;
+        for (int[] ints : matrix) { // REVU Используйте цикл foreach.
+            for (int j = 0; j < ints.length; j++) {
+                if (!isSortedDescendant(ints)) return false;
             }
         }
         return true;
     }
-    // Возвращает true, если все строки двумерного массива matrix строго упорядочены по убыванию, иначе false.
-    // Пустая строка считается упорядоченной. Разные строки массива matrix могут иметь разное количество элементов.
-    // При написании метода рекомендуется внутри него вызвать метод из п. 13.
-
-
 }

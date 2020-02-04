@@ -8,28 +8,22 @@ public class Circle {
     private int yCenter;
     private int radius;
 
-    public Circle(Point center, int radius) {
-        this.xCenter = center.getX();
-        this.yCenter = center.getY();
-        this.radius = radius;
-    }
-
     public Circle(int xCenter, int yCenter, int radius) {
         this.xCenter = xCenter;
         this.yCenter = yCenter;
         this.radius = radius;
     }
 
+    public Circle(Point center, int radius) {
+        this(center.getX(), center.getY(), radius);
+    }
+
     public Circle(int radius) {
-        this.xCenter = 0;
-        this.yCenter = 0;
-        this.radius = radius;
+        this(0, 0, radius);
     }
 
     public Circle() {
-        this.xCenter = 0;
-        this.yCenter = 0;
-        this.radius = 1;
+        this(0, 0, 1);
     }
 
     public Point getCenter() {
@@ -81,7 +75,7 @@ public class Circle {
     }
 
     public boolean isInside(Point point) { // REVU Переиспользуйте уже реализованные методы
-        return Math.sqrt(Math.pow(point.getX() - xCenter, 2) + Math.pow(point.getY() - yCenter, 2)) <= radius;
+        return isInside(point.getX(), point.getY());
     }
 
     @Override

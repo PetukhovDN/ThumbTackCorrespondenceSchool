@@ -4,10 +4,6 @@ import java.util.Objects;
 
 public class ColoredRectangle extends Rectangle {
 
-    private int xLeft;
-    private int yTop;
-    private int xRight;
-    private int yBottom;
     private int color;
 
     public ColoredRectangle(Point topLeft, Point bottomRight, int color) {
@@ -124,16 +120,12 @@ public class ColoredRectangle extends Rectangle {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         ColoredRectangle that = (ColoredRectangle) o;
-        return xLeft == that.xLeft &&
-                yTop == that.yTop &&
-                xRight == that.xRight &&
-                yBottom == that.yBottom &&
-                color == that.color;
+        return color == that.color;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), xLeft, yTop, xRight, yBottom, color);
+        return Objects.hash(super.hashCode(), color);
     }
 
 

@@ -3,9 +3,7 @@ package net.thumbtack.school.figures.v1;
 import java.util.Objects;
 
 public class ColoredCircle extends Circle {
-    private int xCenter;
-    private int yCenter;
-    private int radius;
+
     private int color;
 
     public ColoredCircle(Point center, int radius, int color) {
@@ -97,14 +95,11 @@ public class ColoredCircle extends Circle {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         ColoredCircle that = (ColoredCircle) o;
-        return xCenter == that.xCenter &&
-                yCenter == that.yCenter &&
-                radius == that.radius &&
-                color == that.color;
+        return color == that.color;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), xCenter, yCenter, radius, color);
+        return Objects.hash(super.hashCode(), color);
     }
 }
