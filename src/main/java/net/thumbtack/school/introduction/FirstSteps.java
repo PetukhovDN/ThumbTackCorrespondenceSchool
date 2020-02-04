@@ -3,6 +3,19 @@ package net.thumbtack.school.introduction;
 import java.util.Arrays;
 
 public class FirstSteps {
+    /*
+    REVU Условия задания не требуют документирования методов.
+    Названия методов хорошо описывают их назначение,
+    поэтому дополнительное документирование здесь не требуется.
+
+    Если вы всё же хотите оставить документирующие комментарии,
+    то обратите внимание на следующие моменты:
+    1. В Java есть отдельный синтаксис комментариев для документации.
+    Такие комментарии начинаются символами /**  и заканчиваются
+    как обычный многострочный комментарий.
+    2. В Java принято писать документацию к методу перед методом,
+    а не после него.
+     */
     public int sum(int x, int y) {
         return x + y;
     }
@@ -55,6 +68,8 @@ public class FirstSteps {
     // Для пустого одномерного массива возвращает 0.
 
     public int mul(int[] array) {
+        // REVU Всегда используйте скобки {} в оформлении if/else даже если в
+        // скобках будет только один оператор.
         if (array.length == 0) return 0;
         else {
             int mul = 1;
@@ -68,6 +83,13 @@ public class FirstSteps {
     // Для пустого одномерного массива возвращает 0.
 
     public int min(int[] array) {
+        /*
+        REVU Не нужно сортировать массив.
+        1. Сортировка это вычислительно более сложная операция, чем линейный поиск.
+        2. Подход с сортировкой изменяет массив. Это может быть неприятным
+        сюрпризом для другого программиста.
+        Используйте подход без сортировки.
+        */
         if (array.length == 0) return Integer.MAX_VALUE;
         else
             Arrays.sort(array);
@@ -76,6 +98,7 @@ public class FirstSteps {
         /*
         //Another variant:
         int min = Integer.MAX_VALUE;
+        // REVU Используйте вариант цисла foreach вместо цисла со счётчиком
         for (int i = 0; i < array.length ; i++) {
             if (array[i] < min) min = array[i];
         }
@@ -132,6 +155,9 @@ public class FirstSteps {
 
     public void cube(int[] array) {
         for (int i = 0; i < array.length; i++) {
+            // REVU Используйте простое умножение вместо Math.pow().
+            // Простое умножение здесь не требует преобразования типов и целочисленные операции
+            // как правило работают быстрее.
             array[i] = (int) Math.pow(array[i], 3);
         }
     }
@@ -156,8 +182,8 @@ public class FirstSteps {
     // Переворачивает одномерный массив array, то есть меняет местами 0-й и последний, 1-й и предпоследний и т.д. элементы.
 
     public boolean isPalindrome(int[] array) {
-        if (array.length == 0) return true;
-        for (int i = 0; i < array.length; i++) {
+        if (array.length == 0) return true; // REVU Подумайте о том, можно ли обойтись без этой проверки?
+        for (int i = 0; i < array.length; i++) { // REVU Действительно ли необходимо проверять до i < array.length ?
             if (array[i] != array[array.length - i - 1]) {
                 return false;
             }
@@ -169,7 +195,8 @@ public class FirstSteps {
 
     public int sum(int[][] matrix) {
         int sum2 = 0;
-        for (int i = 0; i < matrix.length; i++) {
+        for (int i = 0; i < matrix.length; i++) { // REVU Используйте цикл foreach.
+            // REVU У вас уже реализован метод для суммы элементов массива. Используйте его.
             for (int j = 0; j < matrix[i].length; j++) {
                 sum2 += matrix[i][j];
             }
@@ -180,8 +207,9 @@ public class FirstSteps {
 
     public int max(int[][] matrix) {
         int max = Integer.MIN_VALUE;
-        for (int i = 0; i < matrix.length; i++) {
+        for (int i = 0; i < matrix.length; i++) { // REVU Используйте цикл foreach.
             for (int j = 0; j < matrix[i].length; j++) {
+                // REVU Переиспользуйте методы, уже реализованные вами.
                 if (matrix[i][j] > max) max = matrix[i][j];
             }
         }
@@ -202,7 +230,7 @@ public class FirstSteps {
     // Для пустого двумерного массива возвращает Integer.MIN_VALUE.
 
     public boolean isSortedDescendant(int[][] matrix) {
-        for (int i = 0; i < matrix.length; i++) {
+        for (int i = 0; i < matrix.length; i++) { // REVU Используйте цикл foreach.
             for (int j = 0; j < matrix[i].length; j++) {
                 if (!isSortedDescendant(matrix[i])) return false;
             }

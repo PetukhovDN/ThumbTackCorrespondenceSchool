@@ -96,13 +96,15 @@ public class Ellipse {
     }
 
     public boolean isInside(int x, int y) {
+        // REVU Здесь вы получаете предупреждение о целочисленном делении в контексте операций с плавающей запятой.
+        // Будет ли метод работать корректно для нечётных значений xAxis и yAxis?
         return Math.pow(x - xCenter, 2) / Math.pow(xAxis / 2, 2)
                 + Math.pow(y - yCenter, 2) / Math.pow(yAxis / 2, 2) <= 1;
     }
 
-    public boolean isInside(Point point) {
-        return Math.pow(point.getX() - xCenter, 2) / Math.pow(xAxis / 2, 2)
-                + Math.pow(point.getY() - yCenter, 2) / Math.pow(yAxis / 2, 2) <= 1;
+    public boolean isInside(Point point) { // REVU Переиспользуйте уже реализованные методы
+        return Math.pow(point.getX() - xCenter, 2) / Math.pow(xAxis / 2.0, 2)
+                + Math.pow(point.getY() - yCenter, 2) / Math.pow(yAxis / 2.0, 2) <= 1;
     }
 
     @Override
