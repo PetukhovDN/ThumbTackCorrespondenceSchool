@@ -53,8 +53,7 @@ public class Square {
     }
 
     public void moveTo(Point point) {
-        xLeft = point.getX();
-        yTop = point.getY();
+        moveTo(point.getX(), point.getY());
     }
 
     public void moveRel(int dx, int dy) {

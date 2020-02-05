@@ -71,10 +71,7 @@ public class Rectangle {
     }
 
     public void moveTo(Point point) {
-        xRight = getLength() + point.getX();
-        yBottom = getWidth() + point.getY();
-        xLeft = point.getX();
-        yTop = point.getY();
+        moveTo(point.getX(), point.getY());
     }
 
     public void moveRel(int dx, int dy) {

@@ -49,8 +49,7 @@ public class Circle {
     }
 
     public void moveTo(Point point) {
-        xCenter = point.getX();
-        yCenter = point.getY();
+        moveTo(point.getX(), point.getY());
     }
 
     public void moveRel(int dx, int dy) {

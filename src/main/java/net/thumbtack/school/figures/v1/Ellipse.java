@@ -58,8 +58,7 @@ public class Ellipse {
     }
 
     public void moveTo(Point point) {
-        this.xCenter = point.getX();
-        this.yCenter = point.getY();
+        moveTo(point.getX(), point.getY());
     }
 
     public void moveRel(int dx, int dy) {
