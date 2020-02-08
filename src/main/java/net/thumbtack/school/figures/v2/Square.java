@@ -75,11 +75,11 @@ public class Square extends Figure {
 
     public boolean isIntersects(Square square) {
 
-        return isInside(square.xLeft, square.yTop) ||
-                isInside(square.xLeft + size, square.yTop + size) ||
-                isInside(square.xLeft + size, square.yTop) ||
-                isInside(square.xLeft, square.yTop + size) ||
-                square.isInside(this);
+        return isInside(square.xLeft, square.yTop)
+                || isInside(square.xLeft + size, square.yTop + size)
+                || isInside(square.xLeft + size, square.yTop)
+                || isInside(square.xLeft, square.yTop + size)
+                || square.isInside(this);
     }
 
     public boolean isInside(Square square) {

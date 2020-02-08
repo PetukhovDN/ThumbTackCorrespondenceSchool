@@ -98,11 +98,11 @@ public class Rectangle extends Figure implements Stretchable {
     }
 
     public boolean isIntersects(Rectangle rectangle) {
-        return isInside(rectangle.xRight, rectangle.yBottom) ||
-                isInside(rectangle.xRight, rectangle.yTop) ||
-                isInside(rectangle.xLeft, rectangle.yTop) ||
-                isInside(rectangle.xLeft, rectangle.yBottom) ||
-                rectangle.isInside(this);
+        return isInside(rectangle.xRight, rectangle.yBottom)
+                || isInside(rectangle.xRight, rectangle.yTop)
+                || isInside(rectangle.xLeft, rectangle.yTop)
+                || isInside(rectangle.xLeft, rectangle.yBottom)
+                || rectangle.isInside(this);
     }
 
     public boolean isInside(Rectangle rectangle) {

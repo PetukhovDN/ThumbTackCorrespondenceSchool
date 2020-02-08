@@ -1,0 +1,56 @@
+package net.thumbtack.school.misc.v2;
+
+import net.thumbtack.school.figures.v2.Point;
+import net.thumbtack.school.iface.v2.Colored;
+
+import java.util.Objects;
+
+public class ColoredIsoscelesTriangle extends IsoscelesTriangle implements Colored {
+    private int color;
+
+    public ColoredIsoscelesTriangle(int x1, int y1, int x2, int y2, int x3, int y3, int color) {
+        super();
+        this.color = color;
+    }
+
+    public ColoredIsoscelesTriangle(Point xy1, Point xy2, Point xy3, int color) {
+        this(xy1.getX(), xy1.getY(), xy2.getX(), xy2.getY(), xy3.getX(), xy3.getY(), color);
+    }
+
+    public ColoredIsoscelesTriangle(int katetX, int katetY, int color) {
+        this(0, 0, katetX, 0, 0, katetY, color);
+    }
+
+    public ColoredIsoscelesTriangle(int color) {
+        this(0, 0, 1, 0, 0, 1, color);
+    }
+
+    public ColoredIsoscelesTriangle() {
+        this(0, 0, 1, 0, 0, 1, 1);
+
+    }
+
+    @Override
+    public int getColor() {
+        return color;
+    }
+
+    @Override
+    public void setColor(int color) {
+        this.color = color;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ColoredIsoscelesTriangle)) return false;
+        if (!super.equals(o)) return false;
+        ColoredIsoscelesTriangle that = (ColoredIsoscelesTriangle) o;
+        return color == that.color;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), color);
+    }
+}
