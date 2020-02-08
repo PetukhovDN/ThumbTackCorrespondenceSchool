@@ -44,6 +44,38 @@ public class Human implements Movable {
         this.positionY = startPosition.getY();
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getPositionX() {
+        return positionX;
+    }
+
+    public void setPositionX(int positionX) {
+        this.positionX = positionX;
+    }
+
+    public int getPositionY() {
+        return positionY;
+    }
+
+    public void setPositionY(int positionY) {
+        this.positionY = positionY;
+    }
+
+    public int getWeight() {
+        return weight;
+    }
+
+    public void setWeight(int weight) {
+        this.weight = weight;
+    }
+
     @Override
     public void moveTo(int x, int y) {
         positionX = x;
@@ -70,4 +102,6 @@ public class Human implements Movable {
     public int hashCode() {
         return Objects.hash(positionX, positionY, weight);
     }
+
+
 }

@@ -66,6 +66,7 @@ public class TestColoredRectangle {
                 () -> assertEquals(1, coloredRectangle.getColor())
         );
     }
+
     @Test
     public void testColoredRectangle5() {
         ColoredRectangle coloredRectangle = new ColoredRectangle();

@@ -35,22 +35,22 @@ public class Rectangle {
         return yBottom - yTop;
     }
 
+    public Point getTopLeft() {
+        return new Point(xLeft, yTop);
+    }
+
     public void setTopLeft(Point topLeft) {
         this.xLeft = topLeft.getX();
         this.yTop = topLeft.getY();
     }
 
+    public Point getBottomRight() {
+        return new Point(xRight, yBottom);
+    }
+
     public void setBottomRight(Point bottomRight) {
         this.xRight = bottomRight.getX();
         this.yBottom = bottomRight.getY();
-    }
-
-    public Point getTopLeft() {
-        return new Point(xLeft, yTop);
-    }
-
-    public Point getBottomRight() {
-        return new Point(xRight, yBottom);
     }
 
     public void moveTo(int x, int y) {

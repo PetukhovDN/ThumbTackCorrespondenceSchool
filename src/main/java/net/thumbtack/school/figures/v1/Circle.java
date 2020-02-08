@@ -30,13 +30,13 @@ public class Circle {
         return new Point(xCenter, yCenter);
     }
 
-    public int getRadius() {
-        return radius;
-    }
-
     public void setCenter(Point center) {
         this.xCenter = center.getX();
         this.yCenter = center.getY();
+    }
+
+    public int getRadius() {
+        return radius;
     }
 
     public void setRadius(int radius) {

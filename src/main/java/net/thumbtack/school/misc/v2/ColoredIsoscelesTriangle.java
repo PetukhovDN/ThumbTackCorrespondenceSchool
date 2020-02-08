@@ -8,25 +8,25 @@ import java.util.Objects;
 public class ColoredIsoscelesTriangle extends IsoscelesTriangle implements Colored {
     private int color;
 
-    public ColoredIsoscelesTriangle(int x1, int y1, int x2, int y2, int x3, int y3, int color) {
-        super();
+    public ColoredIsoscelesTriangle(int x1, int y1, int x2, int y3, int color) {
+        super(x1, y1, x2, y3);
         this.color = color;
     }
 
     public ColoredIsoscelesTriangle(Point xy1, Point xy2, Point xy3, int color) {
-        this(xy1.getX(), xy1.getY(), xy2.getX(), xy2.getY(), xy3.getX(), xy3.getY(), color);
+        this(xy1.getX(), xy1.getY(), xy2.getX(), xy3.getY(), color);
     }
 
     public ColoredIsoscelesTriangle(int katetX, int katetY, int color) {
-        this(0, 0, katetX, 0, 0, katetY, color);
+        this(0, 0, katetX, katetY, color);
     }
 
     public ColoredIsoscelesTriangle(int color) {
-        this(0, 0, 1, 0, 0, 1, color);
+        this(0, 0, 1, 1, color);
     }
 
     public ColoredIsoscelesTriangle() {
-        this(0, 0, 1, 0, 0, 1, 1);
+        this(0, 0, 1, 1, 1);
 
     }
 

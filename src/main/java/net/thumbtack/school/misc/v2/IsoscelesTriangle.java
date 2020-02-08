@@ -6,7 +6,8 @@ import net.thumbtack.school.figures.v2.Point;
 import java.util.Objects;
 
 /**
- * Равнобедренный треугольник, xy1 - первая точка, xy2 - вторая точка (по оси X), xy3 - третья точка по оси Y.
+ * Равнобедренный треугольник, xy1 - первая точка, xy2 - вторая точка (по оси X), xy3 - третья точка (по оси Y).
+ * Одна сторона параллельна оси X, другая сторона параллельна оси Y.
  */
 
 public class IsoscelesTriangle extends Figure {
@@ -18,29 +19,28 @@ public class IsoscelesTriangle extends Figure {
     private int x3;
     private int y3;
 
-    public IsoscelesTriangle(int x1, int y1, int x2, int y2, int x3, int y3) {
+    public IsoscelesTriangle(int x1, int y1, int x2, int y3) {
         this.x1 = x1;
         this.y1 = y1;
         this.x2 = x2;
-        this.y2 = y2;
-        this.x3 = x3;
+        this.y2 = y1;
+        this.x3 = x1;
         this.y3 = y3;
     }
 
     public IsoscelesTriangle(Point xy1, Point xy2, Point xy3) {
-        this(xy1.getX(), xy1.getY(), xy2.getX(), xy2.getY(), xy3.getX(), xy3.getY());
+        this(xy1.getX(), xy1.getY(), xy2.getX(), xy3.getY());
     }
 
     /**
-     * Треугольник с первой точкой в начале координат, вторая точка лежит на оси X (y = 0),
-     * третья точка лежит на оси Y (x = 0).
+     * Треугольник с первой точкой в начале координат.
      *
      * @param katetX длина по оси X
      * @param katetY длина по оси Y
      */
 
     public IsoscelesTriangle(int katetX, int katetY) {
-        this(0, 0, katetX, 0, 0, katetY);
+        this(0, 0, katetX, katetY);
     }
 
     /**
@@ -48,7 +48,7 @@ public class IsoscelesTriangle extends Figure {
      */
 
     public IsoscelesTriangle() {
-        this(0, 0, 1, 0, 0, 1);
+        this(0, 0, 1, 1);
     }
 
     public int getKatetX() {
@@ -56,7 +56,7 @@ public class IsoscelesTriangle extends Figure {
     }
 
     public int getKatetY() {
-        return x3 - x1;
+        return y3 - y1;
     }
 
     public Point getXY1() {

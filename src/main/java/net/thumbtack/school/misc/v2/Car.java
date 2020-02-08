@@ -49,14 +49,30 @@ public class Car implements Movable, Driveable {
         this.positionY = startPosition.getY();
     }
 
-    @Override
-    public void setDriver(Human driver) {
-        this.driver = driver;
+    public double getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(int speed) {
+        this.speed = speed;
+    }
+
+    public int getWeight() {
+        return weight;
+    }
+
+    public void setWeight(int we) {
+        this.weight = weight;
     }
 
     @Override
     public Human getDriver() {
         return driver;
+    }
+
+    @Override
+    public void setDriver(Human driver) {
+        this.driver = driver;
     }
 
     @Override

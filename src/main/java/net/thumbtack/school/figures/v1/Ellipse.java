@@ -31,25 +31,25 @@ public class Ellipse {
         return new Point(xCenter, yCenter);
     }
 
-    public int getXAxis() {
-        return xAxis;
+    public void setCenter(Point center) {
+        this.xCenter = center.getX();
+        this.yCenter = center.getY();
     }
 
-    public int getYAxis() {
-        return yAxis;
+    public int getXAxis() {
+        return xAxis;
     }
 
     public void setXAxis(int xAxis) {
         this.xAxis = xAxis;
     }
 
-    public void setYAxis(int yAxis) {
-        this.yAxis = yAxis;
+    public int getYAxis() {
+        return yAxis;
     }
 
-    public void setCenter(Point center) {
-        this.xCenter = center.getX();
-        this.yCenter = center.getY();
+    public void setYAxis(int yAxis) {
+        this.yAxis = yAxis;
     }
 
     public void moveTo(int x, int y) {

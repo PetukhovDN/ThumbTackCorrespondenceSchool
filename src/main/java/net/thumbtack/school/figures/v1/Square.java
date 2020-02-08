@@ -29,13 +29,13 @@ public class Square {
         return new Point(xLeft, yTop);
     }
 
-    public Point getBottomRight() {
-        return new Point(xLeft + size, yTop + size);
-    }
-
     public void setTopLeft(Point topLeft) {
         xLeft = topLeft.getX();
         yTop = topLeft.getY();
+    }
+
+    public Point getBottomRight() {
+        return new Point(xLeft + size, yTop + size);
     }
 
     public int getLength() {
