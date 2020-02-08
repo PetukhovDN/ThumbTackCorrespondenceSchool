@@ -7,23 +7,13 @@ public class Rectangle {
     private int yTop;
     private int xRight;
     private int yBottom;
-    //private int length; // REVU Это значение можно вычислить, когда оно необходимо. Не нужно хранить его в поле класса.
-    //private int width; // REVU Это значение можно вычислить, когда оно необходимо. Не нужно хранить его в поле класса.
-
-    //REVU На мой взгляд, класс будет выглядеть аккуратнее,
-    //если вы поместите конструкторы перед всеми остальными методами
 
     public Rectangle(int xLeft, int yTop, int xRight, int yBottom) {
         this.xLeft = xLeft;
         this.yTop = yTop;
         this.xRight = xRight;
         this.yBottom = yBottom;
-        //this.length = xRight - xLeft;
-        //this.width = yBottom - yTop;
     }
-
-    //REVU Используйте только один конструктор, который присваивает значения полям.
-    //Другие конструкторы должны вызывать его с помощью this(параметры);
 
     public Rectangle(Point topLeft, Point bottomRight) {
         this(topLeft.getX(), topLeft.getY(), bottomRight.getX(), bottomRight.getY());
@@ -108,24 +98,12 @@ public class Rectangle {
     }
 
     public boolean isIntersects(Rectangle rectangle) {
-        //REVU Подумайте, как можно реализовать проверку без циклов, используя только
-        //значения координат.
-
-        //Выглядит не очень... но работает.
-        return isInside(rectangle.xRight, rectangle.yBottom) ||
-                isInside(rectangle.xRight, rectangle.yTop) ||
-                isInside(rectangle.xLeft, rectangle.yTop) ||
-                isInside(rectangle.xLeft, rectangle.yBottom) ||
-                rectangle.isInside(this);
+        return isInside(rectangle.xRight, rectangle.yBottom)
+                || isInside(rectangle.xRight, rectangle.yTop)
+                || isInside(rectangle.xLeft, rectangle.yTop)
+                || isInside(rectangle.xLeft, rectangle.yBottom)
+                || rectangle.isInside(this);
     }
-
-//        for (int i = rectangle.xLeft; i < rectangle.xRight; i++) {
-//            for (int j = rectangle.yTop; j < rectangle.yBottom; j++) {
-//                if (isInside(i, j)) {
-//                    return true;
-//                } // REVU Всегда используйте скобки {} в оформлении условий
-//            }
-//        }
 
     public boolean isInside(Rectangle rectangle) {
         return isInside(rectangle.getTopLeft())

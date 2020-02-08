@@ -64,7 +64,6 @@ public class Ellipse extends Figure implements Stretchable {
     public void moveRel(int dx, int dy) {
         this.xCenter += dx;
         this.yCenter += dy;
-
     }
 
     @Override

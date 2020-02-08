@@ -7,11 +7,6 @@ public class Square {
     private int yTop;
     private int size;
 
-    /*
-     REVU Используйте только один конструктор, который присваивает значения полям.
-     Другие конструкторы должны вызывать его с помощью this(параметры);
-    */
-
     public Square(int xLeft, int yTop, int size) {
         this.xLeft = xLeft;
         this.yTop = yTop;
@@ -82,23 +77,12 @@ public class Square {
     }
 
     public boolean isIntersects(Square square) {
-        /*
-         REVU Подумайте, как можно реализовать проверку без циклов, используя только
-         значения координат.
-        */
-
-        return isInside(square.xLeft, square.yTop) ||
-                isInside(square.xLeft + size, square.yTop + size) ||
-                isInside(square.xLeft + size, square.yTop) ||
-                isInside(square.xLeft, square.yTop + size) ||
-                square.isInside(this);
+        return isInside(square.xLeft, square.yTop)
+                || isInside(square.xLeft + size, square.yTop + size)
+                || isInside(square.xLeft + size, square.yTop)
+                || isInside(square.xLeft, square.yTop + size)
+                || square.isInside(this);
     }
-//        for (int i = square.xLeft; i <= square.xLeft + size; i++) {
-//            for (int j = square.yTop; j <= square.yTop + size; j++) {
-//                if (isInside(i, j)) return true; // REVU Всегда используйте скобки {} в оформлении условий
-//            }
-//        }
-//        return false;
 
     public boolean isInside(Square square) {
         return isInside(square.getTopLeft())

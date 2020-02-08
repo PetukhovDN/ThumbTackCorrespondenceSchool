@@ -22,11 +22,7 @@ public class StringOperations {
     }
 
     public static boolean isSameLastCharPosition(String string1, String string2, char character) {
-//        String reversedString1 = new StringBuffer(string1).reverse().toString();
-//        String reversedString2 = new StringBuffer(string2).reverse().toString();
-//        return reversedString1.indexOf(character) == reversedString2.indexOf(character);
         return string1.lastIndexOf(character) == string2.lastIndexOf(character);
-
     }
 
     public static boolean isSameFirstStringPosition(String string1, String string2, String str) {
@@ -34,11 +30,7 @@ public class StringOperations {
     }
 
     public static boolean isSameLastStringPosition(String string1, String string2, String str) {
-//        String reversedString1 = new StringBuffer(string1).reverse().toString();
-//        String reversedString2 = new StringBuffer(string2).reverse().toString();
-//        return reversedString1.indexOf(str) == reversedString2.indexOf(str);
         return string1.lastIndexOf(str) == string2.lastIndexOf(str);
-
     }
 
     public static boolean isEqual(String string1, String string2) {
@@ -47,7 +39,6 @@ public class StringOperations {
 
     public static boolean isEqualIgnoreCase(String string1, String string2) {
         return string1.equalsIgnoreCase(string2);
-
     }
 
     public static boolean isLess(String string1, String string2) {
@@ -56,47 +47,33 @@ public class StringOperations {
 
     public static boolean isLessIgnoreCase(String string1, String string2) {
         return string1.compareToIgnoreCase(string2) < 0;
-
     }
 
     public static String concat(String string1, String string2) {
-//        return string1.concat(string2);
         return string1 + string2;
     }
 
     public static boolean isSamePrefix(String string1, String string2, String prefix) {
-//        if (prefix.length() > string1.length() || prefix.length() > string2.length()) return false;
-//        for (int i = 0; i < prefix.length(); i++) {
-//            if (string1.charAt(i) != string2.charAt(i) || string1.charAt(i) != prefix.charAt(i)) return false;
-//        }
-//        return true;
         return string1.startsWith(prefix) && string2.startsWith(prefix);
     }
 
     public static boolean isSameSuffix(String string1, String string2, String suffix) {
-//        if (suffix.length() > string1.length() || suffix.length() > string2.length()) return false;
-//        for (int i = 0; i < suffix.length(); i++) {
-//            char c = string1.charAt(string1.length() - i - 1);
-//            char c1 = string2.charAt(string2.length() - i - 1);
-//            char c2 = suffix.charAt(suffix.length() - i - 1);
-//            if (c != c1 || c != c2) return false;
-//        }
-//        return true;
         return string1.endsWith(suffix) && string2.endsWith(suffix);
     }
 
     public static String getCommonPrefix(String string1, String string2) {
-        StringBuilder builder = new StringBuilder("");
         int smallestLength = Math.min(string1.length(), string2.length());
-        for (int i = 0; i < smallestLength; i++) {
-            if (string1.charAt(i) == string2.charAt(i)) builder.append(string1.charAt(i));
-            else break;
+        int i;
+        for (i = 0; i < smallestLength; i++) {
+            if (string1.charAt(i) != string2.charAt(i)) {
+                break;
+            }
         }
-        return builder.toString();
+        return string1.substring(0, i);
     }
 
     public static String reverse(String string) {
-        return new StringBuffer(string).reverse().toString();
+        return new StringBuilder(string).reverse().toString();
     }
 
     public static boolean isPalindrome(String string) {
@@ -117,7 +94,8 @@ public class StringOperations {
     }
 
     public static boolean hasSameSubstring(String string1, String string2, int index, int length) {
-        if (string1.length() < length + index || string2.length() < length + index) return false;
+        if (string1.length() < length + index
+                || string2.length() < length + index) return false;
         return string1.substring(index, length + index).equals(string2.substring(index, length + index));
     }
 
