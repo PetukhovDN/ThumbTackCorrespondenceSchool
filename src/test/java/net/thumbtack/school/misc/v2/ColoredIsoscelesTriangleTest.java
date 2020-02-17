@@ -1,8 +1,10 @@
 package net.thumbtack.school.misc.v2;
 
 import net.thumbtack.school.figures.v2.Point;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ColoredIsoscelesTriangleTest {
@@ -73,14 +75,31 @@ class ColoredIsoscelesTriangleTest {
 
     @Test
     public void testSetPoints() {
-        ColoredIsoscelesTriangle coloredIsoscelesTriangle = new ColoredIsoscelesTriangle(5, 10, 15, 45, 18);
-        coloredIsoscelesTriangle.setXY1(new Point(-20, -20));
+        ColoredIsoscelesTriangle triangle = new ColoredIsoscelesTriangle(5, 10, 15, 45, 5);
+        triangle.setXY1(new Point(-20, -20));
+        triangle.setXY2(new Point(20, -20));
+        triangle.setXY3(new Point(-20, 20));
         assertAll(
-                () -> assertEquals(-20, coloredIsoscelesTriangle.getXY1().getX()),
-                () -> assertEquals(-20, coloredIsoscelesTriangle.getXY1().getY()),
-                () -> assertEquals(35, coloredIsoscelesTriangle.getKatetX())
+                () -> Assertions.assertEquals(-20, triangle.getXY1().getX()),
+                () -> Assertions.assertEquals(-20, triangle.getXY1().getY()),
+                () -> Assertions.assertEquals(20, triangle.getXY2().getX()),
+                () -> Assertions.assertEquals(-20, triangle.getXY2().getY()),
+                () -> Assertions.assertEquals(-20, triangle.getXY3().getX()),
+                () -> Assertions.assertEquals(20, triangle.getXY3().getY()),
+                () -> Assertions.assertEquals(40, triangle.getKatetX())
         );
     }
+
+    @Test
+    public void testSetColor1() {
+        ColoredIsoscelesTriangle coloredIsoscelesTriangle = new ColoredIsoscelesTriangle(5);
+        assertAll(
+                () -> assertEquals(5, coloredIsoscelesTriangle.getColor())
+        );
+        coloredIsoscelesTriangle.setColor(7);
+        assertEquals(7, coloredIsoscelesTriangle.getColor());
+    }
+
 
     @Test
     public void testMoveTriangle() {
@@ -119,13 +138,13 @@ class ColoredIsoscelesTriangleTest {
     @Test
     public void testAreaTriangle() {
         ColoredIsoscelesTriangle coloredIsoscelesTriangle = new ColoredIsoscelesTriangle(10, 10, 20, 30, 16);
-        assertEquals(100, coloredIsoscelesTriangle.getArea());
+        assertEquals(100, coloredIsoscelesTriangle.getArea(),1);
     }
 
     @Test
     public void testPerimeterTriangle() {
         ColoredIsoscelesTriangle triangle = new ColoredIsoscelesTriangle(20, 20, 23, 24, 16);
-        assertEquals(12, triangle.getPerimeter());
+        assertEquals(12, triangle.getPerimeter(),1);
     }
 
     @Test

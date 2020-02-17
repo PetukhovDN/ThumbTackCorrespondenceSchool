@@ -35,21 +35,17 @@ public class Human implements Movable {
         this("StandardName", 0, 0, 60);
     }
 
-    public Point getStartPosition() {
+    public Point getPosition() {
         return new Point(positionX, positionY);
     }
 
-    public void setStartPosition(Point startPosition) {
+    public void setPosition(Point startPosition) {
         this.positionX = startPosition.getX();
         this.positionY = startPosition.getY();
     }
 
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public int getPositionX() {
@@ -102,6 +98,5 @@ public class Human implements Movable {
     public int hashCode() {
         return Objects.hash(positionX, positionY, weight);
     }
-
 
 }

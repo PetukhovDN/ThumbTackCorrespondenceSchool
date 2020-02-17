@@ -1,12 +1,11 @@
-package net.thumbtack.school.misc.v2;
+package net.thumbtack.school.misc.v3;
 
-import net.thumbtack.school.figures.v2.Point;
+import net.thumbtack.school.figures.v3.Point;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class CarTest {
-
     @Test
     public void testCar1() {
         Car car = new Car(5, 6, 95.7, 1500);
@@ -178,6 +177,5 @@ class CarTest {
         assertNotEquals(car1, car2);
         assertNotEquals(car1, car3);
     }
-
 
 }

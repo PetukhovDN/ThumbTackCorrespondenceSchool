@@ -1,6 +1,6 @@
-package net.thumbtack.school.misc.v2;
+package net.thumbtack.school.misc.v3;
 
-import net.thumbtack.school.figures.v2.Point;
+import net.thumbtack.school.figures.v3.Point;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -79,7 +79,6 @@ class HumanTest {
                 () -> assertNotEquals(0, human.getWeight())
         );
     }
-
     @Test
     void setPositionHuman1() {
         Human human = new Human();
@@ -110,7 +109,7 @@ class HumanTest {
 
     @Test
     public void testMoveHuman() {
-        Human human = new Human("Donald", 20, 30, 40);
+        Human human = new Human("Jhon", 20, 30, 40);
         human.moveRel(100, 50);
         assertAll(
                 () -> assertEquals(120, human.getPosition().getX()),
@@ -127,7 +126,6 @@ class HumanTest {
                 () -> assertEquals(2000, human.getPosition().getY())
         );
     }
-
 
     @Test
     public void testEqualsHuman() {

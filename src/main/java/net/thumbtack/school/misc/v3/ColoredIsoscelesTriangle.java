@@ -10,9 +10,9 @@ import java.util.Objects;
 public class ColoredIsoscelesTriangle extends IsoscelesTriangle implements Colored {
     private Color color;
 
-    public ColoredIsoscelesTriangle(int x1, int y1, int x2, int y3, Color color) {
+    public ColoredIsoscelesTriangle(int x1, int y1, int x2, int y3, Color color) throws ColorException {
         super(x1, y1, x2, y3);
-        this.color = color;
+        this.color = Color.color(color);
     }
 
     public ColoredIsoscelesTriangle(int x1, int y1, int x2, int y3, String color) throws ColorException {
@@ -20,31 +20,31 @@ public class ColoredIsoscelesTriangle extends IsoscelesTriangle implements Color
         this.color = Color.colorFromString(color);
     }
 
-    public ColoredIsoscelesTriangle(Point xy1, Point xy2, Point xy3, Color color) {
-        this(xy1.getX(), xy1.getY(), xy2.getX(), xy3.getY(), color);
+    public ColoredIsoscelesTriangle(Point xy1, Point xy2, Point xy3, Color color) throws ColorException {
+        this(xy1.getX(), xy1.getY(), xy2.getX(), xy3.getY(), Color.color(color));
     }
 
     public ColoredIsoscelesTriangle(Point xy1, Point xy2, Point xy3, String color) throws ColorException {
         this(xy1.getX(), xy1.getY(), xy2.getX(), xy3.getY(), Color.colorFromString(color));
     }
 
-    public ColoredIsoscelesTriangle(int katetX, int katetY, Color color) {
-        this(0, 0, katetX, katetY, color);
+    public ColoredIsoscelesTriangle(int katetX, int katetY, Color color) throws ColorException {
+        this(0, 0, katetX, katetY, Color.color(color));
     }
 
     public ColoredIsoscelesTriangle(int katetX, int katetY, String color) throws ColorException {
         this(0, 0, katetX, katetY, Color.colorFromString(color));
     }
 
-    public ColoredIsoscelesTriangle(Color color) {
-        this(0, 0, 1, 1, color);
+    public ColoredIsoscelesTriangle(Color color) throws ColorException {
+        this(0, 0, 1, 1, Color.color(color));
     }
 
     public ColoredIsoscelesTriangle(String color) throws ColorException {
         this(0, 0, 1, 1, Color.colorFromString(color));
     }
 
-    public ColoredIsoscelesTriangle() {
+    public ColoredIsoscelesTriangle() throws ColorException {
         this(0, 0, 1, 1, Color.RED);
 
     }
@@ -55,8 +55,8 @@ public class ColoredIsoscelesTriangle extends IsoscelesTriangle implements Color
     }
 
     @Override
-    public void setColor(Color color) {
-        this.color = color;
+    public void setColor(Color color) throws ColorException {
+        this.color = Color.color(color);
     }
 
     @Override

@@ -20,8 +20,8 @@ public class Car implements Movable, Driveable {
         this.weight = weight;
     }
 
-    public Car(Point startPosition, double speed, int weight) {
-        this(startPosition.getX(), startPosition.getY(), speed, weight);
+    public Car(Point position, double speed, int weight) {
+        this(position.getX(), position.getY(), speed, weight);
     }
 
     public Car(double speed, int weight) {
@@ -40,11 +40,11 @@ public class Car implements Movable, Driveable {
         this(0, 0, 100, 1000);
     }
 
-    public Point getStartPosition() {
+    public Point getPosition() {
         return new Point(positionX, positionY);
     }
 
-    public void setStartPosition(Point startPosition) {
+    public void setPosition(Point startPosition) {
         this.positionX = startPosition.getX();
         this.positionY = startPosition.getY();
     }
@@ -61,7 +61,7 @@ public class Car implements Movable, Driveable {
         return weight;
     }
 
-    public void setWeight(int we) {
+    public void setWeight(int weight) {
         this.weight = weight;
     }
 
