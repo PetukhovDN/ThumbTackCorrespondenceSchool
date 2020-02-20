@@ -25,11 +25,13 @@ public class NumberOperations {
     }
 
     public static Double calculateDensity(double weight, double volume, double min, double max) {
+        // REVU Выражение сложное и содержит повторяющиеся части. Сделайте рефакторинг.
         return weight / volume < max && weight / volume >= min ? weight / volume : null;
     }
 
     public static Integer find(BigInteger[] array, BigInteger value) {
         for (int i = 0; i < array.length; i++) {
+            // REVU Вместо сравнения можно проверять на равенство
             if (array[i].compareTo(value) == 0) {
                 return i;
             }

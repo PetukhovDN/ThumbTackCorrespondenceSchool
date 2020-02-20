@@ -77,6 +77,7 @@ public class Ellipse {
     }
 
     public double getArea() {
+        // REVU Используйте 4.0 вместо 4 чтобы избежать явного приведения типов и предупреждений о целочисленном делении
         return (double) (xAxis * yAxis) / 4 * Math.PI;
     }
 
@@ -89,7 +90,7 @@ public class Ellipse {
                 + Math.pow(y - yCenter, 2) / Math.pow(yAxis / 2.0, 2) <= 1;
     }
 
-    public boolean isInside(Point point) { // REVU Переиспользуйте уже реализованные методы
+    public boolean isInside(Point point) {
         return isInside(point.getX(), point.getY());
     }
 

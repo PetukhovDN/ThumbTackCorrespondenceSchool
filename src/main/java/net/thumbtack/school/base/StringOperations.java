@@ -6,6 +6,8 @@ import java.util.stream.Collectors;
 public class StringOperations {
 
     public static int getSummaryLength(String[] strings) {
+        // REVU Такой подход делает много лишних действий по объединению строк в одну длинную строку.
+        // Используйте подход без лишних операций над строками.
         return String.join("", strings).length();
     }
 
@@ -77,23 +79,28 @@ public class StringOperations {
     }
 
     public static boolean isPalindrome(String string) {
+        // REVU Используйте подход без копирования строки
         return string.equals(new StringBuilder(string).reverse().toString());
     }
 
     public static boolean isPalindromeIgnoreCase(String string) {
+        // REVU Используйте подход без копирования строки
         return string.equalsIgnoreCase(new StringBuilder(string).reverse().toString());
     }
 
     public static String getLongestPalindromeIgnoreCase(String[] strings) {
         String s = "";
         for (String string : strings) {
+            // REVU Не копируйте строки там, где это не необходимо
             StringBuilder palindrom = new StringBuilder(string).reverse();
+            // REVU Используйте собки {} во всех if и for, даже если в скобках будет только одно действие
             if (string.equalsIgnoreCase(palindrom.toString()) && string.length() > s.length()) s = string;
         }
         return s;
     }
 
     public static boolean hasSameSubstring(String string1, String string2, int index, int length) {
+        // REVU Используйте собки {} во всех if и for, даже если в скобках будет только одно действие
         if (string1.length() < length + index
                 || string2.length() < length + index) return false;
         return string1.substring(index, length + index).equals(string2.substring(index, length + index));
@@ -114,6 +121,7 @@ public class StringOperations {
 
     public static boolean isPalindromeAfterRemovingSpacesIgnoreCase(String string) {
         String string2 = string.replace(" ", "");
+        // REVU Используйте подход без копирования строки
         return string2.equalsIgnoreCase(new StringBuilder(string2).reverse().toString());
     }
 
@@ -122,6 +130,7 @@ public class StringOperations {
     }
 
     public static String makeCsvStringFromInts(int[] array) {
+        // REVU Не забывайте чистить код от частей, которые больше не используются
 //        String[] strings = new String[array.length];
 //        for (int i = 0; i < array.length; i++) {
 //            strings[i] = String.valueOf(array[i]);
@@ -176,6 +185,7 @@ public class StringOperations {
     public static StringBuilder insertCharacters(String string, int[] positions, char[] characters) {
         StringBuilder stringBuilder = new StringBuilder(string);
         int position = 0;
+        // REVU Подумайте, можно ли упросить код, выбрав обратный порядок обхода?
         for (int i = 0; i < positions.length; i++) {
             stringBuilder.insert(positions[i] + position, characters[i]);
             position++;

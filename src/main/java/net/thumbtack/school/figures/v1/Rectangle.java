@@ -93,7 +93,7 @@ public class Rectangle {
         return x <= xRight && x >= xLeft && y <= yBottom && y >= yTop;
     }
 
-    public boolean isInside(Point point) { // REVU Переиспользуйте уже реализованные методы
+    public boolean isInside(Point point) {
         return isInside(point.getX(), point.getY());
     }
 
