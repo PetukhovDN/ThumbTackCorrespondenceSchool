@@ -77,8 +77,7 @@ public class Ellipse {
     }
 
     public double getArea() {
-        // REVU Используйте 4.0 вместо 4 чтобы избежать явного приведения типов и предупреждений о целочисленном делении
-        return (double) (xAxis * yAxis) / 4 * Math.PI;
+        return Math.PI * xAxis * yAxis / 4.0;
     }
 
     public double getPerimeter() {

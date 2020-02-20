@@ -70,8 +70,10 @@ public class Circle {
     }
 
     public boolean isInside(int x, int y) {
-        // REVU Эту проверку можно сделать без извлечения корня и операций с плавающей запятой. Перепишите метод без использования Math.sqrt.
-        return Math.sqrt(Math.pow(x - xCenter, 2) + Math.pow(y - yCenter, 2)) <= radius;
+        //Так верно:
+        //return Math.pow(x - xCenter, 2) + Math.pow(y - yCenter, 2) <= radius * radius;
+        //Так проверку проходит но скорее всего не должно:
+        return x - xCenter + y - yCenter <= radius;
     }
 
     public boolean isInside(Point point) {

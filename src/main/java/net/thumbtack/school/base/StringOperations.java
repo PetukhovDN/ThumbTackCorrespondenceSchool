@@ -1,14 +1,13 @@
 package net.thumbtack.school.base;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.stream.Collectors;
 
 public class StringOperations {
 
     public static int getSummaryLength(String[] strings) {
-        // REVU Такой подход делает много лишних действий по объединению строк в одну длинную строку.
-        // Используйте подход без лишних операций над строками.
-        return String.join("", strings).length();
+        return Arrays.stream(strings).mapToInt(String::length).sum();
     }
 
     public static String getFirstAndLastLetterString(String string) {
@@ -79,50 +78,50 @@ public class StringOperations {
     }
 
     public static boolean isPalindrome(String string) {
-        // REVU Используйте подход без копирования строки
-        return string.equals(new StringBuilder(string).reverse().toString());
+        for (int i = 0; i < string.length() / 2; i++) {
+            if (string.charAt(i) != string.charAt(string.length() - i - 1)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public static boolean isPalindromeIgnoreCase(String string) {
-        // REVU Используйте подход без копирования строки
-        return string.equalsIgnoreCase(new StringBuilder(string).reverse().toString());
+        return isPalindrome(string.toLowerCase());
     }
 
     public static String getLongestPalindromeIgnoreCase(String[] strings) {
-        String s = "";
-        for (String string : strings) {
-            // REVU Не копируйте строки там, где это не необходимо
-            StringBuilder palindrom = new StringBuilder(string).reverse();
-            // REVU Используйте собки {} во всех if и for, даже если в скобках будет только одно действие
-            if (string.equalsIgnoreCase(palindrom.toString()) && string.length() > s.length()) s = string;
-        }
-        return s;
+        return Arrays.stream(strings)
+                .filter(StringOperations::isPalindromeIgnoreCase)
+                .max(Comparator.comparingInt(String::length)).orElse("");
     }
 
     public static boolean hasSameSubstring(String string1, String string2, int index, int length) {
-        // REVU Используйте собки {} во всех if и for, даже если в скобках будет только одно действие
         if (string1.length() < length + index
-                || string2.length() < length + index) return false;
-        return string1.substring(index, length + index).equals(string2.substring(index, length + index));
+                || string2.length() < length + index) {
+            return false;
+        }
+        return string1.substring(index, length + index)
+                .equals(string2.substring(index, length + index));
     }
 
     public static boolean isEqualAfterReplaceCharacters(String string1, char replaceInStr1,
                                                         char replaceByInStr1, String string2,
                                                         char replaceInStr2, char replaceByInStr2) {
-        return string1.replace(replaceInStr1, replaceByInStr1).equals(string2.replace(replaceInStr2, replaceByInStr2));
+        return string1.replace(replaceInStr1, replaceByInStr1)
+                .equals(string2.replace(replaceInStr2, replaceByInStr2));
     }
 
     public static boolean isEqualAfterReplaceStrings(String string1, String replaceInStr1,
                                                      String replaceByInStr1, String string2, String replaceInStr2,
                                                      String replaceByInStr2) {
-        return string1.replace(replaceInStr1, replaceByInStr1).equals(string2.replace(replaceInStr2, replaceByInStr2));
+        return string1.replace(replaceInStr1, replaceByInStr1)
+                .equals(string2.replace(replaceInStr2, replaceByInStr2));
 
     }
 
     public static boolean isPalindromeAfterRemovingSpacesIgnoreCase(String string) {
-        String string2 = string.replace(" ", "");
-        // REVU Используйте подход без копирования строки
-        return string2.equalsIgnoreCase(new StringBuilder(string2).reverse().toString());
+        return isPalindromeIgnoreCase(string.replaceAll(" ", ""));
     }
 
     public static boolean isEqualAfterTrimming(String string1, String string2) {
@@ -130,45 +129,24 @@ public class StringOperations {
     }
 
     public static String makeCsvStringFromInts(int[] array) {
-        // REVU Не забывайте чистить код от частей, которые больше не используются
-//        String[] strings = new String[array.length];
-//        for (int i = 0; i < array.length; i++) {
-//            strings[i] = String.valueOf(array[i]);
-//        }
-//        return String.join(",", strings);
         return Arrays.stream(array)
                 .mapToObj(String::valueOf)
                 .collect(Collectors.joining(","));
     }
 
     public static String makeCsvStringFromDoubles(double[] array) {
-//        String[] strings = new String[array.length];
-//        for (int i = 0; i < array.length; i++) {
-//            strings[i] = String.format("%.2f", array[i]);
-//        }
-//        return String.join(",", strings);
         return Arrays.stream(array)
                 .mapToObj(v -> String.format("%.2f", v))
                 .collect(Collectors.joining(","));
     }
 
     public static StringBuilder makeCsvStringBuilderFromInts(int[] array) {
-//        String[] strings = new String[array.length];
-//        for (int i = 0; i < array.length; i++) {
-//            strings[i] = String.valueOf(array[i]);
-//        }
-//        return new StringBuilder(String.join(",", strings));
         return new StringBuilder(Arrays.stream(array)
                 .mapToObj(String::valueOf)
                 .collect(Collectors.joining(",")));
     }
 
     public static StringBuilder makeCsvStringBuilderFromDoubles(double[] array) {
-//        String[] strings = new String[array.length];
-//        for (int i = 0; i < array.length; i++) {
-//            strings[i] = String.format("%.2f", array[i]);
-//        }
-//        return new StringBuilder(String.join(",", strings));
         return new StringBuilder(Arrays.stream(array)
                 .mapToObj(v -> String.format("%.2f", v))
                 .collect(Collectors.joining(",")));
@@ -184,11 +162,8 @@ public class StringOperations {
 
     public static StringBuilder insertCharacters(String string, int[] positions, char[] characters) {
         StringBuilder stringBuilder = new StringBuilder(string);
-        int position = 0;
-        // REVU Подумайте, можно ли упросить код, выбрав обратный порядок обхода?
-        for (int i = 0; i < positions.length; i++) {
-            stringBuilder.insert(positions[i] + position, characters[i]);
-            position++;
+        for (int i = positions.length - 1; i >= 0; i--) {
+            stringBuilder.insert(positions[i], characters[i]);
         }
         return stringBuilder;
     }

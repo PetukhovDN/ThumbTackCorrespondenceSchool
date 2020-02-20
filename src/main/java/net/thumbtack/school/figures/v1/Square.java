@@ -61,8 +61,7 @@ public class Square {
     }
 
     public double getArea() {
-        // REVU Старайтесь используйте простые арифметические операции, где можно
-        return Math.pow(size, 2);
+        return size * size;
     }
 
     public double getPerimeter() {
