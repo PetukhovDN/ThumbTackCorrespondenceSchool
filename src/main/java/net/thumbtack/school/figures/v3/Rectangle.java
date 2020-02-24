@@ -2,9 +2,10 @@ package net.thumbtack.school.figures.v3;
 
 import net.thumbtack.school.iface.v3.Stretchable;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Rectangle extends Figure implements Stretchable {
+public class Rectangle extends Figure implements Stretchable, Serializable {
     private int xLeft;
     private int yTop;
     private int xRight;
@@ -27,6 +28,22 @@ public class Rectangle extends Figure implements Stretchable {
 
     public Rectangle() {
         this(0, -1, 1, 0);
+    }
+
+    public int getxLeft() {
+        return xLeft;
+    }
+
+    public int getyTop() {
+        return yTop;
+    }
+
+    public int getxRight() {
+        return xRight;
+    }
+
+    public int getyBottom() {
+        return yBottom;
     }
 
     public int getLength() {
