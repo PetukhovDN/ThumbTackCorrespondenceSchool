@@ -9,7 +9,7 @@ public class Trainee implements Serializable {
     private int rating;
 
     public Trainee(String firstName, String lastName, int rating) throws TrainingException {
-        if (firstName == null || firstName.equals("")) {
+        if (firstName == null || firstName.equals("")) { // REVU Эти проверки уже реализованы в сеттерах. Переиспользуйте их.
             throw new TrainingException(TrainingErrorCode.TRAINEE_WRONG_FIRSTNAME);
         }
         if (lastName == null || lastName.equals("")) {
@@ -28,7 +28,7 @@ public class Trainee implements Serializable {
     }
 
     public void setFirstName(String firstName) throws TrainingException {
-        if (firstName == null || firstName.equals("")) {
+        if (firstName == null || firstName.equals("")) { // REVU У строки есть метод для проверки на пустоту
             throw new TrainingException(TrainingErrorCode.TRAINEE_WRONG_FIRSTNAME);
         }
         this.firstName = firstName;
