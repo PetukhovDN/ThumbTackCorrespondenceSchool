@@ -32,14 +32,17 @@ public class PairBox<T extends Figure, V extends Figure> implements HasArea {
 
     @Override
     public double getArea() {
+        // REVU getFirstContent().getArea() - зачем так "сложно"? Вы же здесь в контексте "this".
         return getFirstContent().getArea() + getSecondContent().getArea();
     }
 
     public boolean isAreaEqual(PairBox<? extends Figure, ? extends Figure> pairBox) {
+        // REVU А если у второго box площадь будет гораздо больше, чем у первого?
         return getArea() - pairBox.getArea() < DOUBLE_EPS;
     }
 
     public static boolean isAreaEqual(PairBox<? extends Figure, ? extends Figure> pairBox1, PairBox<? extends Figure, ? extends Figure> pairBox2) {
+        // REVU А если у второго box площадь будет гораздо больше, чем у первого?
         return pairBox1.getArea() - pairBox2.getArea() < DOUBLE_EPS;
     }
 }

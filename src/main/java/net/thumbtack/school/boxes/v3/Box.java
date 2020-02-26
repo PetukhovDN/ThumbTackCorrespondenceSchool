@@ -8,6 +8,7 @@ public class Box<T extends Figure> implements HasArea {
     private T content;
 
     public Box(T content) {
+        // REVU Каково назначение вызова родительского конструктора?
         super();
         this.content = content;
     }
@@ -22,14 +23,17 @@ public class Box<T extends Figure> implements HasArea {
 
     @Override
     public double getArea() {
+        // REVU getContent().getArea() - зачем так "сложно"? Вы же здесь в контексте "this".
         return getContent().getArea();
     }
 
     public boolean isAreaEqual(Box<? extends Figure> box) {
+        // REVU getContent().getArea() - зачем так "сложно"? Вы же здесь в контексте "this".
         return getContent().getArea() - box.getArea() < DOUBLE_EPS;
     }
 
     public static boolean isAreaEqual(Box<? extends Figure> box1, Box<? extends Figure> box2) {
+        // REVU А если у второго box площадь будет гораздо больше, чем у первого?
         return box1.getArea() - box2.getArea() < DOUBLE_EPS;
     }
 }

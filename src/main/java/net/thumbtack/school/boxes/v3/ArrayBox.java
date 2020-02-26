@@ -6,6 +6,7 @@ public class ArrayBox<T extends Figure> {
     private T[] content;
 
     public ArrayBox(T[] content) {
+        // REVU Каково назначение вызова родительского конструктора?
         super();
         this.content = content;
     }
