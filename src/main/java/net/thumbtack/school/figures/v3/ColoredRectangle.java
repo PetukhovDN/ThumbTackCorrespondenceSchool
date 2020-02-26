@@ -18,6 +18,7 @@ public class ColoredRectangle extends Rectangle implements Colored {
     }
 
     public ColoredRectangle(int xLeft, int yTop, int xRight, int yBottom, String color) throws ColorException {
+        // REVU Используйте уже реализованный конструктор
         super(xLeft, yTop, xRight, yBottom);
         this.color = colorFromString(color);
     }

@@ -18,6 +18,7 @@ public class ColoredCircle extends Circle implements Colored {
     }
 
     public ColoredCircle(int xCenter, int yCenter, int radius, String color) throws ColorException {
+        // REVU Используйте уже реализованный конструктор
         super(xCenter, yCenter, radius);
         this.color = colorFromString(color);
     }

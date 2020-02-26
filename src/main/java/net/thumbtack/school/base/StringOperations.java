@@ -87,6 +87,7 @@ public class StringOperations {
     }
 
     public static boolean isPalindromeIgnoreCase(String string) {
+        // REVU Метод String.toLowerCase создаёт копию строки. Попробуйте подход, как в методе isPalindrome (Используйте возможности класса Character).
         return isPalindrome(string.toLowerCase());
     }
 
