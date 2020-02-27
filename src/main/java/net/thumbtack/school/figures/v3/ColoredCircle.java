@@ -12,9 +12,15 @@ public class ColoredCircle extends Circle implements Colored {
 
     private Color color;
 
+    /**
+     * В первом конструкторе color определяется через сеттер, где и проходит проверку в методе verifyColor, последующие конструкторы
+     * вызывают его, таким образом упростил код убрав из остальных конструкторов вызов метода verifyColor.
+     * На вид так лучше.
+     */
+
     public ColoredCircle(int xCenter, int yCenter, int radius, Color color) throws ColorException {
         super(xCenter, yCenter, radius);
-        this.color = Color.verifyColor(color);
+        setColor(color);
     }
 
     public ColoredCircle(int xCenter, int yCenter, int radius, String color) throws ColorException {
@@ -22,27 +28,27 @@ public class ColoredCircle extends Circle implements Colored {
     }
 
     public ColoredCircle(Point center, int radius, Color color) throws ColorException {
-        this(center.getX(), center.getY(), radius, Color.verifyColor(color));
+        this(center.getX(), center.getY(), radius, color);
     }
 
     public ColoredCircle(Point center, int radius, String color) throws ColorException {
-        this(center.getX(), center.getY(), radius, colorFromString(color));
+        this(center.getX(), center.getY(), radius, color);
     }
 
     public ColoredCircle(int radius, Color color) throws ColorException {
-        this(0, 0, radius, Color.verifyColor(color));
+        this(0, 0, radius, color);
     }
 
     public ColoredCircle(int radius, String color) throws ColorException {
-        this(0, 0, radius, colorFromString(color));
+        this(0, 0, radius, color);
     }
 
     public ColoredCircle(Color color) throws ColorException {
-        this(0, 0, 1, Color.verifyColor(color));
+        this(0, 0, 1, color);
     }
 
     public ColoredCircle(String color) throws ColorException {
-        this(0, 0, 1, colorFromString(color));
+        this(0, 0, 1, color);
     }
 
     public ColoredCircle() throws ColorException {
