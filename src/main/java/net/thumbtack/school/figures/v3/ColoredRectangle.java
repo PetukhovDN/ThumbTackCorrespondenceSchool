@@ -14,13 +14,11 @@ public class ColoredRectangle extends Rectangle implements Colored {
 
     public ColoredRectangle(int xLeft, int yTop, int xRight, int yBottom, Color color) throws ColorException {
         super(xLeft, yTop, xRight, yBottom);
-        this.color = Color.color(color);
+        this.color = Color.verifyColor(color);
     }
 
     public ColoredRectangle(int xLeft, int yTop, int xRight, int yBottom, String color) throws ColorException {
-        // REVU Используйте уже реализованный конструктор
-        super(xLeft, yTop, xRight, yBottom);
-        this.color = colorFromString(color);
+        this(xLeft, yTop, xRight, yBottom, colorFromString(color));
     }
 
     public ColoredRectangle(Point topLeft, Point bottomRight, Color color) throws ColorException {
@@ -57,7 +55,7 @@ public class ColoredRectangle extends Rectangle implements Colored {
     }
 
     public void setColor(Color color) throws ColorException {
-        this.color = Color.color(color);
+        this.color = Color.verifyColor(color);
     }
 
     @Override
@@ -67,9 +65,15 @@ public class ColoredRectangle extends Rectangle implements Colored {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
         ColoredRectangle that = (ColoredRectangle) o;
         return color == that.color;
     }

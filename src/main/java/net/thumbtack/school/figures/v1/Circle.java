@@ -82,8 +82,12 @@ public class Circle {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Circle circle = (Circle) o;
         return xCenter == circle.xCenter &&
                 yCenter == circle.yCenter &&

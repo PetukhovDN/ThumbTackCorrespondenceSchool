@@ -23,8 +23,8 @@ class ColoredIsoscelesTriangleTest {
                 () -> assertEquals(20, coloredIsoscelesTriangle.getXY2().getY()),
                 () -> assertEquals(10, coloredIsoscelesTriangle.getXY3().getX()),
                 () -> assertEquals(40, coloredIsoscelesTriangle.getXY3().getY()),
-                () -> assertEquals(20, coloredIsoscelesTriangle.getKatetX()),
-                () -> assertEquals(20, coloredIsoscelesTriangle.getKatetY()),
+                () -> assertEquals(20, coloredIsoscelesTriangle.getCathetusX()),
+                () -> assertEquals(20, coloredIsoscelesTriangle.getCathetusY()),
                 () -> assertEquals(Color.GREEN, coloredIsoscelesTriangle.getColor())
         );
     }
@@ -40,8 +40,8 @@ class ColoredIsoscelesTriangleTest {
                 () -> assertEquals(20, coloredIsoscelesTriangle.getXY2().getY()),
                 () -> assertEquals(10, coloredIsoscelesTriangle.getXY3().getX()),
                 () -> assertEquals(40, coloredIsoscelesTriangle.getXY3().getY()),
-                () -> assertEquals(20, coloredIsoscelesTriangle.getKatetX()),
-                () -> assertEquals(20, coloredIsoscelesTriangle.getKatetY()),
+                () -> assertEquals(20, coloredIsoscelesTriangle.getCathetusX()),
+                () -> assertEquals(20, coloredIsoscelesTriangle.getCathetusY()),
                 () -> assertNotEquals(Color.GREEN, coloredIsoscelesTriangle.getColor())
 
         );
@@ -57,8 +57,8 @@ class ColoredIsoscelesTriangleTest {
                 () -> assertEquals(0, coloredIsoscelesTriangle.getXY2().getY()),
                 () -> assertEquals(0, coloredIsoscelesTriangle.getXY3().getX()),
                 () -> assertEquals(40, coloredIsoscelesTriangle.getXY3().getY()),
-                () -> assertEquals(40, coloredIsoscelesTriangle.getKatetX()),
-                () -> assertEquals(40, coloredIsoscelesTriangle.getKatetY()),
+                () -> assertEquals(40, coloredIsoscelesTriangle.getCathetusX()),
+                () -> assertEquals(40, coloredIsoscelesTriangle.getCathetusY()),
                 () -> assertEquals(Color.GREEN, coloredIsoscelesTriangle.getColor())
         );
     }
@@ -73,8 +73,8 @@ class ColoredIsoscelesTriangleTest {
                 () -> assertEquals(0, coloredIsoscelesTriangle.getXY2().getY()),
                 () -> assertEquals(0, coloredIsoscelesTriangle.getXY3().getX()),
                 () -> assertEquals(1, coloredIsoscelesTriangle.getXY3().getY()),
-                () -> assertEquals(1, coloredIsoscelesTriangle.getKatetX()),
-                () -> assertEquals(1, coloredIsoscelesTriangle.getKatetY()),
+                () -> assertEquals(1, coloredIsoscelesTriangle.getCathetusX()),
+                () -> assertEquals(1, coloredIsoscelesTriangle.getCathetusY()),
                 () -> assertEquals(Color.RED, coloredIsoscelesTriangle.getColor())
         );
     }
@@ -130,7 +130,7 @@ class ColoredIsoscelesTriangleTest {
                 () -> assertEquals(-20, triangle.getXY2().getY()),
                 () -> assertEquals(-20, triangle.getXY3().getX()),
                 () -> assertEquals(20, triangle.getXY3().getY()),
-                () -> assertEquals(40, triangle.getKatetX())
+                () -> assertEquals(40, triangle.getCathetusX())
         );
     }
 
@@ -178,14 +178,14 @@ class ColoredIsoscelesTriangleTest {
         assertAll(
                 () -> assertEquals(120, coloredIsoscelesTriangle.getXY2().getX()),
                 () -> assertEquals(210, coloredIsoscelesTriangle.getXY3().getY()),
-                () -> assertEquals(10, coloredIsoscelesTriangle.getKatetX()),
+                () -> assertEquals(10, coloredIsoscelesTriangle.getCathetusX()),
                 () -> assertEquals(Color.GREEN, coloredIsoscelesTriangle.getColor())
         );
         coloredIsoscelesTriangle.moveTo(new Point(1100, 1200));
         assertAll(
                 () -> assertEquals(1110, coloredIsoscelesTriangle.getXY2().getX()),
                 () -> assertEquals(1200, coloredIsoscelesTriangle.getXY1().getY()),
-                () -> assertEquals(20, coloredIsoscelesTriangle.getKatetY()),
+                () -> assertEquals(20, coloredIsoscelesTriangle.getCathetusY()),
                 () -> assertEquals(Color.GREEN, coloredIsoscelesTriangle.getColor())
         );
     }
@@ -197,7 +197,7 @@ class ColoredIsoscelesTriangleTest {
         assertAll(
                 () -> assertEquals(30, coloredIsoscelesTriangle.getXY3().getY()),
                 () -> assertEquals(30, coloredIsoscelesTriangle.getXY2().getX()),
-                () -> assertEquals(30, coloredIsoscelesTriangle.getKatetX()),
+                () -> assertEquals(30, coloredIsoscelesTriangle.getCathetusX()),
                 () -> assertEquals(Color.GREEN, coloredIsoscelesTriangle.getColor())
         );
     }

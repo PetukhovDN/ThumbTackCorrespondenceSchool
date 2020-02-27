@@ -6,8 +6,6 @@ public class ArrayBox<T extends Figure> {
     private T[] content;
 
     public ArrayBox(T[] content) {
-        // REVU Каково назначение вызова родительского конструктора?
-        super();
         this.content = content;
     }
 
@@ -24,10 +22,10 @@ public class ArrayBox<T extends Figure> {
     }
 
     public void setElement(T element, int i) {
-        getContent()[i] = element;
+        content[i] = element;
     }
 
     public boolean isSameSize(ArrayBox<? extends Figure> arrayBox) {
-        return getContent().length == arrayBox.getContent().length;
+        return content.length == arrayBox.getContent().length;
     }
 }

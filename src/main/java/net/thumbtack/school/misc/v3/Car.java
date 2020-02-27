@@ -93,8 +93,12 @@ public class Car implements Movable, Driveable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Car)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Car)) {
+            return false;
+        }
         Car car = (Car) o;
         return positionX == car.positionX &&
                 positionY == car.positionY &&

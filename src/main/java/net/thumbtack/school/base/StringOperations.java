@@ -87,8 +87,12 @@ public class StringOperations {
     }
 
     public static boolean isPalindromeIgnoreCase(String string) {
-        // REVU Метод String.toLowerCase создаёт копию строки. Попробуйте подход, как в методе isPalindrome (Используйте возможности класса Character).
-        return isPalindrome(string.toLowerCase());
+        for (int i = 0; i < string.length() / 2; i++) {
+            if (Character.toLowerCase(string.charAt(i)) != Character.toLowerCase(string.charAt(string.length() - i - 1))) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public static String getLongestPalindromeIgnoreCase(String[] strings) {

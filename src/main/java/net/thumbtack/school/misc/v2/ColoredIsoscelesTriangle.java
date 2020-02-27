@@ -17,10 +17,8 @@ public class ColoredIsoscelesTriangle extends IsoscelesTriangle implements Color
         this(xy1.getX(), xy1.getY(), xy2.getX(), xy3.getY(), color);
     }
 
-    // REVU Не используйте в коде "рунглиш". Катет по английски это cathetus
-    // https://en.wikipedia.org/wiki/Cathetus
-    public ColoredIsoscelesTriangle(int katetX, int katetY, int color) {
-        this(0, 0, katetX, katetY, color);
+    public ColoredIsoscelesTriangle(int cathetusX, int cathetusY, int color) {
+        this(0, 0, cathetusX, cathetusY, color);
     }
 
     public ColoredIsoscelesTriangle(int color) {
@@ -44,9 +42,15 @@ public class ColoredIsoscelesTriangle extends IsoscelesTriangle implements Color
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ColoredIsoscelesTriangle)) return false;
-        if (!super.equals(o)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof ColoredIsoscelesTriangle)) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
         ColoredIsoscelesTriangle that = (ColoredIsoscelesTriangle) o;
         return color == that.color;
     }

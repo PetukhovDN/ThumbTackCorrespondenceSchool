@@ -35,12 +35,12 @@ public class IsoscelesTriangle extends Figure {
     /**
      * Треугольник с первой точкой в начале координат.
      *
-     * @param katetX длина по оси X
-     * @param katetY длина по оси Y
+     * @param cathetusX длина по оси X
+     * @param cathetusY длина по оси Y
      */
 
-    public IsoscelesTriangle(int katetX, int katetY) {
-        this(0, 0, katetX, katetY);
+    public IsoscelesTriangle(int cathetusX, int cathetusY) {
+        this(0, 0, cathetusX, cathetusY);
     }
 
     /**
@@ -51,11 +51,11 @@ public class IsoscelesTriangle extends Figure {
         this(0, 0, 1, 1);
     }
 
-    public int getKatetX() {
+    public int getCathetusX() {
         return x2 - x1;
     }
 
-    public int getKatetY() {
+    public int getCathetusY() {
         return y3 - y1;
     }
 
@@ -88,8 +88,8 @@ public class IsoscelesTriangle extends Figure {
 
     @Override
     public void moveTo(int x, int y) {
-        x2 = getKatetX() + x;
-        y3 = getKatetY() + y;
+        x2 = getCathetusX() + x;
+        y3 = getCathetusY() + y;
         x1 = x;
         y1 = y;
         y2 = y;
@@ -117,13 +117,13 @@ public class IsoscelesTriangle extends Figure {
 
     @Override
     public double getArea() {
-        return getKatetX() * getKatetY() * 0.5;
+        return getCathetusX() * getCathetusY() * 0.5;
     }
 
     @Override
     public double getPerimeter() {
-        double gipotenuza = Math.sqrt(getKatetX() * getKatetX() + getKatetY() * getKatetY());
-        return gipotenuza + getKatetX() + getKatetY();
+        double gipotenuza = Math.sqrt(getCathetusX() * getCathetusX() + getCathetusY() * getCathetusY());
+        return gipotenuza + getCathetusX() + getCathetusY();
     }
 
     @Override
@@ -149,8 +149,12 @@ public class IsoscelesTriangle extends Figure {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof IsoscelesTriangle)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof IsoscelesTriangle)) {
+            return false;
+        }
         IsoscelesTriangle that = (IsoscelesTriangle) o;
         return x1 == that.x1 &&
                 y1 == that.y1 &&

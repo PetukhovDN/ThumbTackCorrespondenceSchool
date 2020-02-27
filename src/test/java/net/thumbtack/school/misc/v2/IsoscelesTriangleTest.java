@@ -20,8 +20,8 @@ class IsoscelesTriangleTest {
                 () -> assertEquals(20, triangle.getXY2().getY()),
                 () -> assertEquals(10, triangle.getXY3().getX()),
                 () -> assertEquals(40, triangle.getXY3().getY()),
-                () -> assertEquals(20, triangle.getKatetX()),
-                () -> assertEquals(20, triangle.getKatetY())
+                () -> assertEquals(20, triangle.getCathetusX()),
+                () -> assertEquals(20, triangle.getCathetusY())
         );
     }
 
@@ -36,8 +36,8 @@ class IsoscelesTriangleTest {
                 () -> assertEquals(20, triangle.getXY2().getY()),
                 () -> assertEquals(10, triangle.getXY3().getX()),
                 () -> assertEquals(40, triangle.getXY3().getY()),
-                () -> assertEquals(20, triangle.getKatetX()),
-                () -> assertEquals(20, triangle.getKatetY())
+                () -> assertEquals(20, triangle.getCathetusX()),
+                () -> assertEquals(20, triangle.getCathetusY())
         );
     }
 
@@ -51,8 +51,8 @@ class IsoscelesTriangleTest {
                 () -> assertEquals(0, triangle.getXY2().getY()),
                 () -> assertEquals(0, triangle.getXY3().getX()),
                 () -> assertEquals(40, triangle.getXY3().getY()),
-                () -> assertEquals(40, triangle.getKatetX()),
-                () -> assertEquals(40, triangle.getKatetY())
+                () -> assertEquals(40, triangle.getCathetusX()),
+                () -> assertEquals(40, triangle.getCathetusY())
         );
     }
 
@@ -66,8 +66,8 @@ class IsoscelesTriangleTest {
                 () -> assertEquals(0, triangle.getXY2().getY()),
                 () -> assertEquals(0, triangle.getXY3().getX()),
                 () -> assertEquals(1, triangle.getXY3().getY()),
-                () -> assertEquals(1, triangle.getKatetX()),
-                () -> assertEquals(1, triangle.getKatetY())
+                () -> assertEquals(1, triangle.getCathetusX()),
+                () -> assertEquals(1, triangle.getCathetusY())
         );
     }
 
@@ -84,7 +84,7 @@ class IsoscelesTriangleTest {
                 () -> assertEquals(-20, triangle.getXY2().getY()),
                 () -> assertEquals(-20, triangle.getXY3().getX()),
                 () -> assertEquals(20, triangle.getXY3().getY()),
-                () -> assertEquals(40, triangle.getKatetX())
+                () -> assertEquals(40, triangle.getCathetusX())
         );
     }
 
@@ -101,13 +101,13 @@ class IsoscelesTriangleTest {
         assertAll(
                 () -> assertEquals(120, triangle.getXY2().getX()),
                 () -> assertEquals(210, triangle.getXY3().getY()),
-                () -> assertEquals(10, triangle.getKatetX())
+                () -> assertEquals(10, triangle.getCathetusX())
         );
         triangle.moveTo(new Point(1100, 1200));
         assertAll(
                 () -> assertEquals(1110, triangle.getXY2().getX()),
                 () -> assertEquals(1200, triangle.getXY1().getY()),
-                () -> assertEquals(20, triangle.getKatetY())
+                () -> assertEquals(20, triangle.getCathetusY())
         );
     }
 
@@ -118,7 +118,7 @@ class IsoscelesTriangleTest {
         assertAll(
                 () -> assertEquals(30, triangle.getXY3().getY()),
                 () -> assertEquals(30, triangle.getXY2().getX()),
-                () -> assertEquals(30, triangle.getKatetX())
+                () -> assertEquals(30, triangle.getCathetusX())
         );
     }
 

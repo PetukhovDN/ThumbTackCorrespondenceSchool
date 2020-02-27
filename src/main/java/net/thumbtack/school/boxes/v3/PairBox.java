@@ -14,16 +14,20 @@ public class PairBox<T extends Figure, V extends Figure> implements HasArea {
         this.secondContent = secondContent;
     }
 
-    public T getFirstContent() {
-        return this.firstContent;
+    public static boolean isAreaEqual(PairBox<? extends Figure, ? extends Figure> pairBox1, PairBox<? extends Figure, ? extends Figure> pairBox2) {
+        return Math.abs(pairBox1.getArea() - pairBox2.getArea()) < DOUBLE_EPS;
     }
 
-    public V getSecondContent() {
-        return secondContent;
+    public T getFirstContent() {
+        return firstContent;
     }
 
     public void setFirstContent(T firstContent) {
         this.firstContent = firstContent;
+    }
+
+    public V getSecondContent() {
+        return secondContent;
     }
 
     public void setSecondContent(V secondContent) {
@@ -32,17 +36,10 @@ public class PairBox<T extends Figure, V extends Figure> implements HasArea {
 
     @Override
     public double getArea() {
-        // REVU getFirstContent().getArea() - зачем так "сложно"? Вы же здесь в контексте "this".
-        return getFirstContent().getArea() + getSecondContent().getArea();
+        return firstContent.getArea() + secondContent.getArea();
     }
 
     public boolean isAreaEqual(PairBox<? extends Figure, ? extends Figure> pairBox) {
-        // REVU А если у второго box площадь будет гораздо больше, чем у первого?
-        return getArea() - pairBox.getArea() < DOUBLE_EPS;
-    }
-
-    public static boolean isAreaEqual(PairBox<? extends Figure, ? extends Figure> pairBox1, PairBox<? extends Figure, ? extends Figure> pairBox2) {
-        // REVU А если у второго box площадь будет гораздо больше, чем у первого?
-        return pairBox1.getArea() - pairBox2.getArea() < DOUBLE_EPS;
+        return Math.abs(this.getArea() - pairBox.getArea()) < DOUBLE_EPS;
     }
 }

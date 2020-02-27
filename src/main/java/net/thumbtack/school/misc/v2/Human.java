@@ -86,8 +86,12 @@ public class Human implements Movable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Human)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Human)) {
+            return false;
+        }
         Human human = (Human) o;
         return positionX == human.positionX &&
                 positionY == human.positionY &&

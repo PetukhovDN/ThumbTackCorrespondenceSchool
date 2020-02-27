@@ -14,17 +14,15 @@ public class ColoredCircle extends Circle implements Colored {
 
     public ColoredCircle(int xCenter, int yCenter, int radius, Color color) throws ColorException {
         super(xCenter, yCenter, radius);
-        this.color = Color.color(color);
+        this.color = Color.verifyColor(color);
     }
 
     public ColoredCircle(int xCenter, int yCenter, int radius, String color) throws ColorException {
-        // REVU Используйте уже реализованный конструктор
-        super(xCenter, yCenter, radius);
-        this.color = colorFromString(color);
+        this(xCenter, yCenter, radius, colorFromString(color));
     }
 
     public ColoredCircle(Point center, int radius, Color color) throws ColorException {
-        this(center.getX(), center.getY(), radius, color);
+        this(center.getX(), center.getY(), radius, Color.verifyColor(color));
     }
 
     public ColoredCircle(Point center, int radius, String color) throws ColorException {
@@ -32,7 +30,7 @@ public class ColoredCircle extends Circle implements Colored {
     }
 
     public ColoredCircle(int radius, Color color) throws ColorException {
-        this(0, 0, radius, color);
+        this(0, 0, radius, Color.verifyColor(color));
     }
 
     public ColoredCircle(int radius, String color) throws ColorException {
@@ -40,7 +38,7 @@ public class ColoredCircle extends Circle implements Colored {
     }
 
     public ColoredCircle(Color color) throws ColorException {
-        this(0, 0, 1, color);
+        this(0, 0, 1, Color.verifyColor(color));
     }
 
     public ColoredCircle(String color) throws ColorException {
@@ -57,7 +55,7 @@ public class ColoredCircle extends Circle implements Colored {
     }
 
     public void setColor(Color color) throws ColorException {
-        this.color = Color.color(color);
+        this.color = Color.verifyColor(color);
     }
 
     @Override
@@ -67,9 +65,15 @@ public class ColoredCircle extends Circle implements Colored {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
         ColoredCircle that = (ColoredCircle) o;
         return color == that.color;
     }

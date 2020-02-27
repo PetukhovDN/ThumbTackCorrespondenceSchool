@@ -5,8 +5,7 @@ public enum TrainingErrorCode {
     TRAINEE_WRONG_LASTNAME("Неверная фамилия"),
     TRAINEE_WRONG_RATING("Неверная оценка");
 
-    // REVU Члены классов должны быть по возможности приватными
-    String errorString;
+    private String errorString;
 
     TrainingErrorCode(String errorString) {
         this.errorString = errorString;

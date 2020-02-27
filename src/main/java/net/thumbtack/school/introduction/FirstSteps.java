@@ -53,8 +53,9 @@ public class FirstSteps {
     public int min(int[] array) {
         int min = Integer.MAX_VALUE;
         for (int value : array) {
-            // REVU Используйте собки {} во всех if и for, даже если в скобках будет только одно действие
-            if (value < min) min = value;
+            if (value < min) {
+                min = value;
+            }
         }
         return min;
     }
@@ -62,8 +63,9 @@ public class FirstSteps {
     public int max(int[] array) {
         int max = Integer.MIN_VALUE;
         for (int value : array) {
-            // REVU Используйте собки {} во всех if и for, даже если в скобках будет только одно действие
-            if (value > max) max = value;
+            if (value > max) {
+                max = value;
+            }
         }
         return max;
     }
@@ -82,8 +84,9 @@ public class FirstSteps {
 
     public boolean isSortedDescendant(int[] array) {
         for (int i = 0; i < array.length - 1; i++) {
-            // REVU Используйте собки {} во всех if и for, даже если в скобках будет только одно действие
-            if (array[i] <= array[i + 1]) return false;
+            if (array[i] <= array[i + 1]) {
+                return false;
+            }
         }
         return true;
     }
@@ -96,8 +99,9 @@ public class FirstSteps {
 
     public boolean find(int[] array, int value) {
         for (int value2 : array) {
-            // REVU Используйте собки {} во всех if и for, даже если в скобках будет только одно действие
-            if (value2 == value) return true;
+            if (value2 == value) {
+                return true;
+            }
         }
         return false;
     }
@@ -129,21 +133,22 @@ public class FirstSteps {
     }
 
     public int max(int[][] matrix) {
-        int max = Integer.MIN_VALUE;
+        int maxResult = Integer.MIN_VALUE;
         for (int[] ints : matrix) {
-            // REVU Метод max делает обход массива. Вы вызываете его два раза. Я предлагаю вызывать его один раз и сохранить/переиспользовать результат.
-            if (max(ints) > max) {
-                max = max(ints);
+            int maxInArray = max(ints);
+            if (maxInArray > maxResult) {
+                maxResult = maxInArray;
             }
         }
-        return max;
+        return maxResult;
     }
 
     public int diagonalMax(int[][] matrix) {
         int max = Integer.MIN_VALUE;
         for (int i = 0; i < matrix.length; i++) {
-            // REVU Используйте собки {} во всех if и for, даже если в скобках будет только одно действие
-            if (matrix[i][i] > max) max = matrix[i][i];
+            if (matrix[i][i] > max) {
+                max = matrix[i][i];
+            }
         }
         return max;
     }
@@ -151,8 +156,9 @@ public class FirstSteps {
     public boolean isSortedDescendant(int[][] matrix) {
         for (int[] ints : matrix) {
             for (int j = 0; j < ints.length; j++) {
-                // REVU Используйте собки {} во всех if и for, даже если в скобках будет только одно действие
-                if (!isSortedDescendant(ints)) return false;
+                if (!isSortedDescendant(ints)) {
+                    return false;
+                }
             }
         }
         return true;
