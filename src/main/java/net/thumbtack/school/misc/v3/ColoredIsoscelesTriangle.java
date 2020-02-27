@@ -60,11 +60,6 @@ public class ColoredIsoscelesTriangle extends IsoscelesTriangle implements Color
     }
 
     @Override
-    public void setColor(String colorString) throws ColorException {
-        this.color = Color.colorFromString(colorString);
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;

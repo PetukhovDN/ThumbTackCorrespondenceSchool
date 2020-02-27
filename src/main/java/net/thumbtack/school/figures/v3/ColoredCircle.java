@@ -59,11 +59,6 @@ public class ColoredCircle extends Circle implements Colored {
     }
 
     @Override
-    public void setColor(String colorString) throws ColorException {
-        setColor(colorFromString(colorString));
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;

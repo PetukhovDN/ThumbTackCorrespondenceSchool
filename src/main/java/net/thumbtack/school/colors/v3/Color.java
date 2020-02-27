@@ -23,5 +23,4 @@ public enum Color {
             throw new ColorException(ColorErrorCode.NULL_COLOR);
         }
     }
-
 }
