@@ -15,7 +15,7 @@ public enum Color {
             return GREEN;
         } else if (colorString.equals("BLUE")) {
             return BLUE;
-        } else throw new ColorException(ColorErrorCode.WRONG_COLOR_STRING);
+        } else throw new ColorException(ColorErrorCode.WRONG_COLOR_STRING);  // REVU Используйте скобки {}
     }
 
     // REVU Пробел после имени метода не нужен
@@ -29,6 +29,6 @@ public enum Color {
             return GREEN;
         } else if (color == BLUE) {
             return BLUE;
-        } else throw new ColorException(ColorErrorCode.WRONG_COLOR_STRING);
+        } else throw new ColorException(ColorErrorCode.WRONG_COLOR_STRING);  // REVU Используйте скобки {}
     }
 }
