@@ -8,5 +8,6 @@ public interface Colored {
 
     void setColor(Color color) throws ColorException;
 
+    // REVU Реализации этого метода во всех классах одинаковые. Подумайте о том, чтобы сделать этот метод default.
     void setColor(String colorString) throws ColorException;
 }
