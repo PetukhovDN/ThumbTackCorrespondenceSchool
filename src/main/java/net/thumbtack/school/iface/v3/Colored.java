@@ -8,7 +8,7 @@ public interface Colored {
 
     void setColor(Color color) throws ColorException;
 
-    default void setColor(String colorString) throws ColorException{
+    default void setColor(String colorString) throws ColorException {
         setColor(Color.colorFromString(colorString));
     }
 }

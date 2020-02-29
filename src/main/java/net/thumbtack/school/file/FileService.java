@@ -8,6 +8,7 @@ import net.thumbtack.school.ttschool.Trainee;
 import net.thumbtack.school.ttschool.TrainingException;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 public class FileService {
@@ -192,7 +193,7 @@ public class FileService {
     }
 
     public static void writeTraineeToTextFileOneLine(File file, Trainee trainee) throws IOException {
-        try (PrintWriter printWriter = new PrintWriter(file, "UTF-8")) {
+        try (PrintWriter printWriter = new PrintWriter(file, StandardCharsets.UTF_8)) {
             printWriter.write(String.format("%s %s %s", trainee.getFirstName(), trainee.getLastName(), trainee.getRating()));
         }
     }
@@ -209,7 +210,7 @@ public class FileService {
     }
 
     public static void writeTraineeToTextFileThreeLines(File file, Trainee trainee) throws IOException {
-        try (PrintWriter printWriter = new PrintWriter(file, "UTF-8")) {
+        try (PrintWriter printWriter = new PrintWriter(file, StandardCharsets.UTF_8)) {
             printWriter.write(trainee.getFirstName() + "\n");
             printWriter.write(trainee.getLastName() + "\n");
             printWriter.write(trainee.getRating() + "\n");
