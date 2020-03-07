@@ -86,8 +86,8 @@ public class TestStringOperations {
 
     @Test
     public void testIsEqual() {
-        String first = new String("Hello");
-        String second = new String("Hello");
+        String first = "Hello";
+        String second = "Hello";
         String third = "World";
         assertTrue(StringOperations.isEqual(first, second));
         assertFalse(StringOperations.isEqual(first, third));
@@ -95,9 +95,9 @@ public class TestStringOperations {
 
     @Test
     public void testIsEqualIgnoreCase() {
-        String first = new String("Hello");
-        String second = new String("HELLO");
-        String third = new String("HeLlO");
+        String first = "Hello";
+        String second = "HELLO";
+        String third = "HeLlO";
         String fourth = "World";
         assertTrue(StringOperations.isEqualIgnoreCase(first, second));
         assertTrue(StringOperations.isEqualIgnoreCase(first, third));

@@ -138,13 +138,13 @@ class ColoredIsoscelesTriangleTest {
     @Test
     public void testAreaTriangle() {
         ColoredIsoscelesTriangle coloredIsoscelesTriangle = new ColoredIsoscelesTriangle(10, 10, 20, 30, 16);
-        assertEquals(100, coloredIsoscelesTriangle.getArea(),1);
+        assertEquals(100, coloredIsoscelesTriangle.getArea(), 1);
     }
 
     @Test
     public void testPerimeterTriangle() {
         ColoredIsoscelesTriangle triangle = new ColoredIsoscelesTriangle(20, 20, 23, 24, 16);
-        assertEquals(12, triangle.getPerimeter(),1);
+        assertEquals(12, triangle.getPerimeter(), 1);
     }
 
     @Test

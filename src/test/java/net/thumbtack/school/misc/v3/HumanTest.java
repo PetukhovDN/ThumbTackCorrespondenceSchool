@@ -79,6 +79,7 @@ class HumanTest {
                 () -> assertNotEquals(0, human.getWeight())
         );
     }
+
     @Test
     void setPositionHuman1() {
         Human human = new Human();

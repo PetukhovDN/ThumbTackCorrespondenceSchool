@@ -1,7 +1,7 @@
 package net.thumbtack.school.figures.v3;
 
-import net.thumbtack.school.colors.v3.Color;
 import net.thumbtack.school.colors.ColorException;
+import net.thumbtack.school.colors.v3.Color;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
