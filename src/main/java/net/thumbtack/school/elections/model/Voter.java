@@ -3,8 +3,7 @@ package net.thumbtack.school.elections.model;
 import net.thumbtack.school.elections.dto.request.RegisterVoterDtoRequest;
 
 import java.io.Serializable;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 public class Voter implements Serializable {
 
@@ -20,6 +19,9 @@ public class Voter implements Serializable {
     private String password;
     private UUID token;
 
+    private Map<String, List<Integer>> proposalList;
+
+
     public Voter(RegisterVoterDtoRequest registerVoterDtoRequest) {
         this.firstName = registerVoterDtoRequest.getFirstName();
         this.lastName = registerVoterDtoRequest.getLastName();
@@ -30,6 +32,8 @@ public class Voter implements Serializable {
         this.login = registerVoterDtoRequest.getLogin();
         this.password = registerVoterDtoRequest.getPassword();
         setToken(UUID.randomUUID());
+
+        this.proposalList = new HashMap<>();
     }
 
     public String getFirstName() {
@@ -70,6 +74,10 @@ public class Voter implements Serializable {
 
     public void setToken(UUID token) {
         this.token = token;
+    }
+
+    public Map<String, List<Integer>> getProposalList() {
+        return proposalList;
     }
 
     @Override

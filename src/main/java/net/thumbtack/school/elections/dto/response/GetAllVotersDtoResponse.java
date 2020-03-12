@@ -4,10 +4,10 @@ import net.thumbtack.school.elections.model.Voter;
 
 import java.util.List;
 
-public class GetAllVotersResponse {
+public class GetAllVotersDtoResponse {
     private List<Voter> voterList;
 
-    public GetAllVotersResponse(List<Voter> voterList) {
+    public GetAllVotersDtoResponse(List<Voter> voterList) {
         this.voterList = voterList;
     }
 

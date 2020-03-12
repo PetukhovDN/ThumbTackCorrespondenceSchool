@@ -1,10 +1,12 @@
 package net.thumbtack.school.elections.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.Serializable;
 import java.util.UUID;
 
-public class Candidate {
+public class Candidate implements Serializable {
+
+    private static final long serialVersionUID = 7436256402214609702L;
+
     private String firstName;
     private String lastName;
     private String middleName;
@@ -15,7 +17,7 @@ public class Candidate {
     private String password;
     private UUID token;
 
-    private List<String> proposalList;
+    private CandidateProgram candidateProgram;
 
     public Candidate(Voter voter) {
         this.firstName = voter.getFirstName();
@@ -27,7 +29,7 @@ public class Candidate {
         this.login = voter.getLogin();
         this.password = voter.getPassword();
         this.token = voter.getToken();
-        this.proposalList = new ArrayList<>();
+        this.candidateProgram = new CandidateProgram();
     }
 
     public String getFirstName() {
@@ -66,8 +68,8 @@ public class Candidate {
         return token;
     }
 
-    public List<String> getProposalList() {
-        return proposalList;
+    public CandidateProgram getCandidateProgram() {
+        return candidateProgram;
     }
 }
 

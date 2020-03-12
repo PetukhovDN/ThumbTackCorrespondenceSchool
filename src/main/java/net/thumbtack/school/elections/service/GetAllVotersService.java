@@ -2,8 +2,8 @@ package net.thumbtack.school.elections.service;
 
 import com.google.gson.Gson;
 import net.thumbtack.school.elections.daoimpl.VoterDaoImpl;
-import net.thumbtack.school.elections.dto.request.GetAllVotersRequest;
-import net.thumbtack.school.elections.dto.response.GetAllVotersResponse;
+import net.thumbtack.school.elections.dto.request.GetAllVotersDtoRequest;
+import net.thumbtack.school.elections.dto.response.GetAllVotersDtoResponse;
 import net.thumbtack.school.elections.exceptions.ElectionsException;
 
 public class GetAllVotersService {
@@ -16,11 +16,11 @@ public class GetAllVotersService {
     public String returnIfValid() {
         String result;
         try {
-            GetAllVotersRequest getAllVotersRequest = new Gson().fromJson(requestJsonString, GetAllVotersRequest.class);
-            getAllVotersRequest.validate();
+            GetAllVotersDtoRequest getAllVotersDtoRequest = new Gson().fromJson(requestJsonString, GetAllVotersDtoRequest.class);
+            getAllVotersDtoRequest.validate();
             VoterDaoImpl voterDao = new VoterDaoImpl();
-            GetAllVotersResponse getAllVotersResponse = new GetAllVotersResponse(voterDao.getAllVoters(getAllVotersRequest.getToken()));
-            result = new Gson().toJson(getAllVotersResponse);
+            GetAllVotersDtoResponse getAllVotersDtoResponse = new GetAllVotersDtoResponse(voterDao.getAllVotersFromDatabase(getAllVotersDtoRequest.getToken()));
+            result = new Gson().toJson(getAllVotersDtoResponse);
         } catch (ElectionsException e) {
             result = new Gson().toJson(e.getErrorCode().getErrorString());
         }

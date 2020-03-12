@@ -13,6 +13,6 @@ public interface VoterDao {
 
     UUID logoutFromDatabase(UUID token) throws ElectionsException;
 
-    List<Voter> getAllVoters(UUID token) throws ElectionsException;
+    List<Voter> getAllVotersFromDatabase(UUID token) throws ElectionsException;
 
 }

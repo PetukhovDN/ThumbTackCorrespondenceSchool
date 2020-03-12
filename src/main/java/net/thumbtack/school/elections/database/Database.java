@@ -3,10 +3,7 @@ package net.thumbtack.school.elections.database;
 import net.thumbtack.school.elections.model.Voter;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class Database implements Serializable {
 
@@ -15,6 +12,8 @@ public class Database implements Serializable {
 
     private List<Voter> votersList = new ArrayList<>();
     private Set<String> loginVotersSet = new HashSet<>();
+    private Set<UUID> validTokensSet = new HashSet<>();
+    private Map<String, List<Integer>> proposalsOfAllVoters = new HashMap<>();
 
     public static Database getInstance() {
         if (instance == null) {
@@ -29,5 +28,13 @@ public class Database implements Serializable {
 
     public Set<String> getLoginVotersSet() {
         return loginVotersSet;
+    }
+
+    public Set<UUID> getValidTokensSet() {
+        return validTokensSet;
+    }
+
+    public Map<String, List<Integer>> getProposalsOfAllVoters() {
+        return proposalsOfAllVoters;
     }
 }

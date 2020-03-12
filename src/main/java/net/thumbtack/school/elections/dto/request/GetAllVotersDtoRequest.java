@@ -5,10 +5,10 @@ import net.thumbtack.school.elections.exceptions.ExceptionErrorCode;
 
 import java.util.UUID;
 
-public class GetAllVotersRequest {
+public class GetAllVotersDtoRequest {
     private UUID token;
 
-    public GetAllVotersRequest(UUID token) {
+    public GetAllVotersDtoRequest(UUID token) {
         this.token = token;
     }
 

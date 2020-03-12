@@ -2,11 +2,17 @@ package net.thumbtack.school.elections.server;
 
 import com.google.gson.Gson;
 import net.thumbtack.school.elections.database.Database;
+import net.thumbtack.school.elections.dto.request.GetAllVotersDtoRequest;
+import net.thumbtack.school.elections.dto.request.LoginVoterDtoRequest;
 import net.thumbtack.school.elections.dto.request.LogoutVoterDtoRequest;
 import net.thumbtack.school.elections.dto.request.RegisterVoterDtoRequest;
+import net.thumbtack.school.elections.dto.response.GetAllVotersDtoResponse;
+import net.thumbtack.school.elections.dto.response.LoginVoterDtoResponse;
+import net.thumbtack.school.elections.dto.response.LogoutVoterDtoResponse;
 import net.thumbtack.school.elections.dto.response.RegisterVoterDtoResponse;
 import net.thumbtack.school.elections.exceptions.ElectionsException;
 import net.thumbtack.school.elections.exceptions.ExceptionErrorCode;
+import net.thumbtack.school.elections.model.Voter;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
@@ -74,11 +80,6 @@ class ServerTest {
         server.stopServer(savedDataFileName);
     }
 
-    /**
-     * Отдельно тест работает, вместе с остальными нет.
-     * Не могу понять как сделать чтобы тесты не зависели друг от друга -
-     * они запускаются в случайном порядке и сбивают друг друга.
-     */
     @Test
     void testLogoutVoter() {
         server.startServer(savedDataFileName);
@@ -88,21 +89,33 @@ class ServerTest {
         String jsonRegisterResult = server.registerVoter(jsonRegisterRequest);
         RegisterVoterDtoResponse registerResult = gson.fromJson(jsonRegisterResult, RegisterVoterDtoResponse.class);
         UUID tokenForCheck = registerResult.getToken();
+
         LogoutVoterDtoRequest logoutRequest = new LogoutVoterDtoRequest(tokenForCheck);
         String jsonLogoutRequest = gson.toJson(logoutRequest);
         String jsonLogoutResult = server.logoutVoter(jsonLogoutRequest);
-//        LogoutVoterDtoResponse logoutVDResponse = gson.fromJson(jsonLogoutResult, LogoutVoterDtoResponse.class);
+        LogoutVoterDtoResponse logoutVDResponse = gson.fromJson(jsonLogoutResult, LogoutVoterDtoResponse.class);
 
-        assertEquals(n + 1, Database.getInstance().getVotersList().size()); //проверка что избиратель добавился
-//        assertEquals(gson.toJson(logoutVDResponse), jsonLogoutResult);
+        assertEquals(n + 1, Database.getInstance().getVotersList().size()); //проверка что тестовый избиратель добавился
+        assertEquals(gson.toJson(logoutVDResponse), jsonLogoutResult);
         server.stopServer(savedDataFileName);
     }
 
+    /**
+     * Тест отдельно не работает, так как считает что сервер стартует с нуля...
+     */
     @Test
     void testLoginVoter() {
         server.startServer(savedDataFileName);
         int n = Database.getInstance().getVotersList().size();
+        Voter testVoter = Database.getInstance().getVotersList().get(0);
 
+        LoginVoterDtoRequest loginRequest = new LoginVoterDtoRequest(testVoter.getLogin(), testVoter.getPassword());
+        String jsonLoginRequest = gson.toJson(loginRequest);
+        String jsonLoginResult = server.loginVoter(jsonLoginRequest);
+        LoginVoterDtoResponse loginVDResponse = gson.fromJson(jsonLoginResult, LoginVoterDtoResponse.class);
+
+        assertEquals(n, Database.getInstance().getVotersList().size());
+        assertEquals(gson.toJson(loginVDResponse), jsonLoginResult);
         server.stopServer(savedDataFileName);
     }
 
@@ -114,13 +127,14 @@ class ServerTest {
         String jsonRegisterRequest = gson.toJson(registerRequest);
         String jsonRegisterResult = server.registerVoter(jsonRegisterRequest);
         RegisterVoterDtoResponse registerResult = gson.fromJson(jsonRegisterResult, RegisterVoterDtoResponse.class); //добавление избирателя для проверки
-        String tokenForCheck = registerResult.getToken().toString();
-//        String jsonRequest = gson.toJson(tokenForCheck);
-//        String jsonResult = server.getAllVotersList(jsonRequest);
-//        GetAllVotersResponse result = gson.fromJson(jsonResult, GetAllVotersResponse.class);
-//
-//        assertEquals(gson.toJson(result), jsonResult);
-        assertEquals(n + 1, Database.getInstance().getVotersList().size()); //проверка что избиратель добавился
+        UUID tokenForCheck = registerResult.getToken();
+        GetAllVotersDtoRequest getVotersRequest = new GetAllVotersDtoRequest(tokenForCheck);
+        String jsonGetVotersRequest = gson.toJson(getVotersRequest);
+        String jsonGetVotersResult = server.getAllVotersList(jsonGetVotersRequest);
+        GetAllVotersDtoResponse result = gson.fromJson(jsonGetVotersResult, GetAllVotersDtoResponse.class);
+
+        assertEquals(gson.toJson(result), jsonGetVotersResult);
+        assertEquals(n + 1, Database.getInstance().getVotersList().size()); //проверка что тестовый избиратель добавился
         server.stopServer(savedDataFileName);
     }
 }
