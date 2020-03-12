@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import net.thumbtack.school.elections.daoimpl.VoterDaoImpl;
 import net.thumbtack.school.elections.dto.request.LoginVoterDtoRequest;
 import net.thumbtack.school.elections.dto.response.LoginVoterDtoResponse;
-import net.thumbtack.school.elections.exceptions.VoterException;
+import net.thumbtack.school.elections.exceptions.ElectionsException;
 
 public class LoginVoterService {
     private String requestJsonString;
@@ -13,7 +13,7 @@ public class LoginVoterService {
         this.requestJsonString = requestJsonString;
     }
 
-    public String validateAndLogin() {
+    public String loginIfValid() {
         String result;
         try {
             LoginVoterDtoRequest loginVoterDtoRequest = new Gson().fromJson(requestJsonString, LoginVoterDtoRequest.class);
@@ -21,7 +21,7 @@ public class LoginVoterService {
             VoterDaoImpl voterDao = new VoterDaoImpl();
             LoginVoterDtoResponse loginVoterDtoResponse = new LoginVoterDtoResponse(voterDao.loginToDatabase(loginVoterDtoRequest.getLogin(), loginVoterDtoRequest.getPassword()));
             result = new Gson().toJson(loginVoterDtoResponse);
-        } catch (VoterException e) {
+        } catch (ElectionsException e) {
             result = new Gson().toJson(e.getErrorCode().getErrorString());
         }
         return result;

@@ -1,9 +1,9 @@
 package net.thumbtack.school.elections.exceptions;
 
-public class VoterException extends Throwable {
-    ExceptionErrorCode exceptionErrorCode;
+public class ElectionsException extends Throwable {
+    private ExceptionErrorCode exceptionErrorCode;
 
-    public VoterException(ExceptionErrorCode exceptionErrorCode) {
+    public ElectionsException(ExceptionErrorCode exceptionErrorCode) {
         this.exceptionErrorCode = exceptionErrorCode;
     }
 

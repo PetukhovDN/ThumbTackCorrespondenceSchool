@@ -1,7 +1,7 @@
 package net.thumbtack.school.elections.dto.request;
 
 import net.thumbtack.school.elections.exceptions.ExceptionErrorCode;
-import net.thumbtack.school.elections.exceptions.VoterException;
+import net.thumbtack.school.elections.exceptions.ElectionsException;
 
 public class RegisterVoterDtoRequest {
 
@@ -57,31 +57,30 @@ public class RegisterVoterDtoRequest {
         return password;
     }
 
-    public void validate() throws VoterException {
+    public void validate() throws ElectionsException {
         if (this.firstName == null || this.firstName.isEmpty()) {
-            throw new VoterException(ExceptionErrorCode.EMPTY_VOTER_FIRSTNAME);
+            throw new ElectionsException(ExceptionErrorCode.EMPTY_VOTER_FIRSTNAME);
         }
-
         if (this.lastName == null || this.lastName.isEmpty()) {
-            throw new VoterException(ExceptionErrorCode.EMPTY_VOTER_LASTNAME);
+            throw new ElectionsException(ExceptionErrorCode.EMPTY_VOTER_LASTNAME);
         }
         if (this.street == null || this.street.isEmpty()) {
-            throw new VoterException(ExceptionErrorCode.EMPTY_VOTER_STREET);
+            throw new ElectionsException(ExceptionErrorCode.EMPTY_VOTER_STREET);
         }
         if (this.house == 0) {
-            throw new VoterException(ExceptionErrorCode.EMPTY_VOTER_HOUSE);
+            throw new ElectionsException(ExceptionErrorCode.EMPTY_VOTER_HOUSE);
         }
         if (this.login == null || this.login.isEmpty()) {
-            throw new VoterException(ExceptionErrorCode.EMPTY_VOTER_LOGIN);
+            throw new ElectionsException(ExceptionErrorCode.EMPTY_VOTER_LOGIN);
         }
         if (this.login.length() < 3) {
-            throw new VoterException(ExceptionErrorCode.WRONG_VOTER_LOGIN_LENGTH);
+            throw new ElectionsException(ExceptionErrorCode.WRONG_VOTER_LOGIN_LENGTH);
         }
         if (this.password == null || this.password.isEmpty()) {
-            throw new VoterException(ExceptionErrorCode.EMPTY_VOTER_PASSWORD);
+            throw new ElectionsException(ExceptionErrorCode.EMPTY_VOTER_PASSWORD);
         }
         if (this.password.length() < 8) {
-            throw new VoterException(ExceptionErrorCode.WRONG_VOTER_PASSWORD_LENGTH);
+            throw new ElectionsException(ExceptionErrorCode.WRONG_VOTER_PASSWORD_LENGTH);
         }
     }
 }

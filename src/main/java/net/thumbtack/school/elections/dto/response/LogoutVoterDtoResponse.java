@@ -1,15 +1,15 @@
 package net.thumbtack.school.elections.dto.response;
 
-public class LogoutVoterDtoResponse {
-    private String success;
+import java.util.UUID;
 
-    public LogoutVoterDtoResponse(Boolean success) {
-        if (success) {
-            this.success = "Выход прошел успешно";
-        }
+public class LogoutVoterDtoResponse {
+    private UUID token;
+
+    public LogoutVoterDtoResponse(UUID token) {
+        this.token = token;
     }
 
-    public String getToken() {
-        return success;
+    public UUID getToken() {
+        return token;
     }
 }

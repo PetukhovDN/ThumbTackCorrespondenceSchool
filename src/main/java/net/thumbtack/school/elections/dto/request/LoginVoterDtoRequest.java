@@ -1,7 +1,7 @@
 package net.thumbtack.school.elections.dto.request;
 
 import net.thumbtack.school.elections.exceptions.ExceptionErrorCode;
-import net.thumbtack.school.elections.exceptions.VoterException;
+import net.thumbtack.school.elections.exceptions.ElectionsException;
 
 public class LoginVoterDtoRequest {
 
@@ -21,12 +21,12 @@ public class LoginVoterDtoRequest {
         return password;
     }
 
-    public void validate() throws VoterException {
+    public void validate() throws ElectionsException {
         if (this.login == null || this.login.isEmpty()) {
-            throw new VoterException(ExceptionErrorCode.EMPTY_VOTER_LOGIN);
+            throw new ElectionsException(ExceptionErrorCode.EMPTY_VOTER_LOGIN);
         }
         if (this.password == null || this.password.isEmpty()) {
-            throw new VoterException(ExceptionErrorCode.EMPTY_VOTER_PASSWORD);
+            throw new ElectionsException(ExceptionErrorCode.EMPTY_VOTER_PASSWORD);
         }
     }
 }
