@@ -130,7 +130,7 @@ class ServerTest {
         UUID tokenForCheck = registerResult.getToken();
         GetAllVotersDtoRequest getVotersRequest = new GetAllVotersDtoRequest(tokenForCheck);
         String jsonGetVotersRequest = gson.toJson(getVotersRequest);
-        String jsonGetVotersResult = server.getAllVotersList(jsonGetVotersRequest);
+        String jsonGetVotersResult = server.getAllVoters(jsonGetVotersRequest);
         GetAllVotersDtoResponse result = gson.fromJson(jsonGetVotersResult, GetAllVotersDtoResponse.class);
 
         assertEquals(gson.toJson(result), jsonGetVotersResult);

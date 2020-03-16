@@ -1,7 +1,9 @@
 package net.thumbtack.school.elections.server;
 
 import net.thumbtack.school.elections.database.Database;
-import net.thumbtack.school.elections.service.*;
+import net.thumbtack.school.elections.service.CandidateService;
+import net.thumbtack.school.elections.service.ProposalService;
+import net.thumbtack.school.elections.service.VoterService;
 
 import java.io.*;
 
@@ -28,11 +30,9 @@ import java.io.*;
 
 public class Server implements Serializable {
     private static final long serialVersionUID = -6335324644020763893L; //сервер сериализуется? или только БД
-    RegisterVoterService registerVoterService;
-    LoginVoterService loginVoterService;
-    LogoutVoterService logoutVoterService;
-    GetAllVotersService getAllVotersService;
-    AddCandidateService addCandidateService;
+    VoterService voterService;
+    CandidateService candidateService;
+    ProposalService proposalService;
     Database database = null;
     private String isOnline = "Сервер еще не запущен";
 
@@ -41,7 +41,7 @@ public class Server implements Serializable {
     }
 
     public void startServer(String savedDataFileName) {
-        if (!isOnline.equals("Сервер запущен")) {
+        if (!isOnline.equals("Сервер запущен") && !isOnline.equals("Сервер уже запущен")) {
             try (ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(savedDataFileName))) {
                 if (!(objectInputStream.readObject() == null)) {
                     while (objectInputStream.available() > 0) {
@@ -60,7 +60,7 @@ public class Server implements Serializable {
     }
 
     public void stopServer(String saveDataFileName) {
-        if (!isOnline.equals("Сервер остановлен")) {
+        if (!isOnline.equals("Сервер остановлен") && !isOnline.equals("Сервер уже остановлен")) {
             try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(saveDataFileName))) {
                 database = Database.getInstance();
                 objectOutputStream.writeObject(database);
@@ -74,28 +74,33 @@ public class Server implements Serializable {
     }
 
     public String registerVoter(String requestJsonString) {
-        registerVoterService = new RegisterVoterService(requestJsonString);
-        return registerVoterService.createIfValid();
+        voterService = new VoterService(requestJsonString);
+        return voterService.registerVoter();
     }
 
     public String loginVoter(String requestJsonString) {
-        loginVoterService = new LoginVoterService(requestJsonString);
-        return loginVoterService.loginIfValid();
+        voterService = new VoterService(requestJsonString);
+        return voterService.loginVoter();
     }
 
     public String logoutVoter(String requestJsonString) {
-        logoutVoterService = new LogoutVoterService(requestJsonString);
-        return logoutVoterService.logoutIfValid();
+        voterService = new VoterService(requestJsonString);
+        return voterService.logoutVoter();
     }
 
-    public String getAllVotersList(String requestJsonString) {
-        getAllVotersService = new GetAllVotersService(requestJsonString);
-        return getAllVotersService.returnIfValid();
+    public String getAllVoters(String requestJsonString) {
+        voterService = new VoterService(requestJsonString);
+        return voterService.getAllVoters();
+    }
+
+    public String makeProposal(String requestJsonString) {
+        proposalService = new ProposalService(requestJsonString);
+        return proposalService.makeProposal();
     }
 
     public String addCandidate(String requestJsonString) {
-
-        return "";
+        candidateService = new CandidateService(requestJsonString);
+        return candidateService.addCandidate();
     }
 
 

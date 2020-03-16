@@ -4,9 +4,9 @@ import net.thumbtack.school.elections.dao.VoterDao;
 import net.thumbtack.school.elections.database.Database;
 import net.thumbtack.school.elections.exceptions.ElectionsException;
 import net.thumbtack.school.elections.exceptions.ExceptionErrorCode;
+import net.thumbtack.school.elections.model.Proposal;
 import net.thumbtack.school.elections.model.Voter;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,25 +19,17 @@ public class VoterDaoImpl implements VoterDao {
             throw new ElectionsException(ExceptionErrorCode.DUPLICATE_VOTER);
         }
         database.getVotersList().add(voter); //добавляет избирателя в set
-        database.getLoginVotersSet().add(voter.getLogin()); //добавляет логи избирателя в список залогинившихся пользователей
-        database.getValidTokensSet().add(voter.getToken());
+        database.getValidTokensSet().add(voter.getToken()); //добавляет токен в сет валидных токенов
         return voter.getToken(); //возвращает значение токена избирателя
     }
 
     @Override
     public UUID loginToDatabase(String login, String password) throws ElectionsException {
-        UUID result;
-        for (Voter voter : database.getVotersList()
-        ) {
-            if (voter.getLogin().equals(login)) { //проверяет есть ли такой избиратель
-                if (voter.getPassword().equals(password))//проверяет верен ли пароль
-                {
-                    voter.setToken(UUID.randomUUID()); //назначает новый случайный token для этого избирателя
-                    result = voter.getToken();
-                    database.getLoginVotersSet().add(voter.getLogin()); //добавляет логин в set залогинившихся избирателей
-                    database.getValidTokensSet().add(voter.getToken());
-                    return result;
-                }
+        for (Voter voter : database.getVotersList()) {
+            if (voter.getLogin().equals(login) && voter.getPassword().equals(password)) { //проверяет есть ли такой избиратель
+                voter.setToken(UUID.randomUUID()); //назначает новый случайный token для этого избирателя
+                database.getValidTokensSet().add(voter.getToken());
+                return voter.getToken();
             }
         }
         throw new ElectionsException(ExceptionErrorCode.NULL_VOTER_LOGIN);
@@ -45,34 +37,30 @@ public class VoterDaoImpl implements VoterDao {
 
     @Override
     public UUID logoutFromDatabase(UUID token) throws ElectionsException {
-        UUID result = null;
         if (database.getValidTokensSet().contains(token)) {
-            for (Voter voter : database.getVotersList()
-            ) {
+            for (Voter voter : database.getVotersList()) {
                 if (voter.getToken().equals(token)) { //проверяет есть ли такой избиратель
+                    database.getValidTokensSet().remove(token);
                     voter.setToken(null); //удаляем данный token
-                    result = voter.getToken();
-                    database.getLoginVotersSet().remove(voter.getLogin()); //удаляет логин из сета залогинивщихся избирателей
-                    database.getValidTokensSet().remove(voter.getToken());
-                    database.getProposalsOfAllVoters().putAll(voter.getProposalList()); //добавляем все предложения данного избирателя в общий пул предложений всех избирателей
+                    break;
                 }
             }
-        } else {
-            throw new ElectionsException(ExceptionErrorCode.WRONG_VOTER_TOKEN);
+            for (Proposal proposal: database.getProposalList()) {
+                if (proposal.getAuthorToken().equals(token)){ //если является автором предложения,
+                    proposal.getRating().remove(token); //удалить рейтинг этого предложения
+                }
+            }
+            return token;
         }
-
-        return result;
+        throw new ElectionsException(ExceptionErrorCode.WRONG_VOTER_TOKEN);
     }
 
     @Override
     public List<Voter> getAllVotersFromDatabase(UUID token) throws ElectionsException {
-        List<Voter> result;
         if (database.getValidTokensSet().contains(token)) {
-            result = new ArrayList<>(database.getVotersList());
-        } else {
-            throw new ElectionsException(ExceptionErrorCode.WRONG_VOTER_TOKEN);
+            return database.getVotersList();
         }
-        return result;
+        throw new ElectionsException(ExceptionErrorCode.WRONG_VOTER_TOKEN);
     }
 }
 

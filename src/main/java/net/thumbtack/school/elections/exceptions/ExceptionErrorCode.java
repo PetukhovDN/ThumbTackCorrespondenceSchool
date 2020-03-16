@@ -18,7 +18,8 @@ public enum ExceptionErrorCode {
     WRONG_VOTER_PASSWORD_LENGTH("Пароль должен быть длиннее 6 символов"),
     WRONG_VOTER_PASSWORD("Неверный пароль"),
     WRONG_VOTER_TOKEN("Неверный токен"),
-    DUPLICATE_VOTER("Такой избиратель уже зарегестрирован");
+    DUPLICATE_VOTER("Такой избиратель уже зарегестрирован"),
+    EMPTY_VOTER_PROPOSAL("Предложение не может быть пустым");
 
     private String errorString;
 
