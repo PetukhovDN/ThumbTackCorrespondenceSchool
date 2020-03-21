@@ -45,8 +45,8 @@ public class VoterDaoImpl implements VoterDao {
                     break;
                 }
             }
-            for (Proposal proposal: database.getProposalList()) {
-                if (proposal.getAuthorToken().equals(token)){ //если является автором предложения,
+            for (Proposal proposal : database.getProposalList()) {
+                if (proposal.getAuthorToken().equals(token)) { //если является автором предложения,
                     proposal.getRating().remove(token); //удалить рейтинг этого предложения
                 }
             }

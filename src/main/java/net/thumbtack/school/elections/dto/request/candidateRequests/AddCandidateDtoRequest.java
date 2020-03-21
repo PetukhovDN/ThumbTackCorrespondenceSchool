@@ -1,4 +1,4 @@
-package net.thumbtack.school.elections.dto.request;
+package net.thumbtack.school.elections.dto.request.candidateRequests;
 
 import net.thumbtack.school.elections.exceptions.ElectionsException;
 import net.thumbtack.school.elections.exceptions.ExceptionErrorCode;

@@ -1,8 +1,9 @@
 package net.thumbtack.school.elections.model;
 
-import net.thumbtack.school.elections.dto.request.AddCandidateDtoRequest;
+import net.thumbtack.school.elections.dto.request.candidateRequests.AddCandidateDtoRequest;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Candidate implements Serializable {
 
@@ -24,5 +25,22 @@ public class Candidate implements Serializable {
         return lastName;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Candidate)) {
+            return false;
+        }
+        Candidate candidate = (Candidate) o;
+        return Objects.equals(firstName, candidate.firstName) &&
+                Objects.equals(lastName, candidate.lastName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(firstName, lastName);
+    }
 }
 

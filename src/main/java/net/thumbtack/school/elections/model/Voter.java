@@ -1,9 +1,10 @@
 package net.thumbtack.school.elections.model;
 
-import net.thumbtack.school.elections.dto.request.RegisterVoterDtoRequest;
+import net.thumbtack.school.elections.dto.request.voterRequests.RegisterVoterDtoRequest;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.Objects;
+import java.util.UUID;
 
 public class Voter implements Serializable {
 
@@ -81,14 +82,12 @@ public class Voter implements Serializable {
         }
         Voter voter = (Voter) o;
         return firstName.equals(voter.firstName) &&
-                lastName.equals(voter.lastName) &&
-                login.equals(voter.login) &&
-                password.equals(voter.password);
+                lastName.equals(voter.lastName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(firstName, lastName, login, password);
+        return Objects.hash(firstName, lastName);
     }
 }
 

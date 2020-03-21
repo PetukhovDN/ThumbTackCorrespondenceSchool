@@ -1,10 +1,11 @@
 package net.thumbtack.school.elections.model;
 
-import net.thumbtack.school.elections.dto.request.MakeProposalDtoRequest;
+import net.thumbtack.school.elections.dto.request.proposalRequests.MakeProposalDtoRequest;
 
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 public class Proposal implements Serializable {
@@ -33,4 +34,23 @@ public class Proposal implements Serializable {
     public Map<UUID, Integer> getRating() {
         return rating;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Proposal)) {
+            return false;
+        }
+        Proposal proposal = (Proposal) o;
+        return Objects.equals(proposalInfo, proposal.proposalInfo);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(proposalInfo);
+    }
 }
+
+

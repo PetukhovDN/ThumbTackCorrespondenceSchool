@@ -1,7 +1,7 @@
-package net.thumbtack.school.elections.dto.request;
+package net.thumbtack.school.elections.dto.request.voterRequests;
 
-import net.thumbtack.school.elections.exceptions.ExceptionErrorCode;
 import net.thumbtack.school.elections.exceptions.ElectionsException;
+import net.thumbtack.school.elections.exceptions.ExceptionErrorCode;
 
 import java.util.UUID;
 

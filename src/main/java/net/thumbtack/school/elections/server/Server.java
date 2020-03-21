@@ -1,5 +1,6 @@
 package net.thumbtack.school.elections.server;
 
+import com.google.gson.Gson;
 import net.thumbtack.school.elections.database.Database;
 import net.thumbtack.school.elections.service.CandidateService;
 import net.thumbtack.school.elections.service.ProposalService;
@@ -30,78 +31,132 @@ import java.io.*;
 
 public class Server implements Serializable {
     private static final long serialVersionUID = -6335324644020763893L; //сервер сериализуется? или только БД
-    VoterService voterService;
-    CandidateService candidateService;
-    ProposalService proposalService;
-    Database database = null;
-    private String isOnline = "Сервер еще не запущен";
+    private static Database database;
+    private static Boolean electionsStarted = false;
 
-    public String isOnline() {
-        return isOnline;
-    }
+    private static VoterService voterService;
+    private static CandidateService candidateService;
+    private static ProposalService proposalService;
 
     public void startServer(String savedDataFileName) {
-        if (!isOnline.equals("Сервер запущен") && !isOnline.equals("Сервер уже запущен")) {
+        if (savedDataFileName != null && !savedDataFileName.isEmpty()) {
             try (ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(savedDataFileName))) {
-                if (!(objectInputStream.readObject() == null)) {
+                if (objectInputStream.readObject() != null) {
                     while (objectInputStream.available() > 0) {
                         database = (Database) objectInputStream.readObject();
                     }
                 } else {
                     database = new Database();
                 }
-                isOnline = "Сервер запущен";
             } catch (ClassNotFoundException | IOException e) {
                 e.printStackTrace();
             }
         } else {
-            isOnline = "Сервер уже запущен";
+            database = new Database();
         }
     }
 
-    public void stopServer(String saveDataFileName) {
-        if (!isOnline.equals("Сервер остановлен") && !isOnline.equals("Сервер уже остановлен")) {
-            try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(saveDataFileName))) {
+    public void stopServer(String savedDataFileName) {
+        if (savedDataFileName != null && !savedDataFileName.isEmpty()) {
+            try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(savedDataFileName))) {
                 database = Database.getInstance();
                 objectOutputStream.writeObject(database);
-                isOnline = "Сервер остановлен";
             } catch (IOException e) {
                 e.printStackTrace();
             }
         } else {
-            isOnline = "Сервер уже остановлен";
+            database = null;
         }
     }
 
     public String registerVoter(String requestJsonString) {
+        if (electionsStarted) {
+            return new Gson().toJson("Выборы уже начались");
+        }
         voterService = new VoterService(requestJsonString);
         return voterService.registerVoter();
     }
 
     public String loginVoter(String requestJsonString) {
+        if (electionsStarted) {
+            return new Gson().toJson("Выборы уже начались");
+        }
         voterService = new VoterService(requestJsonString);
         return voterService.loginVoter();
     }
 
     public String logoutVoter(String requestJsonString) {
+        if (electionsStarted) {
+            return new Gson().toJson("Выборы уже начались");
+        }
         voterService = new VoterService(requestJsonString);
         return voterService.logoutVoter();
     }
 
     public String getAllVoters(String requestJsonString) {
+        if (electionsStarted) {
+            return new Gson().toJson("Выборы уже начались");
+        }
         voterService = new VoterService(requestJsonString);
         return voterService.getAllVoters();
     }
 
+    public String addCandidate(String requestJsonString) {
+        if (electionsStarted) {
+            return new Gson().toJson("Выборы уже начались");
+        }
+        candidateService = new CandidateService(requestJsonString);
+        return candidateService.addCandidate();
+    }
+
+    public String agreeToBeCandidate(String requestJsonString) {
+        if (electionsStarted) {
+            return new Gson().toJson("Выборы уже начались");
+        }
+        candidateService = new CandidateService(requestJsonString);
+        return candidateService.agreeToBeCandidate();
+    }
+
+    public String getAllCandidates(String requestJsonString) {
+        if (electionsStarted) {
+            return new Gson().toJson("Выборы уже начались");
+        }
+        candidateService = new CandidateService(requestJsonString);
+        return candidateService.getAllAgreedCandidates();
+    }
+
     public String makeProposal(String requestJsonString) {
+        if (electionsStarted) {
+            return new Gson().toJson("Выборы уже начались");
+        }
         proposalService = new ProposalService(requestJsonString);
         return proposalService.makeProposal();
     }
 
-    public String addCandidate(String requestJsonString) {
-        candidateService = new CandidateService(requestJsonString);
-        return candidateService.addCandidate();
+    public String addRating(String requestJsonString) {
+        if (electionsStarted) {
+            return new Gson().toJson("Выборы уже начались");
+        }
+        proposalService = new ProposalService(requestJsonString);
+        return proposalService.addRatingForProposal();
     }
+
+    public String removeRating(String requestJsonString) {
+        if (electionsStarted) {
+            return new Gson().toJson("Выборы уже начались");
+        }
+        proposalService = new ProposalService(requestJsonString);
+        return proposalService.removeRatingFromProposal();
+    }
+
+    public String getAllProposals(String requestJsonString) {
+        if (electionsStarted) {
+            return new Gson().toJson("Выборы уже начались");
+        }
+        proposalService = new ProposalService(requestJsonString);
+        return proposalService.getAllProposals();
+    }
+
 
 
 }

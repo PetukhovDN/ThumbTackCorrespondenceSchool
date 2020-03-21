@@ -2,14 +2,14 @@ package net.thumbtack.school.elections.service;
 
 import com.google.gson.Gson;
 import net.thumbtack.school.elections.daoimpl.VoterDaoImpl;
-import net.thumbtack.school.elections.dto.request.GetAllVotersDtoRequest;
-import net.thumbtack.school.elections.dto.request.LoginVoterDtoRequest;
-import net.thumbtack.school.elections.dto.request.LogoutVoterDtoRequest;
-import net.thumbtack.school.elections.dto.request.RegisterVoterDtoRequest;
-import net.thumbtack.school.elections.dto.response.GetAllVotersDtoResponse;
-import net.thumbtack.school.elections.dto.response.LoginVoterDtoResponse;
-import net.thumbtack.school.elections.dto.response.LogoutVoterDtoResponse;
-import net.thumbtack.school.elections.dto.response.RegisterVoterDtoResponse;
+import net.thumbtack.school.elections.dto.request.voterRequests.GetAllVotersDtoRequest;
+import net.thumbtack.school.elections.dto.request.voterRequests.LoginVoterDtoRequest;
+import net.thumbtack.school.elections.dto.request.voterRequests.LogoutVoterDtoRequest;
+import net.thumbtack.school.elections.dto.request.voterRequests.RegisterVoterDtoRequest;
+import net.thumbtack.school.elections.dto.response.voterResponses.GetAllVotersDtoResponse;
+import net.thumbtack.school.elections.dto.response.voterResponses.LoginVoterDtoResponse;
+import net.thumbtack.school.elections.dto.response.voterResponses.LogoutVoterDtoResponse;
+import net.thumbtack.school.elections.dto.response.voterResponses.RegisterVoterDtoResponse;
 import net.thumbtack.school.elections.exceptions.ElectionsException;
 import net.thumbtack.school.elections.model.Voter;
 

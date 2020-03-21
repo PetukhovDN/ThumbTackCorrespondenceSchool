@@ -19,7 +19,11 @@ public enum ExceptionErrorCode {
     WRONG_VOTER_PASSWORD("Неверный пароль"),
     WRONG_VOTER_TOKEN("Неверный токен"),
     DUPLICATE_VOTER("Такой избиратель уже зарегестрирован"),
-    EMPTY_VOTER_PROPOSAL("Предложение не может быть пустым");
+    EMPTY_VOTER_PROPOSAL("Предложение не может быть пустым"),
+    EMPTY_CANDIDATE_LIST("Такой кандидат не выдвинут"),
+    SAME_PROPOSAL_AUTHOR("Нельзя менять рейтинг у совственного предложения"),
+    WRONG_PROPOSAL_INFO("Такое предложение еще не было выдвинуто"),
+    WRONG_PROPOSAL_RATING("Рейтинг должен быть от 1 до 5");
 
     private String errorString;
 

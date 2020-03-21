@@ -1,14 +1,16 @@
-package net.thumbtack.school.elections.dto.request;
+package net.thumbtack.school.elections.dto.request.proposalRequests;
 
 import net.thumbtack.school.elections.exceptions.ElectionsException;
 import net.thumbtack.school.elections.exceptions.ExceptionErrorCode;
 
 import java.util.UUID;
 
-public class GetAllVotersDtoRequest {
+public class RemoveRatingFromProposalDtoRequest {
+    private String proposal;
     private UUID token;
 
-    public GetAllVotersDtoRequest(UUID token) {
+    public RemoveRatingFromProposalDtoRequest(String proposal, UUID token) {
+        this.proposal = proposal;
         this.token = token;
     }
 
@@ -16,7 +18,14 @@ public class GetAllVotersDtoRequest {
         return token;
     }
 
+    public String getProposal() {
+        return proposal;
+    }
+
     public void validate() throws ElectionsException {
+        if (this.proposal == null || this.proposal.isEmpty()) {
+            throw new ElectionsException(ExceptionErrorCode.EMPTY_VOTER_PROPOSAL);
+        }
         if (this.token == null || this.token.toString().isEmpty()) {
             throw new ElectionsException(ExceptionErrorCode.WRONG_VOTER_TOKEN);
         }
