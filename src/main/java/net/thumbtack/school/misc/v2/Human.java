@@ -93,7 +93,7 @@ public class Human implements Movable {
             return false;
         }
         Human human = (Human) o;
-        return positionX == human.positionX &&
+        return positionX == human.positionX && // REVU Отсустствует сравнение по имени. Так и задумано?
                 positionY == human.positionY &&
                 weight == human.weight;
     }

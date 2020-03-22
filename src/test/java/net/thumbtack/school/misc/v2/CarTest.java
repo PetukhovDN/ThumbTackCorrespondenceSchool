@@ -110,7 +110,7 @@ class CarTest {
         Human driver1 = new Human("Tod");
         car.setDriver(driver1);
         car.drive();
-        assertEquals(driver1, car.getDriver());
+        assertEquals(driver1, car.getDriver()); // REVU Метод drive явно заменяет водителя. Почему водители должны остаться равны?
     }
 
     @Test

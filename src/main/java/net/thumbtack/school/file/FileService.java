@@ -12,6 +12,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 public class FileService {
+    // REVU В методу writeByteArrayToBinaryFile вам уже передали File.
+    // Вызывайте writeByteArrayToBinaryFile из writeByteArrayToBinaryFile, а не наоборот.
+    // REVU То же касается остальных методов, где вы вызываете File::getPath()
     public static void writeByteArrayToBinaryFile(String fileName, byte[] array) throws IOException {
         try (FileOutputStream fileOutputStream = new FileOutputStream(new File(fileName))) {
             fileOutputStream.write(array);
@@ -41,7 +44,7 @@ public class FileService {
         byte[] fileInArray;
         try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
             byteArrayOutputStream.write(array);
-            try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(byteArrayOutputStream.toByteArray())) {
+            try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(byteArrayOutputStream.toByteArray())) { // REVU Строка слишком длинная
                 fileInArray = new byte[byteArrayInputStream.available() / 2];
                 int j = 0;
                 while (byteArrayInputStream.available() > 0) {
@@ -65,6 +68,7 @@ public class FileService {
     }
 
     public static byte[] readByteArrayFromBinaryFileBuffered(String fileName) throws IOException {
+        // REVU Используйте readAllBytes
         byte[] fileInArray;
         try (BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(fileName))) {
             fileInArray = new byte[bufferedInputStream.available()];
@@ -119,6 +123,10 @@ public class FileService {
                     dataInputStream.readInt(),
                     dataInputStream.readUTF());
         } catch (ColorException e) {
+            // REVU Не ловите здесь это исключение.
+            // Этот метод не может обработать эту ошибку. Это исключение нужно ловить в вызывающем коде.
+            // Сейчас вы просто "заглушили" исключение. В случае ошибки метод "притворяется", что всё прошло хорошо
+            // и молча возвращает null.
             e.printStackTrace();
         }
         return coloredRectangle;
@@ -127,7 +135,7 @@ public class FileService {
     public static void writeRectangleArrayToBinaryFile(File file, Rectangle[] rects) throws IOException {
         try (DataOutputStream dataOutputStream = new DataOutputStream(new FileOutputStream(file))) {
             for (Rectangle rect : rects) {
-                {
+                { // REVU Лишние операторные скобки
                     dataOutputStream.writeInt(rect.getxLeft());
                     dataOutputStream.writeInt(rect.getyTop());
                     dataOutputStream.writeInt(rect.getxRight());
@@ -138,7 +146,7 @@ public class FileService {
     }
 
     public static Rectangle[] readRectangleArrayFromBinaryFileReverse(File file) throws IOException {
-        Rectangle[] rects;
+        Rectangle[] rects; // REVU Используйте осмысленные имена
         try (RandomAccessFile randomAccessFile = new RandomAccessFile(file, "rw")) {
             rects = new Rectangle[(int) randomAccessFile.length() / 16];
             int j = 0;
@@ -158,13 +166,15 @@ public class FileService {
 
     public static void writeRectangleToTextFileOneLine(File file, Rectangle rect) throws IOException {
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file))) {
-            bufferedWriter.write(String.format("%d %d %d %d", rect.getxLeft(), rect.getyTop(), rect.getxRight(), rect.getyBottom()));
+            bufferedWriter.write(String.format("%d %d %d %d", rect.getxLeft(), rect.getyTop(), rect.getxRight(), rect.getyBottom())); // REVU Строка слишком длинная
         }
     }
 
     public static Rectangle readRectangleFromTextFileOneLine(File file) throws IOException {
-        Rectangle rect;
+        Rectangle rect; // REVU Используйте осмысленные имена
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
+            // REVU Не нужно пытаться записать в одну строчку максимум действий. Такой код тяжело читать и отлаживать.
+            // REVU Переносите каждое действие над stream на следующую строку для читабельности
             int[] numArr = Arrays.stream(bufferedReader.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
             rect = new Rectangle(numArr[0], numArr[1], numArr[2], numArr[3]);
         }
@@ -181,7 +191,7 @@ public class FileService {
     }
 
     public static Rectangle readRectangleFromTextFileFourLines(File file) throws IOException {
-        Rectangle rect;
+        Rectangle rect; // REVU Используйте осмысленные имена
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
             int[] numArr = new int[4];
             for (int i = 0; i < 4; i++) {
@@ -194,7 +204,7 @@ public class FileService {
 
     public static void writeTraineeToTextFileOneLine(File file, Trainee trainee) throws IOException {
         try (PrintWriter printWriter = new PrintWriter(file, StandardCharsets.UTF_8)) {
-            printWriter.write(String.format("%s %s %s", trainee.getFirstName(), trainee.getLastName(), trainee.getRating()));
+            printWriter.write(String.format("%s %s %s", trainee.getFirstName(), trainee.getLastName(), trainee.getRating())); // REVU Строка слишком длинная
         }
     }
 
@@ -204,6 +214,7 @@ public class FileService {
             String[] strings = bufferedReader.readLine().split(" ");
             trainee = new Trainee(strings[0], strings[1], Integer.parseInt(strings[2]));
         } catch (TrainingException e) {
+            // REVU Не нужно ловить это исключение. См. объяснение выше.
             e.printStackTrace();
         }
         return trainee;
@@ -220,7 +231,7 @@ public class FileService {
     public static Trainee readTraineeFromTextFileThreeLines(File file) throws IOException {
         Trainee trainee = null;
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
-            trainee = new Trainee(bufferedReader.readLine(), bufferedReader.readLine(), Integer.parseInt(bufferedReader.readLine()));
+            trainee = new Trainee(bufferedReader.readLine(), bufferedReader.readLine(), Integer.parseInt(bufferedReader.readLine())); // REVU Строка слишком длинная
         } catch (TrainingException e) {
             e.printStackTrace();
         }
@@ -238,12 +249,12 @@ public class FileService {
         try (ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(file))) {
             trainee = (Trainee) objectInputStream.readObject();
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            e.printStackTrace(); // REVU Не ловите исключения здесь
         }
         return trainee;
     }
 
-    public static String serializeTraineeToJsonString(Trainee trainee) throws IOException {
+    public static String serializeTraineeToJsonString(Trainee trainee) throws IOException { // REVU IOException не может возникнуть здесь. Уберите его из сигнатуры.
         return new Gson().toJson(trainee);
     }
 
