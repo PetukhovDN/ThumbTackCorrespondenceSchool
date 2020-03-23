@@ -12,39 +12,32 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 public class FileService {
-    // REVU В методу writeByteArrayToBinaryFile вам уже передали File.
-    // Вызывайте writeByteArrayToBinaryFile из writeByteArrayToBinaryFile, а не наоборот.
-    // REVU То же касается остальных методов, где вы вызываете File::getPath()
     public static void writeByteArrayToBinaryFile(String fileName, byte[] array) throws IOException {
-        try (FileOutputStream fileOutputStream = new FileOutputStream(new File(fileName))) {
+        writeByteArrayToBinaryFile(new File(fileName), array);
+    }
+
+    public static void writeByteArrayToBinaryFile(File file, byte[] array) throws IOException {
+        try (FileOutputStream fileOutputStream = new FileOutputStream(file)) {
             fileOutputStream.write(array);
         }
     }
 
-    public static void writeByteArrayToBinaryFile(File file, byte[] array) throws IOException {
-        writeByteArrayToBinaryFile(file.getPath(), array);
-    }
-
     public static byte[] readByteArrayFromBinaryFile(String fileName) throws IOException {
-        byte[] fileInArray;
-        try (FileInputStream fileInputStream = new FileInputStream(fileName)) {
-            fileInArray = new byte[fileInputStream.available()];
-            for (int i = 0; i < fileInArray.length; i++) {
-                fileInArray[i] = (byte) fileInputStream.read();
-            }
-        }
-        return fileInArray;
+        return readByteArrayFromBinaryFile(new File(fileName));
     }
 
     public static byte[] readByteArrayFromBinaryFile(File file) throws IOException {
-        return readByteArrayFromBinaryFile(file.getPath());
+        try (FileInputStream fileInputStream = new FileInputStream(file)) {
+            return fileInputStream.readAllBytes();
+        }
     }
 
     public static byte[] writeAndReadByteArrayUsingByteStream(byte[] array) throws IOException {
         byte[] fileInArray;
         try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
             byteArrayOutputStream.write(array);
-            try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(byteArrayOutputStream.toByteArray())) { // REVU Строка слишком длинная
+            byte[] buf = byteArrayOutputStream.toByteArray();
+            try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(buf)) {
                 fileInArray = new byte[byteArrayInputStream.available() / 2];
                 int j = 0;
                 while (byteArrayInputStream.available() > 0) {
@@ -58,29 +51,23 @@ public class FileService {
     }
 
     public static void writeByteArrayToBinaryFileBuffered(String fileName, byte[] array) throws IOException {
-        try (BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(new FileOutputStream(fileName))) {
+        writeByteArrayToBinaryFileBuffered(new File(fileName), array);
+    }
+
+    public static void writeByteArrayToBinaryFileBuffered(File file, byte[] array) throws IOException {
+        try (BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(new FileOutputStream(file))) {
             bufferedOutputStream.write(array);
         }
     }
 
-    public static void writeByteArrayToBinaryFileBuffered(File file, byte[] array) throws IOException {
-        writeByteArrayToBinaryFileBuffered(file.getPath(), array);
-    }
-
     public static byte[] readByteArrayFromBinaryFileBuffered(String fileName) throws IOException {
-        // REVU Используйте readAllBytes
-        byte[] fileInArray;
-        try (BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(fileName))) {
-            fileInArray = new byte[bufferedInputStream.available()];
-            for (int i = 0; i < fileInArray.length; i++) {
-                fileInArray[i] = (byte) bufferedInputStream.read();
-            }
-        }
-        return fileInArray;
+        return readByteArrayFromBinaryFileBuffered(new File(fileName));
     }
 
     public static byte[] readByteArrayFromBinaryFileBuffered(File file) throws IOException {
-        return readByteArrayFromBinaryFileBuffered(file.getPath());
+        try (BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(file))) {
+            return bufferedInputStream.readAllBytes();
+        }
     }
 
     public static void writeRectangleToBinaryFile(File file, Rectangle rect) throws IOException {
@@ -93,14 +80,12 @@ public class FileService {
     }
 
     public static Rectangle readRectangleFromBinaryFile(File file) throws IOException {
-        Rectangle rectangle;
         try (DataInputStream dataInputStream = new DataInputStream(new FileInputStream(file))) {
-            rectangle = new Rectangle(dataInputStream.readInt(),
+            return new Rectangle(dataInputStream.readInt(),
                     dataInputStream.readInt(),
                     dataInputStream.readInt(),
                     dataInputStream.readInt());
         }
-        return rectangle;
     }
 
     public static void writeColoredRectangleToBinaryFile(File file, ColoredRectangle rect) throws IOException {
@@ -113,46 +98,36 @@ public class FileService {
         }
     }
 
-    public static ColoredRectangle readColoredRectangleFromBinaryFile(File file) throws IOException {
-        ColoredRectangle coloredRectangle = null;
+    public static ColoredRectangle readColoredRectangleFromBinaryFile(File file) throws IOException, ColorException {
         try (DataInputStream dataInputStream = new DataInputStream(new FileInputStream(file))) {
-            coloredRectangle = new ColoredRectangle(
+            return new ColoredRectangle(
                     dataInputStream.readInt(),
                     dataInputStream.readInt(),
                     dataInputStream.readInt(),
                     dataInputStream.readInt(),
                     dataInputStream.readUTF());
-        } catch (ColorException e) {
-            // REVU Не ловите здесь это исключение.
-            // Этот метод не может обработать эту ошибку. Это исключение нужно ловить в вызывающем коде.
-            // Сейчас вы просто "заглушили" исключение. В случае ошибки метод "притворяется", что всё прошло хорошо
-            // и молча возвращает null.
-            e.printStackTrace();
         }
-        return coloredRectangle;
     }
 
-    public static void writeRectangleArrayToBinaryFile(File file, Rectangle[] rects) throws IOException {
+    public static void writeRectangleArrayToBinaryFile(File file, Rectangle[] rectangles) throws IOException {
         try (DataOutputStream dataOutputStream = new DataOutputStream(new FileOutputStream(file))) {
-            for (Rectangle rect : rects) {
-                { // REVU Лишние операторные скобки
-                    dataOutputStream.writeInt(rect.getxLeft());
-                    dataOutputStream.writeInt(rect.getyTop());
-                    dataOutputStream.writeInt(rect.getxRight());
-                    dataOutputStream.writeInt(rect.getyBottom());
-                }
+            for (Rectangle rectangle : rectangles) {
+                dataOutputStream.writeInt(rectangle.getxLeft());
+                dataOutputStream.writeInt(rectangle.getyTop());
+                dataOutputStream.writeInt(rectangle.getxRight());
+                dataOutputStream.writeInt(rectangle.getyBottom());
             }
         }
     }
 
     public static Rectangle[] readRectangleArrayFromBinaryFileReverse(File file) throws IOException {
-        Rectangle[] rects; // REVU Используйте осмысленные имена
+        Rectangle[] rectangles;
         try (RandomAccessFile randomAccessFile = new RandomAccessFile(file, "rw")) {
-            rects = new Rectangle[(int) randomAccessFile.length() / 16];
+            rectangles = new Rectangle[(int) randomAccessFile.length() / 16];
             int j = 0;
             for (int i = (int) file.length() - 16; i >= 0; i -= 16) {
                 randomAccessFile.seek(i);
-                rects[j] = new Rectangle(
+                rectangles[j] = new Rectangle(
                         randomAccessFile.readInt(),
                         randomAccessFile.readInt(),
                         randomAccessFile.readInt(),
@@ -160,25 +135,28 @@ public class FileService {
                 j++;
             }
         }
-        return rects;
+        return rectangles;
     }
 
 
-    public static void writeRectangleToTextFileOneLine(File file, Rectangle rect) throws IOException {
+    public static void writeRectangleToTextFileOneLine(File file, Rectangle rectangle) throws IOException {
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file))) {
-            bufferedWriter.write(String.format("%d %d %d %d", rect.getxLeft(), rect.getyTop(), rect.getxRight(), rect.getyBottom())); // REVU Строка слишком длинная
+            int xLeft = rectangle.getxLeft();
+            int yTop = rectangle.getyTop();
+            int xRight = rectangle.getxRight();
+            int yBottom = rectangle.getyBottom();
+            bufferedWriter.write(String.format("%d %d %d %d", xLeft, yTop, xRight, yBottom));
         }
     }
 
     public static Rectangle readRectangleFromTextFileOneLine(File file) throws IOException {
-        Rectangle rect; // REVU Используйте осмысленные имена
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
-            // REVU Не нужно пытаться записать в одну строчку максимум действий. Такой код тяжело читать и отлаживать.
-            // REVU Переносите каждое действие над stream на следующую строку для читабельности
-            int[] numArr = Arrays.stream(bufferedReader.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
-            rect = new Rectangle(numArr[0], numArr[1], numArr[2], numArr[3]);
+            int[] numArr = Arrays.stream(bufferedReader.readLine()
+                    .split(" "))
+                    .mapToInt(Integer::parseInt)
+                    .toArray();
+            return new Rectangle(numArr[0], numArr[1], numArr[2], numArr[3]);
         }
-        return rect;
     }
 
     public static void writeRectangleToTextFileFourLines(File file, Rectangle rect) throws IOException {
@@ -191,33 +169,29 @@ public class FileService {
     }
 
     public static Rectangle readRectangleFromTextFileFourLines(File file) throws IOException {
-        Rectangle rect; // REVU Используйте осмысленные имена
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
             int[] numArr = new int[4];
             for (int i = 0; i < 4; i++) {
                 numArr[i] = Integer.parseInt(bufferedReader.readLine());
             }
-            rect = new Rectangle(numArr[0], numArr[1], numArr[2], numArr[3]);
+            return new Rectangle(numArr[0], numArr[1], numArr[2], numArr[3]);
         }
-        return rect;
     }
 
     public static void writeTraineeToTextFileOneLine(File file, Trainee trainee) throws IOException {
         try (PrintWriter printWriter = new PrintWriter(file, StandardCharsets.UTF_8)) {
-            printWriter.write(String.format("%s %s %s", trainee.getFirstName(), trainee.getLastName(), trainee.getRating())); // REVU Строка слишком длинная
+            String firstName = trainee.getFirstName();
+            String lastName = trainee.getLastName();
+            int rating = trainee.getRating();
+            printWriter.write(String.format("%s %s %d", firstName, lastName, rating));
         }
     }
 
-    public static Trainee readTraineeFromTextFileOneLine(File file) throws IOException {
-        Trainee trainee = null;
+    public static Trainee readTraineeFromTextFileOneLine(File file) throws IOException, TrainingException {
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
             String[] strings = bufferedReader.readLine().split(" ");
-            trainee = new Trainee(strings[0], strings[1], Integer.parseInt(strings[2]));
-        } catch (TrainingException e) {
-            // REVU Не нужно ловить это исключение. См. объяснение выше.
-            e.printStackTrace();
+            return new Trainee(strings[0], strings[1], Integer.parseInt(strings[2]));
         }
-        return trainee;
     }
 
     public static void writeTraineeToTextFileThreeLines(File file, Trainee trainee) throws IOException {
@@ -228,14 +202,10 @@ public class FileService {
         }
     }
 
-    public static Trainee readTraineeFromTextFileThreeLines(File file) throws IOException {
-        Trainee trainee = null;
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
-            trainee = new Trainee(bufferedReader.readLine(), bufferedReader.readLine(), Integer.parseInt(bufferedReader.readLine())); // REVU Строка слишком длинная
-        } catch (TrainingException e) {
-            e.printStackTrace();
+    public static Trainee readTraineeFromTextFileThreeLines(File file) throws IOException, TrainingException {
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+            return new Trainee(br.readLine(), br.readLine(), Integer.parseInt(br.readLine()));
         }
-        return trainee;
     }
 
     public static void serializeTraineeToBinaryFile(File file, Trainee trainee) throws IOException {
@@ -244,21 +214,17 @@ public class FileService {
         }
     }
 
-    public static Trainee deserializeTraineeFromBinaryFile(File file) throws IOException {
-        Trainee trainee = null;
+    public static Trainee deserializeTraineeFromBinaryFile(File file) throws IOException, ClassNotFoundException {
         try (ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(file))) {
-            trainee = (Trainee) objectInputStream.readObject();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace(); // REVU Не ловите исключения здесь
+            return (Trainee) objectInputStream.readObject();
         }
-        return trainee;
     }
 
-    public static String serializeTraineeToJsonString(Trainee trainee) throws IOException { // REVU IOException не может возникнуть здесь. Уберите его из сигнатуры.
+    public static String serializeTraineeToJsonString(Trainee trainee) {
         return new Gson().toJson(trainee);
     }
 
-    public static Trainee deserializeTraineeFromJsonString(String json) throws IOException {
+    public static Trainee deserializeTraineeFromJsonString(String json) {
         return new Gson().fromJson(json, Trainee.class);
     }
 
@@ -269,10 +235,8 @@ public class FileService {
     }
 
     public static Trainee deserializeTraineeFromJsonFile(File file) throws IOException {
-        Trainee trainee;
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
-            trainee = new Gson().fromJson(bufferedReader, Trainee.class);
+            return new Gson().fromJson(bufferedReader, Trainee.class);
         }
-        return trainee;
     }
 }

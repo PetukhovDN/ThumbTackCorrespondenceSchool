@@ -93,14 +93,14 @@ public class Human implements Movable {
             return false;
         }
         Human human = (Human) o;
-        return positionX == human.positionX && // REVU Отсустствует сравнение по имени. Так и задумано?
+        return positionX == human.positionX &&
                 positionY == human.positionY &&
-                weight == human.weight;
+                weight == human.weight &&
+                Objects.equals(name, human.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(positionX, positionY, weight);
+        return Objects.hash(name, positionX, positionY, weight);
     }
-
 }

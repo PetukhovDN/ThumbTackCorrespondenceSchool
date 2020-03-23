@@ -88,12 +88,15 @@ class ServerTest {
         server.stopServer(null);
     }
 
+    /**
+     * Отдельно не работает
+     */
     @Test
     void testLoginVoter() {
         Server server = new Server();
         server.startServer(null);
         int n = Database.getInstance().getVotersList().size();
-        Voter testVoter = Database.getInstance().getVotersList().get(0);
+        Voter testVoter = Database.getInstance().getVotersList().get(0); //IndexOutOfBoundsException
 
         LoginVoterDtoRequest loginRequest = new LoginVoterDtoRequest(testVoter.getLogin(), testVoter.getPassword());
         String jsonLoginRequest = new Gson().toJson(loginRequest);

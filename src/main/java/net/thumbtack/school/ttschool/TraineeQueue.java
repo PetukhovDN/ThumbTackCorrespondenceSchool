@@ -4,8 +4,7 @@ import java.util.ArrayDeque;
 import java.util.Queue;
 
 public class TraineeQueue {
-    // REVU Поля классов должны быть private
-    Queue<Trainee> queue;
+    private Queue<Trainee> queue;
 
     public TraineeQueue() {
         queue = new ArrayDeque<>();

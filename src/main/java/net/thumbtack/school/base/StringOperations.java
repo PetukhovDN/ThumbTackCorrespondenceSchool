@@ -7,7 +7,9 @@ import java.util.stream.Collectors;
 public class StringOperations {
 
     public static int getSummaryLength(String[] strings) {
-        return Arrays.stream(strings).mapToInt(String::length).sum();
+        return Arrays.stream(strings)
+                .mapToInt(String::length)
+                .sum();
     }
 
     public static String getFirstAndLastLetterString(String string) {

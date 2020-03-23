@@ -29,7 +29,8 @@ public class ProposalDaoImpl implements ProposalDao {
                 if (proposalFromBase.getProposalInfo().equals(proposal)) {
                     if (proposalFromBase.getAuthorToken().equals(token)) {
                         throw new ElectionsException(ExceptionErrorCode.SAME_PROPOSAL_AUTHOR);
-                    } else {
+                    }
+                    else {
                         proposalFromBase.getRating().put(token, rate);
                         return token;
                     }
@@ -47,7 +48,8 @@ public class ProposalDaoImpl implements ProposalDao {
                 if (proposalFromBase.getProposalInfo().equals(proposal)) {
                     if (proposalFromBase.getAuthorToken().equals(token)) {
                         throw new ElectionsException(ExceptionErrorCode.SAME_PROPOSAL_AUTHOR);
-                    } else {
+                    }
+                    else {
                         proposalFromBase.getRating().remove(token);
                         return token;
                     }

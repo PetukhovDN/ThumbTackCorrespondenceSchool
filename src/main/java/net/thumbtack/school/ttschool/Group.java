@@ -63,12 +63,6 @@ public class Group {
             }
         }
         throw new TrainingException(TrainingErrorCode.TRAINEE_NOT_FOUND);
-        // REVU Удаляйте неиспользуемый код
-//        Trainee trainee = list.stream().filter(t -> t.getFirstName().equals(firstName)).findFirst().orElse(null);
-//        if (trainee == null) {
-//            throw new TrainingException(TrainingErrorCode.TRAINEE_NOT_FOUND);
-//        }
-//        return trainee;
     }
 
     public Trainee getTraineeByFullName(String fullName) throws TrainingException {
@@ -104,8 +98,9 @@ public class Group {
             }
         }
         int a = bestRating;
-        // REVU Переносите каждую операцию над Stream на новую строку
-        List<Trainee> bestTrainees = list.stream().filter(tr -> tr.getRating() == a).collect(Collectors.toList());
+        List<Trainee> bestTrainees = list.stream()
+                .filter(tr -> tr.getRating() == a)
+                .collect(Collectors.toList());
         if (bestTrainees.isEmpty()) {
             throw new TrainingException(TrainingErrorCode.TRAINEE_NOT_FOUND);
         }

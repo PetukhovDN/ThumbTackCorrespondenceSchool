@@ -39,32 +39,35 @@ public class Server implements Serializable {
     private static ProposalService proposalService;
 
     public void startServer(String savedDataFileName) {
-        if (savedDataFileName != null && !savedDataFileName.isEmpty()) {
+        if (savedDataFileName != null) {
             try (ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(savedDataFileName))) {
                 if (objectInputStream.readObject() != null) {
                     while (objectInputStream.available() > 0) {
                         database = (Database) objectInputStream.readObject();
                     }
-                } else {
+                }
+                else {
                     database = new Database();
                 }
             } catch (ClassNotFoundException | IOException e) {
                 e.printStackTrace();
             }
-        } else {
+        }
+        else {
             database = new Database();
         }
     }
 
     public void stopServer(String savedDataFileName) {
-        if (savedDataFileName != null && !savedDataFileName.isEmpty()) {
+        if (savedDataFileName != null) {
             try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(savedDataFileName))) {
                 database = Database.getInstance();
                 objectOutputStream.writeObject(database);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        } else {
+        }
+        else {
             database = null;
         }
     }
@@ -156,7 +159,6 @@ public class Server implements Serializable {
         proposalService = new ProposalService(requestJsonString);
         return proposalService.getAllProposals();
     }
-
 
 
 }

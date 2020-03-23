@@ -6,8 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class TraineeMap {
-    // REVU Поля классов должны быть private
-    Map<Trainee, String> traineeMap;
+    private Map<Trainee, String> traineeMap;
 
     public TraineeMap() {
         traineeMap = new HashMap<>();
@@ -23,7 +22,8 @@ public class TraineeMap {
     public void replaceTraineeInfo(Trainee trainee, String institute) throws TrainingException {
         if (traineeMap.containsKey(trainee)) {
             traineeMap.put(trainee, institute);
-        } else {
+        }
+        else {
             throw new TrainingException(TrainingErrorCode.TRAINEE_NOT_FOUND);
         }
     }
@@ -39,10 +39,11 @@ public class TraineeMap {
     }
 
     public String getInstituteByTrainee(Trainee trainee) throws TrainingException {
-        if (traineeMap.get(trainee) == null) { // REVU Делаете get в Map два раза
+        String institute = traineeMap.get(trainee);
+        if (institute == null) {
             throw new TrainingException(TrainingErrorCode.TRAINEE_NOT_FOUND);
         }
-        return traineeMap.get(trainee);
+        return institute;
     }
 
     public Set<Trainee> getAllTrainees() {

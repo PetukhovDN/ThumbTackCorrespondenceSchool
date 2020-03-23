@@ -22,7 +22,8 @@ public class CandidateDaoImpl implements CandidateDao {
                 if (voter.getFirstName().equals(candidate.getFirstName()) && voter.getLastName().equals(candidate.getLastName())) { //проверяет есть ли такой избиратель
                     if (voter.getToken().equals(token)) {                   //если избиратель выдвигает сам себя,
                         database.getCandidatesList().put(candidate, true);  //то он автоматически дает свое согласие
-                    } else {
+                    }
+                    else {
                         database.getCandidatesList().put(candidate, false);
                     }
                     return token;
@@ -41,7 +42,8 @@ public class CandidateDaoImpl implements CandidateDao {
                         if (candidate.getFirstName().equals(voter.getFirstName()) && candidate.getLastName().equals(voter.getLastName())) {
                             database.getCandidatesList().put(candidate, true);
                             return token;
-                        } else {
+                        }
+                        else {
                             throw new ElectionsException(ExceptionErrorCode.EMPTY_CANDIDATE_LIST);
                         }
                     }
