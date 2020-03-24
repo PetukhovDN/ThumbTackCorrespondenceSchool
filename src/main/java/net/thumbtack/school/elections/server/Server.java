@@ -32,11 +32,19 @@ import java.io.*;
 public class Server implements Serializable {
     private static final long serialVersionUID = -6335324644020763893L; //сервер сериализуется? или только БД
     private static Database database;
-    private static Boolean electionsStarted = false;
+    private Boolean electionsStarted = false;
 
     private static VoterService voterService;
     private static CandidateService candidateService;
     private static ProposalService proposalService;
+
+    public Boolean getElectionsStarted() {
+        return electionsStarted;
+    }
+
+    public void setElectionsStarted(Boolean electionsStarted) {
+        this.electionsStarted = electionsStarted;
+    }
 
     public void startServer(String savedDataFileName) {
         if (savedDataFileName != null) {
@@ -97,9 +105,6 @@ public class Server implements Serializable {
     }
 
     public String getAllVoters(String requestJsonString) {
-        if (electionsStarted) {
-            return new Gson().toJson("Выборы уже начались");
-        }
         voterService = new VoterService(requestJsonString);
         return voterService.getAllVoters();
     }
@@ -121,9 +126,6 @@ public class Server implements Serializable {
     }
 
     public String getAllCandidates(String requestJsonString) {
-        if (electionsStarted) {
-            return new Gson().toJson("Выборы уже начались");
-        }
         candidateService = new CandidateService(requestJsonString);
         return candidateService.getAllAgreedCandidates();
     }
@@ -153,9 +155,6 @@ public class Server implements Serializable {
     }
 
     public String getAllProposals(String requestJsonString) {
-        if (electionsStarted) {
-            return new Gson().toJson("Выборы уже начались");
-        }
         proposalService = new ProposalService(requestJsonString);
         return proposalService.getAllProposals();
     }

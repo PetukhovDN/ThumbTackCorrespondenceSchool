@@ -13,6 +13,6 @@ public interface ProposalDao {
 
     UUID removeRatingFromProposal(String proposal, UUID token) throws ElectionsException;
 
-    Map<String, Integer> getAllProposals(UUID token) throws ElectionsException;
+    Map<String, Double> getAllProposals(UUID token) throws ElectionsException;
 
 }

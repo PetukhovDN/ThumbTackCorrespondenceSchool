@@ -2,10 +2,14 @@ package net.thumbtack.school.elections.server;
 
 import com.google.gson.Gson;
 import net.thumbtack.school.elections.database.Database;
+import net.thumbtack.school.elections.dto.request.candidateRequests.AddCandidateDtoRequest;
+import net.thumbtack.school.elections.dto.request.candidateRequests.AgreeToBeCandidateDtoRequest;
 import net.thumbtack.school.elections.dto.request.voterRequests.GetAllVotersDtoRequest;
 import net.thumbtack.school.elections.dto.request.voterRequests.LoginVoterDtoRequest;
 import net.thumbtack.school.elections.dto.request.voterRequests.LogoutVoterDtoRequest;
 import net.thumbtack.school.elections.dto.request.voterRequests.RegisterVoterDtoRequest;
+import net.thumbtack.school.elections.dto.response.candidateResponses.AddCandidateDtoResponse;
+import net.thumbtack.school.elections.dto.response.candidateResponses.AgreeToBeCandidateDtoResponse;
 import net.thumbtack.school.elections.dto.response.voterResponses.GetAllVotersDtoResponse;
 import net.thumbtack.school.elections.dto.response.voterResponses.LoginVoterDtoResponse;
 import net.thumbtack.school.elections.dto.response.voterResponses.LogoutVoterDtoResponse;
@@ -13,6 +17,7 @@ import net.thumbtack.school.elections.dto.response.voterResponses.RegisterVoterD
 import net.thumbtack.school.elections.exceptions.ElectionsException;
 import net.thumbtack.school.elections.exceptions.ExceptionErrorCode;
 import net.thumbtack.school.elections.model.Voter;
+import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
@@ -20,6 +25,14 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ServerTest {
+
+    /**
+     * Избиратели в базе:
+     * "Bob", "Fisher"
+     * "Tom", "Fisher"
+     * "Tim", "Fisher"
+     * "Andrey", "Petrov"
+     */
 
 
     @Test
@@ -39,6 +52,11 @@ class ServerTest {
         assertEquals(n + 2, Database.getInstance().getVotersList().size()); //проверка что запрос был успешным и количество избирателей увеличилось
         assertEquals(new Gson().toJson(result1), jsonResult1);
         assertEquals(new Gson().toJson(result2), jsonResult2);
+
+        server.setElectionsStarted(true);
+        String jsonResult3 = server.registerVoter(jsonRequest2);
+        assertEquals(new Gson().toJson("Выборы уже начались"), jsonResult3);
+
         server.stopServer(null);
     }
 
@@ -89,7 +107,7 @@ class ServerTest {
     }
 
     /**
-     * Отдельно не работает
+     * Отдельно не работает, так как база одна
      */
     @Test
     void testLoginVoter() {
@@ -125,6 +143,97 @@ class ServerTest {
 
         assertEquals(new Gson().toJson(result), jsonGetVotersResult);
         assertEquals(n + 1, Database.getInstance().getVotersList().size()); //проверка что тестовый избиратель добавился
+        server.stopServer(null);
+    }
+
+    @Test
+    void testAddCandidate() {
+        Server server = new Server();
+        server.startServer(null);
+        int m = Database.getInstance().getCandidatesList().size();
+        UUID tokenForCheck = Database.getInstance().getVotersList().get(0).getToken();
+        ElectionsException exception1 = new ElectionsException(ExceptionErrorCode.WRONG_VOTER_TOKEN);
+
+        AddCandidateDtoRequest addCandidateRequest1 = new AddCandidateDtoRequest("Bob", "Fisher", tokenForCheck);  //первый избиратель в базе
+        AddCandidateDtoRequest addCandidateRequest2 = new AddCandidateDtoRequest("Tim", "Fisher", tokenForCheck);  //второй избиратель в базе
+        AddCandidateDtoRequest addCandidateRequest3 = new AddCandidateDtoRequest("Bill", "Fisher", tokenForCheck); //не существует такого избирателя в базе
+        String jsonAddCandidateRequest1 = new Gson().toJson(addCandidateRequest1);
+        String jsonAddCandidateRequest2 = new Gson().toJson(addCandidateRequest2);
+        String jsonAddCandidateRequest3 = new Gson().toJson(addCandidateRequest3);
+        String jsonAddCandidateResponse1 = server.addCandidate(jsonAddCandidateRequest1);
+        String jsonAddCandidateResponse2 = server.addCandidate(jsonAddCandidateRequest2);
+        String jsonAddCandidateResponse3 = server.addCandidate(jsonAddCandidateRequest3);
+        AddCandidateDtoResponse addCandidateResponse1 = new Gson().fromJson(jsonAddCandidateResponse1, AddCandidateDtoResponse.class);
+        AddCandidateDtoResponse addCandidateResponse2 = new Gson().fromJson(jsonAddCandidateResponse2, AddCandidateDtoResponse.class);
+
+        assertEquals(new Gson().toJson(addCandidateResponse1.getToken()), new Gson().toJson(tokenForCheck));
+        assertEquals(new Gson().toJson(addCandidateResponse2.getToken()), new Gson().toJson(tokenForCheck));
+        assertEquals(new Gson().toJson(exception1.getErrorCode().getErrorString()), jsonAddCandidateResponse3);
+
+        assertEquals(m + 2, Database.getInstance().getCandidatesList().size()); // оба добавились но только первый согласен быть кандидатом
+
+        server.stopServer(null);
+    }
+
+    @Ignore
+    void agreeToBeCandidate() {
+        Server server = new Server();
+        server.startServer(null);
+        int m = Database.getInstance().getCandidatesList().size(); //0
+        UUID tokenForCheck = Database.getInstance().getVotersList().get(1).getToken(); //токен Tim Fisher
+        AgreeToBeCandidateDtoRequest agreeRequest = new AgreeToBeCandidateDtoRequest(tokenForCheck);
+        String jsonAgreeRequest = new Gson().toJson(agreeRequest);
+        String jsonAgreeResponse = server.agreeToBeCandidate(jsonAgreeRequest);
+        AgreeToBeCandidateDtoResponse agreeResponse = new Gson().fromJson(jsonAgreeResponse, AgreeToBeCandidateDtoResponse.class);
+
+        assertEquals(new Gson().toJson(agreeResponse.getToken()), new Gson().toJson(tokenForCheck));
+        assertEquals(m + 2, Database.getInstance().getCandidatesList().size());
+
+        server.stopServer(null);
+    }
+
+    @Test
+    void getAllCandidates() {
+        Server server = new Server();
+        server.startServer(null);
+        int n = Database.getInstance().getVotersList().size();
+
+        server.stopServer(null);
+    }
+
+    @Test
+    void makeProposal() {
+        Server server = new Server();
+        server.startServer(null);
+        int n = Database.getInstance().getVotersList().size();
+
+        server.stopServer(null);
+    }
+
+    @Test
+    void addRating() {
+        Server server = new Server();
+        server.startServer(null);
+        int n = Database.getInstance().getVotersList().size();
+
+        server.stopServer(null);
+    }
+
+    @Test
+    void removeRating() {
+        Server server = new Server();
+        server.startServer(null);
+        int n = Database.getInstance().getVotersList().size();
+
+        server.stopServer(null);
+    }
+
+    @Test
+    void getAllProposals() {
+        Server server = new Server();
+        server.startServer(null);
+        int n = Database.getInstance().getVotersList().size();
+
         server.stopServer(null);
     }
 }
