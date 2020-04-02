@@ -16,7 +16,7 @@ public class CandidateDaoImpl implements CandidateDao {
 
     @Override
     public UUID addCandidateToDatabase(Candidate candidate, UUID token) throws ElectionsException {
-        if (Database.getInstance().getValidTokensSet().contains(token)) {
+        if (Database.getInstance().getValidTokensSet().contains(token)) { // REVU Если инвертировать условие и сразу возвращать результат, то у вас "уменьшится отступ" всего метода. Актуально для всех DAO.
             for (Voter voter : Database.getInstance().getVotersList()) {
                 if (voter.getFirstName().equals(candidate.getFirstName())
                         && voter.getLastName().equals(candidate.getLastName())) { //проверяет есть ли такой избиратель
@@ -36,9 +36,9 @@ public class CandidateDaoImpl implements CandidateDao {
     @Override
     public UUID agreeToBeCandidate(UUID token) throws ElectionsException {
         if (Database.getInstance().getValidTokensSet().contains(token)) {
-            for (Voter voter : Database.getInstance().getVotersList()) {
+            for (Voter voter : Database.getInstance().getVotersList()) { // REVU Такой подход работы со списками очень неэффективный. Используйте Map.
                 if (voter.getToken().equals(token)) {
-                    List<Candidate> list = new ArrayList<>(Database.getInstance().getCandidatesList().keySet());
+                    List<Candidate> list = new ArrayList<>(Database.getInstance().getCandidatesList().keySet()); // REVU Используйте Map.
                     for (Candidate candidate : list) {
                         if (candidate.getFirstName().equals(voter.getFirstName())
                                 && candidate.getLastName().equals(voter.getLastName())) {

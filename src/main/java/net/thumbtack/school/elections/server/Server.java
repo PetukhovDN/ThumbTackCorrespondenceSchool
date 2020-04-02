@@ -54,7 +54,7 @@ public class Server implements Serializable {
                         database = (Database) objectInputStream.readObject();
                     }
                 }
-                else {
+                else { // REVU Раньше вы записывали else как `} else {`. Это был правильный вариант записи. Используйте старый вариант.
                     database = new Database();
                 }
             } catch (ClassNotFoundException | IOException e) {
@@ -82,14 +82,20 @@ public class Server implements Serializable {
 
     public String registerVoter(String requestJsonString) {
         if (electionsStarted) {
+            // REVU С точки зрения клиента, (JS кода в браузере, например) тяжело работать с API, которое вовзвращает то объект, то строку.
+            // Возвращайте результат всегда в виде объекта.
+            // Предусмотрите в ответе статус выполнения запроса (например подобные HTTP кодам) и (опционально) сообщение об ошибке.
             return new Gson().toJson("Выборы уже начались");
         }
-        voterService = new VoterService(requestJsonString);
+        voterService = new VoterService(requestJsonString); // REVU Не создавайте сервис каждый раз, создайте его как поле класса Server
         return voterService.registerVoter();
     }
 
     public String loginVoter(String requestJsonString) {
         if (electionsStarted) {
+            // REVU Старайтесь не создавать объект Gson каждый раз, создайте его как поле класса Server.
+            // Если подумать над порядком инициализации полей класса Server, можно использовать один единственный
+            // экземпляр этого объекта на всё приложение
             return new Gson().toJson("Выборы уже начались");
         }
         voterService = new VoterService(requestJsonString);

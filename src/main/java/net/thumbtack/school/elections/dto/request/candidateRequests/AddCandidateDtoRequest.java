@@ -1,3 +1,6 @@
+// REVU Имена пакетов должны быть в нижнем регистре.
+// Используйте точки для разделения частей названия пакета, если необходимо.
+// Для справок обратите внимание на пример пакетной структуры в документе "Рекомендации к Заданию 11".
 package net.thumbtack.school.elections.dto.request.candidateRequests;
 
 import net.thumbtack.school.elections.exceptions.ElectionsException;
