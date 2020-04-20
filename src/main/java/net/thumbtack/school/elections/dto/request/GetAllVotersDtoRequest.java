@@ -1,14 +1,14 @@
-package net.thumbtack.school.elections.dto.request.candidateRequests;
+package net.thumbtack.school.elections.dto.request;
 
 import net.thumbtack.school.elections.exceptions.ElectionsException;
 import net.thumbtack.school.elections.exceptions.ExceptionErrorCode;
 
 import java.util.UUID;
 
-public class GetAllAgreedCandidatesDtoRequest {
+public class GetAllVotersDtoRequest {
     private UUID token;
 
-    public GetAllAgreedCandidatesDtoRequest(UUID token) {
+    public GetAllVotersDtoRequest(UUID token) {
         this.token = token;
     }
 

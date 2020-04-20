@@ -31,12 +31,12 @@ import java.io.*;
 
 public class Server implements Serializable {
     private static final long serialVersionUID = -6335324644020763893L; //сервер сериализуется? или только БД
+    public static Gson gson = new Gson();
     private static Database database;
+    private static VoterService voterService = new VoterService();
+    private static CandidateService candidateService = new CandidateService();
+    private static ProposalService proposalService = new ProposalService();
     private Boolean electionsStarted = false;
-
-    private static VoterService voterService;
-    private static CandidateService candidateService;
-    private static ProposalService proposalService;
 
     public Boolean getElectionsStarted() {
         return electionsStarted;
@@ -53,15 +53,13 @@ public class Server implements Serializable {
                     while (objectInputStream.available() > 0) {
                         database = (Database) objectInputStream.readObject();
                     }
-                }
-                else { // REVU Раньше вы записывали else как `} else {`. Это был правильный вариант записи. Используйте старый вариант.
+                } else {
                     database = new Database();
                 }
             } catch (ClassNotFoundException | IOException e) {
                 e.printStackTrace();
             }
-        }
-        else {
+        } else {
             database = new Database();
         }
     }
@@ -74,95 +72,80 @@ public class Server implements Serializable {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
-        else {
+        } else {
             database = null;
         }
     }
 
     public String registerVoter(String requestJsonString) {
-        if (electionsStarted) {
+        if (getElectionsStarted()) {
             // REVU С точки зрения клиента, (JS кода в браузере, например) тяжело работать с API, которое вовзвращает то объект, то строку.
             // Возвращайте результат всегда в виде объекта.
             // Предусмотрите в ответе статус выполнения запроса (например подобные HTTP кодам) и (опционально) сообщение об ошибке.
-            return new Gson().toJson("Выборы уже начались");
+            return gson.toJson("Выборы уже начались");
         }
-        voterService = new VoterService(requestJsonString); // REVU Не создавайте сервис каждый раз, создайте его как поле класса Server
-        return voterService.registerVoter();
+        return voterService.registerVoter(requestJsonString);
     }
 
     public String loginVoter(String requestJsonString) {
-        if (electionsStarted) {
-            // REVU Старайтесь не создавать объект Gson каждый раз, создайте его как поле класса Server.
-            // Если подумать над порядком инициализации полей класса Server, можно использовать один единственный
-            // экземпляр этого объекта на всё приложение
-            return new Gson().toJson("Выборы уже начались");
+        if (getElectionsStarted()) {
+            return gson.toJson("Выборы уже начались");
         }
-        voterService = new VoterService(requestJsonString);
-        return voterService.loginVoter();
+        return voterService.loginVoter(requestJsonString);
     }
 
     public String logoutVoter(String requestJsonString) {
-        if (electionsStarted) {
-            return new Gson().toJson("Выборы уже начались");
+        if (getElectionsStarted()) {
+            return gson.toJson("Выборы уже начались");
         }
-        voterService = new VoterService(requestJsonString);
-        return voterService.logoutVoter();
+        return voterService.logoutVoter(requestJsonString);
     }
 
     public String getAllVoters(String requestJsonString) {
-        voterService = new VoterService(requestJsonString);
-        return voterService.getAllVoters();
+        return voterService.getAllVoters(requestJsonString);
     }
 
     public String addCandidate(String requestJsonString) {
-        if (electionsStarted) {
-            return new Gson().toJson("Выборы уже начались");
+        if (getElectionsStarted()) {
+            return gson.toJson("Выборы уже начались");
         }
-        candidateService = new CandidateService(requestJsonString);
-        return candidateService.addCandidate();
+        return candidateService.addCandidate(requestJsonString);
     }
 
     public String agreeToBeCandidate(String requestJsonString) {
-        if (electionsStarted) {
-            return new Gson().toJson("Выборы уже начались");
+        if (getElectionsStarted()) {
+            return gson.toJson("Выборы уже начались");
         }
-        candidateService = new CandidateService(requestJsonString);
-        return candidateService.agreeToBeCandidate();
+        return candidateService.agreeToBeCandidate(requestJsonString);
     }
 
     public String getAllCandidates(String requestJsonString) {
-        candidateService = new CandidateService(requestJsonString);
-        return candidateService.getAllAgreedCandidates();
+        return candidateService.getAllAgreedCandidates(requestJsonString);
     }
 
     public String makeProposal(String requestJsonString) {
-        if (electionsStarted) {
-            return new Gson().toJson("Выборы уже начались");
+        if (getElectionsStarted()) {
+            return gson.toJson("Выборы уже начались");
         }
-        proposalService = new ProposalService(requestJsonString);
-        return proposalService.makeProposal();
+        return proposalService.makeProposal(requestJsonString);
     }
 
     public String addRating(String requestJsonString) {
-        if (electionsStarted) {
-            return new Gson().toJson("Выборы уже начались");
+        if (getElectionsStarted()) {
+            return gson.toJson("Выборы уже начались");
         }
-        proposalService = new ProposalService(requestJsonString);
-        return proposalService.addRatingForProposal();
+        return proposalService.addRatingForProposal(requestJsonString);
     }
 
     public String removeRating(String requestJsonString) {
-        if (electionsStarted) {
-            return new Gson().toJson("Выборы уже начались");
+        if (getElectionsStarted()) {
+            return gson.toJson("Выборы уже начались");
         }
-        proposalService = new ProposalService(requestJsonString);
-        return proposalService.removeRatingFromProposal();
+        return proposalService.removeRatingFromProposal(requestJsonString);
     }
 
     public String getAllProposals(String requestJsonString) {
-        proposalService = new ProposalService(requestJsonString);
-        return proposalService.getAllProposals();
+        return proposalService.getAllProposals(requestJsonString);
     }
 
 

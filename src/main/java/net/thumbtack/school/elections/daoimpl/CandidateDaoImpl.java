@@ -16,18 +16,18 @@ public class CandidateDaoImpl implements CandidateDao {
 
     @Override
     public UUID addCandidateToDatabase(Candidate candidate, UUID token) throws ElectionsException {
-        if (Database.getInstance().getValidTokensSet().contains(token)) { // REVU Если инвертировать условие и сразу возвращать результат, то у вас "уменьшится отступ" всего метода. Актуально для всех DAO.
-            for (Voter voter : Database.getInstance().getVotersList()) {
-                if (voter.getFirstName().equals(candidate.getFirstName())
-                        && voter.getLastName().equals(candidate.getLastName())) { //проверяет есть ли такой избиратель
-                    if (voter.getToken().equals(token)) {                                   //если избиратель выдвигает сам себя,
-                        Database.getInstance().getCandidatesList().put(candidate, true);    //то он автоматически дает свое согласие
-                    }
-                    else {
-                        Database.getInstance().getCandidatesList().put(candidate, false);
-                    }
-                    return token;
+        if (!Database.getInstance().getVotersList().containsValue(token)) {
+            throw new ElectionsException(ExceptionErrorCode.WRONG_VOTER_TOKEN);
+        }
+        for (Map.Entry<Voter, UUID> voterPair : Database.getInstance().getVotersList().entrySet()) {
+            if (voterPair.getKey().getFirstName().equals(candidate.getFirstName())
+                    && voterPair.getKey().getLastName().equals(candidate.getLastName())) {
+                if (voterPair.getKey().getToken().equals(token)) {
+                    Database.getInstance().getCandidatesList().put(candidate, true);
+                } else {
+                    Database.getInstance().getCandidatesList().put(candidate, false);
                 }
+                return token;
             }
         }
         throw new ElectionsException(ExceptionErrorCode.WRONG_VOTER_TOKEN);
@@ -35,21 +35,16 @@ public class CandidateDaoImpl implements CandidateDao {
 
     @Override
     public UUID agreeToBeCandidate(UUID token) throws ElectionsException {
-        if (Database.getInstance().getValidTokensSet().contains(token)) {
-            for (Voter voter : Database.getInstance().getVotersList()) { // REVU Такой подход работы со списками очень неэффективный. Используйте Map.
-                if (voter.getToken().equals(token)) {
-                    List<Candidate> list = new ArrayList<>(Database.getInstance().getCandidatesList().keySet()); // REVU Используйте Map.
-                    for (Candidate candidate : list) {
-                        if (candidate.getFirstName().equals(voter.getFirstName())
-                                && candidate.getLastName().equals(voter.getLastName())) {
-                            Database.getInstance().getCandidatesList().put(candidate, true);
-                            return token;
-                        }
-                        throw new ElectionsException(ExceptionErrorCode.EMPTY_CANDIDATE_LIST);
-
+        for (Map.Entry<Voter, UUID> voterPair : Database.getInstance().getVotersList().entrySet()) {
+            if (voterPair.getValue().equals(token)) {
+                for (Map.Entry<Candidate, Boolean> candidatePair : Database.getInstance().getCandidatesList().entrySet()) {
+                    if (candidatePair.getKey().getFirstName().equals(voterPair.getKey().getFirstName())
+                            && candidatePair.getKey().getLastName().equals(voterPair.getKey().getLastName())) {
+                        Database.getInstance().getCandidatesList().put(candidatePair.getKey(), true);
+                        return token;
                     }
-
                 }
+                throw new ElectionsException(ExceptionErrorCode.EMPTY_CANDIDATE_LIST);
             }
         }
         throw new ElectionsException(ExceptionErrorCode.WRONG_VOTER_TOKEN);
@@ -58,14 +53,14 @@ public class CandidateDaoImpl implements CandidateDao {
     @Override
     public List<Candidate> getAllAgreedCandidates(UUID token) throws ElectionsException {
         List<Candidate> resultList = new ArrayList<>();
-        if (Database.getInstance().getValidTokensSet().contains(token)) {
-            for (Map.Entry<Candidate, Boolean> pair : Database.getInstance().getCandidatesList().entrySet()) {
-                if (pair.getValue()) {
-                    resultList.add(pair.getKey());
-                }
-            }
-            return resultList;
+        if (!Database.getInstance().getVotersList().containsValue(token)) {
+            throw new ElectionsException(ExceptionErrorCode.WRONG_VOTER_TOKEN);
         }
-        throw new ElectionsException(ExceptionErrorCode.WRONG_VOTER_TOKEN);
+        for (Map.Entry<Candidate, Boolean> pair : Database.getInstance().getCandidatesList().entrySet()) {
+            if (pair.getValue()) {
+                resultList.add(pair.getKey());
+            }
+        }
+        return resultList;
     }
 }

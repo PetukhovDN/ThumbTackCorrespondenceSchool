@@ -3,7 +3,7 @@ package net.thumbtack.school.elections.dao;
 import net.thumbtack.school.elections.exceptions.ElectionsException;
 import net.thumbtack.school.elections.model.Voter;
 
-import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 public interface VoterDao {
@@ -13,6 +13,6 @@ public interface VoterDao {
 
     UUID logoutFromDatabase(UUID token) throws ElectionsException;
 
-    List<Voter> getAllVotersFromDatabase(UUID token) throws ElectionsException;
+    Set<Voter> getAllVotersFromDatabase(UUID token) throws ElectionsException;
 
 }

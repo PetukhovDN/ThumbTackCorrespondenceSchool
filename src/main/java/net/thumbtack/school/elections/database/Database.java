@@ -12,8 +12,7 @@ public class Database implements Serializable {
     private static final long serialVersionUID = 577745366661255865L;
     private static Database instance;
 
-    private List<Voter> votersList = new ArrayList<>();
-    private Set<UUID> validTokensSet = new HashSet<>();
+    private Map<Voter, UUID> votersList = new HashMap<>();
     private Map<Candidate, Boolean> candidatesList = new HashMap<>();
     private List<Proposal> proposalList = new ArrayList<>();
 
@@ -24,14 +23,9 @@ public class Database implements Serializable {
         return instance;
     }
 
-    public List<Voter> getVotersList() {
+    public Map<Voter, UUID> getVotersList() {
         return votersList;
     }
-
-    public Set<UUID> getValidTokensSet() {
-        return validTokensSet;
-    }
-
 
     public Map<Candidate, Boolean> getCandidatesList() { //boolean отвечает за согласие избирателя быть кандидатом в мэры
         return candidatesList;

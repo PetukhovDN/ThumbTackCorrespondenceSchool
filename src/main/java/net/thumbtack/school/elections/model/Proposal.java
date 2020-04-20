@@ -1,6 +1,6 @@
 package net.thumbtack.school.elections.model;
 
-import net.thumbtack.school.elections.dto.request.proposalRequests.MakeProposalDtoRequest;
+import net.thumbtack.school.elections.dto.request.MakeProposalDtoRequest;
 
 import java.io.Serializable;
 import java.util.HashMap;

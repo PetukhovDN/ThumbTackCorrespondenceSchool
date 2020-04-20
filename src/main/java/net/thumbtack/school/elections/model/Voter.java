@@ -1,6 +1,6 @@
 package net.thumbtack.school.elections.model;
 
-import net.thumbtack.school.elections.dto.request.voterRequests.RegisterVoterDtoRequest;
+import net.thumbtack.school.elections.dto.request.RegisterVoterDtoRequest;
 
 import java.io.Serializable;
 import java.util.Objects;

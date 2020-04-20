@@ -41,8 +41,7 @@ public class FirstSteps {
     public int mul(int[] array) {
         if (array.length == 0) {
             return 0;
-        }
-        else {
+        } else {
             int mul = 1;
             for (int value : array) {
                 mul *= value;
@@ -75,8 +74,7 @@ public class FirstSteps {
         double sum = 0.0;
         if (array.length == 0) {
             return 0;
-        }
-        else {
+        } else {
             for (int value : array) {
                 sum += value;
             }

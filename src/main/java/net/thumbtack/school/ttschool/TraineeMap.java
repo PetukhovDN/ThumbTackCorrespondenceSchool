@@ -22,8 +22,7 @@ public class TraineeMap {
     public void replaceTraineeInfo(Trainee trainee, String institute) throws TrainingException {
         if (traineeMap.containsKey(trainee)) {
             traineeMap.put(trainee, institute);
-        }
-        else {
+        } else {
             throw new TrainingException(TrainingErrorCode.TRAINEE_NOT_FOUND);
         }
     }

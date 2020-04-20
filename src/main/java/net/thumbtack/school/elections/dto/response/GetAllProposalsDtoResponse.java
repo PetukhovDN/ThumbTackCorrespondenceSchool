@@ -1,4 +1,4 @@
-package net.thumbtack.school.elections.dto.response.proposalResponses;
+package net.thumbtack.school.elections.dto.response;
 
 import java.util.Map;
 

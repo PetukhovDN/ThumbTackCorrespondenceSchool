@@ -1,57 +1,53 @@
 package net.thumbtack.school.elections.service;
 
-import com.google.gson.Gson;
 import net.thumbtack.school.elections.daoimpl.CandidateDaoImpl;
-import net.thumbtack.school.elections.dto.request.candidateRequests.AddCandidateDtoRequest;
-import net.thumbtack.school.elections.dto.request.candidateRequests.AgreeToBeCandidateDtoRequest;
-import net.thumbtack.school.elections.dto.request.candidateRequests.GetAllAgreedCandidatesDtoRequest;
-import net.thumbtack.school.elections.dto.response.candidateResponses.AddCandidateDtoResponse;
-import net.thumbtack.school.elections.dto.response.candidateResponses.AgreeToBeCandidateDtoResponse;
-import net.thumbtack.school.elections.dto.response.candidateResponses.GetAllAgreedCandidatesDtoResponse;
+import net.thumbtack.school.elections.dto.request.AddCandidateDtoRequest;
+import net.thumbtack.school.elections.dto.request.AgreeToBeCandidateDtoRequest;
+import net.thumbtack.school.elections.dto.request.GetAllAgreedCandidatesDtoRequest;
+import net.thumbtack.school.elections.dto.response.AddCandidateDtoResponse;
+import net.thumbtack.school.elections.dto.response.AgreeToBeCandidateDtoResponse;
+import net.thumbtack.school.elections.dto.response.GetAllAgreedCandidatesDtoResponse;
 import net.thumbtack.school.elections.exceptions.ElectionsException;
 import net.thumbtack.school.elections.model.Candidate;
 
+import static net.thumbtack.school.elections.server.Server.gson;
+
 public class CandidateService {
-    private String requestJsonString;
     private String resultJsonString;
 
-    public CandidateService(String requestJsonString) {
-        this.requestJsonString = requestJsonString;
-    }
-
-    public String addCandidate() {
+    public String addCandidate(String requestJsonString) {
         try {
-            AddCandidateDtoRequest addCandidateRequest = new Gson().fromJson(requestJsonString, AddCandidateDtoRequest.class);
+            AddCandidateDtoRequest addCandidateRequest = gson.fromJson(requestJsonString, AddCandidateDtoRequest.class);
             addCandidateRequest.validate();
             Candidate candidate = new Candidate(addCandidateRequest);
             AddCandidateDtoResponse addCandidateResponse = new AddCandidateDtoResponse(new CandidateDaoImpl().addCandidateToDatabase(candidate, addCandidateRequest.getToken()));
-            resultJsonString = new Gson().toJson(addCandidateResponse);
+            resultJsonString = gson.toJson(addCandidateResponse);
         } catch (ElectionsException e) {
-            resultJsonString = new Gson().toJson(e.getErrorCode().getErrorString());
+            resultJsonString = gson.toJson(e.getErrorCode().getErrorString());
         }
         return resultJsonString;
     }
 
-    public String agreeToBeCandidate() {
+    public String agreeToBeCandidate(String requestJsonString) {
         try {
-            AgreeToBeCandidateDtoRequest agreeRequest = new Gson().fromJson(requestJsonString, AgreeToBeCandidateDtoRequest.class);
+            AgreeToBeCandidateDtoRequest agreeRequest = gson.fromJson(requestJsonString, AgreeToBeCandidateDtoRequest.class);
             agreeRequest.validate();
             AgreeToBeCandidateDtoResponse agreeResponse = new AgreeToBeCandidateDtoResponse(new CandidateDaoImpl().agreeToBeCandidate(agreeRequest.getToken()));
-            resultJsonString = new Gson().toJson(agreeResponse);
+            resultJsonString = gson.toJson(agreeResponse);
         } catch (ElectionsException e) {
-            resultJsonString = new Gson().toJson(e.getErrorCode().getErrorString());
+            resultJsonString = gson.toJson(e.getErrorCode().getErrorString());
         }
         return resultJsonString;
     }
 
-    public String getAllAgreedCandidates() {
+    public String getAllAgreedCandidates(String requestJsonString) {
         try {
-            GetAllAgreedCandidatesDtoRequest allCandidatesRequest = new Gson().fromJson(requestJsonString, GetAllAgreedCandidatesDtoRequest.class);
+            GetAllAgreedCandidatesDtoRequest allCandidatesRequest = gson.fromJson(requestJsonString, GetAllAgreedCandidatesDtoRequest.class);
             allCandidatesRequest.validate();
             GetAllAgreedCandidatesDtoResponse allCandidatesResponse = new GetAllAgreedCandidatesDtoResponse(new CandidateDaoImpl().getAllAgreedCandidates(allCandidatesRequest.getToken()));
-            resultJsonString = new Gson().toJson(allCandidatesResponse);
+            resultJsonString = gson.toJson(allCandidatesResponse);
         } catch (ElectionsException e) {
-            resultJsonString = new Gson().toJson(e.getErrorCode().getErrorString());
+            resultJsonString = gson.toJson(e.getErrorCode().getErrorString());
         }
         return resultJsonString;
     }

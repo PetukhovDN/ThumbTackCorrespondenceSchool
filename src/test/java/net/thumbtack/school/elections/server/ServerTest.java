@@ -2,18 +2,8 @@ package net.thumbtack.school.elections.server;
 
 import com.google.gson.Gson;
 import net.thumbtack.school.elections.database.Database;
-import net.thumbtack.school.elections.dto.request.candidateRequests.AddCandidateDtoRequest;
-import net.thumbtack.school.elections.dto.request.candidateRequests.AgreeToBeCandidateDtoRequest;
-import net.thumbtack.school.elections.dto.request.voterRequests.GetAllVotersDtoRequest;
-import net.thumbtack.school.elections.dto.request.voterRequests.LoginVoterDtoRequest;
-import net.thumbtack.school.elections.dto.request.voterRequests.LogoutVoterDtoRequest;
-import net.thumbtack.school.elections.dto.request.voterRequests.RegisterVoterDtoRequest;
-import net.thumbtack.school.elections.dto.response.candidateResponses.AddCandidateDtoResponse;
-import net.thumbtack.school.elections.dto.response.candidateResponses.AgreeToBeCandidateDtoResponse;
-import net.thumbtack.school.elections.dto.response.voterResponses.GetAllVotersDtoResponse;
-import net.thumbtack.school.elections.dto.response.voterResponses.LoginVoterDtoResponse;
-import net.thumbtack.school.elections.dto.response.voterResponses.LogoutVoterDtoResponse;
-import net.thumbtack.school.elections.dto.response.voterResponses.RegisterVoterDtoResponse;
+import net.thumbtack.school.elections.dto.request.*;
+import net.thumbtack.school.elections.dto.response.*;
 import net.thumbtack.school.elections.exceptions.ElectionsException;
 import net.thumbtack.school.elections.exceptions.ExceptionErrorCode;
 import net.thumbtack.school.elections.model.Voter;
@@ -114,7 +104,7 @@ class ServerTest {
         Server server = new Server();
         server.startServer(null);
         int n = Database.getInstance().getVotersList().size();
-        Voter testVoter = Database.getInstance().getVotersList().get(0); //IndexOutOfBoundsException
+        Voter testVoter = (Voter) Database.getInstance().getVotersList().keySet().toArray()[0];
 
         LoginVoterDtoRequest loginRequest = new LoginVoterDtoRequest(testVoter.getLogin(), testVoter.getPassword());
         String jsonLoginRequest = new Gson().toJson(loginRequest);
@@ -151,7 +141,7 @@ class ServerTest {
         Server server = new Server();
         server.startServer(null);
         int m = Database.getInstance().getCandidatesList().size();
-        UUID tokenForCheck = Database.getInstance().getVotersList().get(0).getToken();
+        UUID tokenForCheck = (UUID) Database.getInstance().getVotersList().values().toArray()[0];
         ElectionsException exception1 = new ElectionsException(ExceptionErrorCode.WRONG_VOTER_TOKEN);
 
         AddCandidateDtoRequest addCandidateRequest1 = new AddCandidateDtoRequest("Bob", "Fisher", tokenForCheck);  //первый избиратель в базе
@@ -180,7 +170,7 @@ class ServerTest {
         Server server = new Server();
         server.startServer(null);
         int m = Database.getInstance().getCandidatesList().size(); //0
-        UUID tokenForCheck = Database.getInstance().getVotersList().get(1).getToken(); //токен Tim Fisher
+        UUID tokenForCheck = (UUID) Database.getInstance().getVotersList().values().toArray()[1];  //токен Tim Fisher
         AgreeToBeCandidateDtoRequest agreeRequest = new AgreeToBeCandidateDtoRequest(tokenForCheck);
         String jsonAgreeRequest = new Gson().toJson(agreeRequest);
         String jsonAgreeResponse = server.agreeToBeCandidate(jsonAgreeRequest);

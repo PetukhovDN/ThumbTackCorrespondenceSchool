@@ -1,4 +1,4 @@
-package net.thumbtack.school.elections.dto.response.candidateResponses;
+package net.thumbtack.school.elections.dto.response;
 
 import java.util.UUID;
 
