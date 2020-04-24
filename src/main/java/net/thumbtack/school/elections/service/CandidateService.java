@@ -13,13 +13,18 @@ import net.thumbtack.school.elections.model.Candidate;
 import static net.thumbtack.school.elections.server.Server.gson;
 
 public class CandidateService {
+    private final CandidateDaoImpl candidateDao;
+
+    public CandidateService() {
+        candidateDao = new CandidateDaoImpl();
+    }
 
     public String addCandidate(String requestJsonString) {
         try {
             AddCandidateDtoRequest addCandidateRequest = gson.fromJson(requestJsonString, AddCandidateDtoRequest.class);
             addCandidateRequest.validate();
             Candidate candidate = new Candidate(addCandidateRequest);
-            AddCandidateDtoResponse addCandidateResponse = new AddCandidateDtoResponse(new CandidateDaoImpl().addCandidateToDatabase(candidate, addCandidateRequest.getToken()));
+            AddCandidateDtoResponse addCandidateResponse = new AddCandidateDtoResponse(candidateDao.addCandidateToDatabase(candidate, addCandidateRequest.getToken()));
             return gson.toJson(addCandidateResponse);
         } catch (ElectionsException e) {
             return gson.toJson(e.getErrorCode().getErrorString());
@@ -30,7 +35,7 @@ public class CandidateService {
         try {
             AgreeToBeCandidateDtoRequest agreeRequest = gson.fromJson(requestJsonString, AgreeToBeCandidateDtoRequest.class);
             agreeRequest.validate();
-            AgreeToBeCandidateDtoResponse agreeResponse = new AgreeToBeCandidateDtoResponse(new CandidateDaoImpl().agreeToBeCandidate(agreeRequest.getToken()));
+            AgreeToBeCandidateDtoResponse agreeResponse = new AgreeToBeCandidateDtoResponse(candidateDao.agreeToBeCandidate(agreeRequest.getToken()));
             return gson.toJson(agreeResponse);
         } catch (ElectionsException e) {
             return gson.toJson(e.getErrorCode().getErrorString());
@@ -41,7 +46,7 @@ public class CandidateService {
         try {
             GetAllAgreedCandidatesDtoRequest allCandidatesRequest = gson.fromJson(requestJsonString, GetAllAgreedCandidatesDtoRequest.class);
             allCandidatesRequest.validate();
-            GetAllAgreedCandidatesDtoResponse allCandidatesResponse = new GetAllAgreedCandidatesDtoResponse(new CandidateDaoImpl().getAllAgreedCandidates(allCandidatesRequest.getToken()));
+            GetAllAgreedCandidatesDtoResponse allCandidatesResponse = new GetAllAgreedCandidatesDtoResponse(candidateDao.getAllAgreedCandidates(allCandidatesRequest.getToken()));
             return gson.toJson(allCandidatesResponse);
         } catch (ElectionsException e) {
             return gson.toJson(e.getErrorCode().getErrorString());

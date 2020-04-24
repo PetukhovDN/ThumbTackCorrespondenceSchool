@@ -15,13 +15,18 @@ import net.thumbtack.school.elections.model.Proposal;
 import static net.thumbtack.school.elections.server.Server.gson;
 
 public class ProposalService {
+    private final ProposalDaoImpl proposalDao;
+
+    public ProposalService() {
+        proposalDao = new ProposalDaoImpl();
+    }
 
     public String makeProposal(String requestJsonString) {
         try {
             MakeProposalDtoRequest makeProposalRequest = gson.fromJson(requestJsonString, MakeProposalDtoRequest.class);
             makeProposalRequest.validate();
             Proposal proposal = new Proposal(makeProposalRequest);
-            MakeProposalDtoResponse makeProposalResponse = new MakeProposalDtoResponse(new ProposalDaoImpl().makeProposal(proposal, makeProposalRequest.getToken()));
+            MakeProposalDtoResponse makeProposalResponse = new MakeProposalDtoResponse(proposalDao.makeProposal(proposal, makeProposalRequest.getToken()));
             return gson.toJson(makeProposalResponse);
         } catch (ElectionsException e) {
             return gson.toJson(e.getErrorCode().getErrorString());
@@ -32,7 +37,7 @@ public class ProposalService {
         try {
             AddRatingForProposalDtoRequest addRatingRequest = gson.fromJson(requestJsonString, AddRatingForProposalDtoRequest.class);
             addRatingRequest.validate();
-            AddRatingForProposalDtoResponse addRatingResponse = new AddRatingForProposalDtoResponse(new ProposalDaoImpl().addRatingForProposal(addRatingRequest.getProposal(), addRatingRequest.getRating(), addRatingRequest.getToken()));
+            AddRatingForProposalDtoResponse addRatingResponse = new AddRatingForProposalDtoResponse(proposalDao.addRatingForProposal(addRatingRequest.getProposal(), addRatingRequest.getRating(), addRatingRequest.getToken()));
             return gson.toJson(addRatingResponse);
         } catch (ElectionsException e) {
             return gson.toJson(e.getErrorCode().getErrorString());
@@ -43,7 +48,7 @@ public class ProposalService {
         try {
             RemoveRatingFromProposalDtoRequest removeRatingRequest = gson.fromJson(requestJsonString, RemoveRatingFromProposalDtoRequest.class);
             removeRatingRequest.validate();
-            RemoveRatingFromProposalDtoResponse removeRatingResponse = new RemoveRatingFromProposalDtoResponse(new ProposalDaoImpl().removeRatingFromProposal(removeRatingRequest.getProposal(), removeRatingRequest.getToken()));
+            RemoveRatingFromProposalDtoResponse removeRatingResponse = new RemoveRatingFromProposalDtoResponse(proposalDao.removeRatingFromProposal(removeRatingRequest.getProposal(), removeRatingRequest.getToken()));
             return gson.toJson(removeRatingResponse);
         } catch (ElectionsException e) {
             return gson.toJson(e.getErrorCode().getErrorString());
@@ -54,7 +59,7 @@ public class ProposalService {
         try {
             GetAllProposalsDtoRequest getAllProposalsRequest = gson.fromJson(requestJsonString, GetAllProposalsDtoRequest.class);
             getAllProposalsRequest.validate();
-            GetAllProposalsDtoResponse getAllProposalsResponse = new GetAllProposalsDtoResponse(new ProposalDaoImpl().getAllProposals(getAllProposalsRequest.getToken()));
+            GetAllProposalsDtoResponse getAllProposalsResponse = new GetAllProposalsDtoResponse(proposalDao.getAllProposals(getAllProposalsRequest.getToken()));
             return gson.toJson(getAllProposalsResponse);
         } catch (ElectionsException e) {
             return gson.toJson(e.getErrorCode().getErrorString());

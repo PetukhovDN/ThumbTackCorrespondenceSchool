@@ -15,13 +15,17 @@ import net.thumbtack.school.elections.model.Voter;
 import static net.thumbtack.school.elections.server.Server.gson;
 
 public class VoterService {
+    private final VoterDaoImpl voterDao;
+
+    public VoterService() {
+        voterDao = new VoterDaoImpl();
+    }
 
     public String registerVoter(String requestJsonString) {
         try {
             RegisterVoterDtoRequest registerRequest = gson.fromJson(requestJsonString, RegisterVoterDtoRequest.class);
             registerRequest.validate();
-            Voter voter = new Voter(registerRequest);
-            RegisterVoterDtoResponse registerResponse = new RegisterVoterDtoResponse(new VoterDaoImpl().insertToDataBase(voter));
+            RegisterVoterDtoResponse registerResponse = new RegisterVoterDtoResponse(voterDao.insertToDataBase(new Voter(registerRequest)));
             return gson.toJson(registerResponse);
         } catch (ElectionsException e) {
             return gson.toJson(e.getErrorCode().getErrorString());
@@ -32,7 +36,7 @@ public class VoterService {
         try {
             LoginVoterDtoRequest loginRequest = gson.fromJson(requestJsonString, LoginVoterDtoRequest.class);
             loginRequest.validate();
-            LoginVoterDtoResponse loginResponse = new LoginVoterDtoResponse(new VoterDaoImpl().loginToDatabase(loginRequest.getLogin(), loginRequest.getPassword()));
+            LoginVoterDtoResponse loginResponse = new LoginVoterDtoResponse(voterDao.loginToDatabase(loginRequest.getLogin(), loginRequest.getPassword()));
             return gson.toJson(loginResponse);
         } catch (ElectionsException e) {
             return gson.toJson(e.getErrorCode().getErrorString());
@@ -43,7 +47,7 @@ public class VoterService {
         try {
             LogoutVoterDtoRequest logoutRequest = gson.fromJson(requestJsonString, LogoutVoterDtoRequest.class);
             logoutRequest.validate();
-            LogoutVoterDtoResponse logoutResponse = new LogoutVoterDtoResponse(new VoterDaoImpl().logoutFromDatabase(logoutRequest.getToken()));
+            LogoutVoterDtoResponse logoutResponse = new LogoutVoterDtoResponse(voterDao.logoutFromDatabase(logoutRequest.getToken()));
             return gson.toJson(logoutResponse);
         } catch (ElectionsException e) {
             return gson.toJson(e.getErrorCode().getErrorString());
@@ -54,7 +58,7 @@ public class VoterService {
         try {
             GetAllVotersDtoRequest getVotersRequest = gson.fromJson(requestJsonString, GetAllVotersDtoRequest.class);
             getVotersRequest.validate();
-            GetAllVotersDtoResponse getVotersResponse = new GetAllVotersDtoResponse(new VoterDaoImpl().getAllVotersFromDatabase(getVotersRequest.getToken()));
+            GetAllVotersDtoResponse getVotersResponse = new GetAllVotersDtoResponse(voterDao.getAllVotersFromDatabase(getVotersRequest.getToken()));
             return gson.toJson(getVotersResponse);
         } catch (ElectionsException e) {
             return gson.toJson(e.getErrorCode().getErrorString());

@@ -13,19 +13,24 @@ import java.util.Map;
 import java.util.UUID;
 
 public class CandidateDaoImpl implements CandidateDao {
+    private final Database database;
+
+    public CandidateDaoImpl() {
+        database = Database.getInstance();
+    }
 
     @Override
     public UUID addCandidateToDatabase(Candidate candidate, UUID token) throws ElectionsException {
-        if (!Database.getInstance().getVotersList().containsValue(token)) {
+        if (!database.getVotersList().containsValue(token)) {
             throw new ElectionsException(ExceptionErrorCode.WRONG_VOTER_TOKEN);
         }
-        for (Map.Entry<Voter, UUID> voterPair : Database.getInstance().getVotersList().entrySet()) {
+        for (Map.Entry<Voter, UUID> voterPair : database.getVotersList().entrySet()) {
             if (voterPair.getKey().getFirstName().equals(candidate.getFirstName())
                     && voterPair.getKey().getLastName().equals(candidate.getLastName())) {
                 if (voterPair.getKey().getToken().equals(token)) {
-                    Database.getInstance().getCandidatesList().put(candidate, true);
+                    database.getCandidatesList().put(candidate, true);
                 } else {
-                    Database.getInstance().getCandidatesList().put(candidate, false);
+                    database.getCandidatesList().put(candidate, false);
                 }
                 return token;
             }
@@ -35,12 +40,12 @@ public class CandidateDaoImpl implements CandidateDao {
 
     @Override
     public UUID agreeToBeCandidate(UUID token) throws ElectionsException {
-        for (Map.Entry<Voter, UUID> voterPair : Database.getInstance().getVotersList().entrySet()) {
+        for (Map.Entry<Voter, UUID> voterPair : database.getVotersList().entrySet()) {
             if (voterPair.getValue().equals(token)) {
-                for (Map.Entry<Candidate, Boolean> candidatePair : Database.getInstance().getCandidatesList().entrySet()) {
+                for (Map.Entry<Candidate, Boolean> candidatePair : database.getCandidatesList().entrySet()) {
                     if (candidatePair.getKey().getFirstName().equals(voterPair.getKey().getFirstName())
                             && candidatePair.getKey().getLastName().equals(voterPair.getKey().getLastName())) {
-                        Database.getInstance().getCandidatesList().put(candidatePair.getKey(), true);
+                        database.getCandidatesList().put(candidatePair.getKey(), true);
                         return token;
                     }
                 }
@@ -53,10 +58,10 @@ public class CandidateDaoImpl implements CandidateDao {
     @Override
     public List<Candidate> getAllAgreedCandidates(UUID token) throws ElectionsException {
         List<Candidate> resultList = new ArrayList<>();
-        if (!Database.getInstance().getVotersList().containsValue(token)) {
+        if (!database.getVotersList().containsValue(token)) {
             throw new ElectionsException(ExceptionErrorCode.WRONG_VOTER_TOKEN);
         }
-        for (Map.Entry<Candidate, Boolean> pair : Database.getInstance().getCandidatesList().entrySet()) {
+        for (Map.Entry<Candidate, Boolean> pair : database.getCandidatesList().entrySet()) {
             if (pair.getValue()) {
                 resultList.add(pair.getKey());
             }
