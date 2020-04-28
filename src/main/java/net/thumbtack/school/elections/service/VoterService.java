@@ -1,5 +1,6 @@
 package net.thumbtack.school.elections.service;
 
+import net.thumbtack.school.elections.dao.VoterDao;
 import net.thumbtack.school.elections.daoimpl.VoterDaoImpl;
 import net.thumbtack.school.elections.dto.request.GetAllVotersDtoRequest;
 import net.thumbtack.school.elections.dto.request.LoginVoterDtoRequest;
@@ -15,7 +16,7 @@ import net.thumbtack.school.elections.model.Voter;
 import static net.thumbtack.school.elections.server.Server.gson;
 
 public class VoterService {
-    private final VoterDaoImpl voterDao;
+    private final VoterDao voterDao;
 
     public VoterService() {
         voterDao = new VoterDaoImpl();

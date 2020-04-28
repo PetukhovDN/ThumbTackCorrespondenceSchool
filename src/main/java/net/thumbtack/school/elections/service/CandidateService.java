@@ -1,5 +1,6 @@
 package net.thumbtack.school.elections.service;
 
+import net.thumbtack.school.elections.dao.CandidateDao;
 import net.thumbtack.school.elections.daoimpl.CandidateDaoImpl;
 import net.thumbtack.school.elections.dto.request.AddCandidateDtoRequest;
 import net.thumbtack.school.elections.dto.request.AgreeToBeCandidateDtoRequest;
@@ -13,7 +14,7 @@ import net.thumbtack.school.elections.model.Candidate;
 import static net.thumbtack.school.elections.server.Server.gson;
 
 public class CandidateService {
-    private final CandidateDaoImpl candidateDao;
+    private final CandidateDao candidateDao;
 
     public CandidateService() {
         candidateDao = new CandidateDaoImpl();

@@ -16,15 +16,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ServerTest {
 
-    /**
-     * Избиратели в базе:
-     * "Bob", "Fisher"
-     * "Tom", "Fisher"
-     * "Tim", "Fisher"
-     * "Andrey", "Petrov"
-     */
-
-
     @Test
     public void testRegisterVoterRightInfo() {
         Server server = new Server();
@@ -65,10 +56,10 @@ class ServerTest {
         String jsonRequest3 = new Gson().toJson(request3);
         String jsonResult1 = server.registerVoter(jsonRequest1);
         String jsonResult2 = server.registerVoter(jsonRequest2); //запрос для дублирования избирателей
-        RegisterVoterDtoResponse result = new Gson().fromJson(jsonResult2, RegisterVoterDtoResponse.class);
+        RegisterVoterDtoResponse registerResponse = new Gson().fromJson(jsonResult2, RegisterVoterDtoResponse.class);
         String jsonResult3 = server.registerVoter(jsonRequest3);
 
-        assertEquals(new Gson().toJson(result), jsonResult2);
+        assertEquals(new Gson().toJson(registerResponse), jsonResult2);
         assertEquals(new Gson().toJson(exception1.getErrorCode().getErrorString()), jsonResult1);
         assertEquals(new Gson().toJson(exception2.getErrorCode().getErrorString()), jsonResult3);
         assertEquals(n + 1, Database.getInstance().getVotersList().size()); //проверка что сработал только request2
@@ -89,10 +80,10 @@ class ServerTest {
         LogoutVoterDtoRequest logoutRequest = new LogoutVoterDtoRequest(tokenForCheck);
         String jsonLogoutRequest = new Gson().toJson(logoutRequest);
         String jsonLogoutResult = server.logoutVoter(jsonLogoutRequest);
-        LogoutVoterDtoResponse logoutVDResponse = new Gson().fromJson(jsonLogoutResult, LogoutVoterDtoResponse.class);
+        LogoutVoterDtoResponse logoutResponse = new Gson().fromJson(jsonLogoutResult, LogoutVoterDtoResponse.class);
 
         assertEquals(n + 1, Database.getInstance().getVotersList().size()); //проверка что тестовый избиратель добавился
-        assertEquals(new Gson().toJson(logoutVDResponse), jsonLogoutResult);
+        assertEquals(new Gson().toJson(logoutResponse), jsonLogoutResult);
         server.stopServer(null);
     }
 
@@ -121,11 +112,12 @@ class ServerTest {
         Server server = new Server();
         server.startServer(null);
         int n = Database.getInstance().getVotersList().size();
+
         RegisterVoterDtoRequest registerRequest = new RegisterVoterDtoRequest("Ivan", "Makarov", "Sergeevich", "Zukova", 13, 45, "petrov12345", "qwertyasdf");
         String jsonRegisterRequest = new Gson().toJson(registerRequest);
         String jsonRegisterResult = server.registerVoter(jsonRegisterRequest);
-        RegisterVoterDtoResponse registerResult = new Gson().fromJson(jsonRegisterResult, RegisterVoterDtoResponse.class); //добавление избирателя для проверки
-        UUID tokenForCheck = registerResult.getToken();
+        RegisterVoterDtoResponse registerResponse = new Gson().fromJson(jsonRegisterResult, RegisterVoterDtoResponse.class); //добавление избирателя для проверки
+        UUID tokenForCheck = registerResponse.getToken();
         GetAllVotersDtoRequest getVotersRequest = new GetAllVotersDtoRequest(tokenForCheck);
         String jsonGetVotersRequest = new Gson().toJson(getVotersRequest);
         String jsonGetVotersResult = server.getAllVoters(jsonGetVotersRequest);

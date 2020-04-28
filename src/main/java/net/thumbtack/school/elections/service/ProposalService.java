@@ -1,5 +1,6 @@
 package net.thumbtack.school.elections.service;
 
+import net.thumbtack.school.elections.dao.ProposalDao;
 import net.thumbtack.school.elections.daoimpl.ProposalDaoImpl;
 import net.thumbtack.school.elections.dto.request.AddRatingForProposalDtoRequest;
 import net.thumbtack.school.elections.dto.request.GetAllProposalsDtoRequest;
@@ -15,7 +16,7 @@ import net.thumbtack.school.elections.model.Proposal;
 import static net.thumbtack.school.elections.server.Server.gson;
 
 public class ProposalService {
-    private final ProposalDaoImpl proposalDao;
+    private final ProposalDao proposalDao;
 
     public ProposalService() {
         proposalDao = new ProposalDaoImpl();
