@@ -12,6 +12,8 @@ public class Proposal implements Serializable {
 
     private static final long serialVersionUID = 5349904395383032185L;
 
+    private final UUID defaultAuthorToken = UUID.fromString("Токен всего общества города"); //
+
     private String proposalInfo;
     private UUID authorToken;
     private Map<UUID, Integer> rating;
@@ -29,6 +31,10 @@ public class Proposal implements Serializable {
 
     public UUID getAuthorToken() {
         return authorToken;
+    }
+
+    public void setDefaultAuthor() {
+        this.authorToken = defaultAuthorToken;
     }
 
     public Map<UUID, Integer> getRating() {

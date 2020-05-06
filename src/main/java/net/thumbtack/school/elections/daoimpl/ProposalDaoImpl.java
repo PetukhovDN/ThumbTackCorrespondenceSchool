@@ -19,19 +19,25 @@ public class ProposalDaoImpl implements ProposalDao {
 
     @Override
     public UUID makeProposal(Proposal proposal, UUID token) throws ElectionsException {
-        if (!database.getVotersList().containsValue(token)) {
+        if (database.getElectionsStarted().equals("Выборы начались")) {
+            throw new ElectionsException(ExceptionErrorCode.ELECTIONS_HAVE_BEEN_STARTED);
+        }
+        if (!database.getVotersMap().containsValue(token)) {
             throw new ElectionsException(ExceptionErrorCode.WRONG_VOTER_TOKEN);
         }
-        database.getProposalList().add(proposal);
+        database.getProposalSet().add(proposal);
         return token;
     }
 
     @Override
     public UUID addRatingForProposal(String proposal, int rate, UUID token) throws ElectionsException {
-        if (!database.getVotersList().containsValue(token)) {
+        if (database.getElectionsStarted().equals("Выборы начались")) {
+            throw new ElectionsException(ExceptionErrorCode.ELECTIONS_HAVE_BEEN_STARTED);
+        }
+        if (!database.getVotersMap().containsValue(token)) {
             throw new ElectionsException(ExceptionErrorCode.WRONG_VOTER_TOKEN);
         }
-        for (Proposal proposalFromBase : database.getProposalList()) {
+        for (Proposal proposalFromBase : database.getProposalSet()) {
             if (proposalFromBase.getProposalInfo().equals(proposal)) {
                 if (proposalFromBase.getAuthorToken().equals(token)) {
                     throw new ElectionsException(ExceptionErrorCode.SAME_PROPOSAL_AUTHOR);
@@ -46,10 +52,13 @@ public class ProposalDaoImpl implements ProposalDao {
 
     @Override
     public UUID removeRatingFromProposal(String proposal, UUID token) throws ElectionsException {
-        if (!database.getVotersList().containsValue(token)) {
+        if (database.getElectionsStarted().equals("Выборы начались")) {
+            throw new ElectionsException(ExceptionErrorCode.ELECTIONS_HAVE_BEEN_STARTED);
+        }
+        if (!database.getVotersMap().containsValue(token)) {
             throw new ElectionsException(ExceptionErrorCode.WRONG_VOTER_TOKEN);
         }
-        for (Proposal proposalFromBase : database.getProposalList()) {
+        for (Proposal proposalFromBase : database.getProposalSet()) {
             if (proposalFromBase.getProposalInfo().equals(proposal)) {
                 if (proposalFromBase.getAuthorToken().equals(token)) {
                     throw new ElectionsException(ExceptionErrorCode.SAME_PROPOSAL_AUTHOR);
@@ -65,10 +74,10 @@ public class ProposalDaoImpl implements ProposalDao {
     @Override
     public Map<String, Double> getAllProposals(UUID token) throws ElectionsException {
         Map<String, Double> results = new HashMap<>();
-        if (!database.getVotersList().containsValue(token)) {
+        if (!database.getVotersMap().containsValue(token)) {
             throw new ElectionsException(ExceptionErrorCode.WRONG_VOTER_TOKEN);
         }
-        for (Proposal proposal : database.getProposalList()) {
+        for (Proposal proposal : database.getProposalSet()) {
             double sumRatings = 0.0;
             int count = 0;
             for (Integer rating : proposal.getRating().values()) {

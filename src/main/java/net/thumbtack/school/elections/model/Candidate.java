@@ -25,6 +25,7 @@ public class Candidate implements Serializable {
         return lastName;
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

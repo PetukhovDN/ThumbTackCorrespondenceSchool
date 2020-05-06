@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import net.thumbtack.school.elections.database.Database;
 import net.thumbtack.school.elections.service.CandidateService;
 import net.thumbtack.school.elections.service.ProposalService;
+import net.thumbtack.school.elections.service.StartElectionsService;
 import net.thumbtack.school.elections.service.VoterService;
 
 import java.io.*;
@@ -36,15 +37,7 @@ public class Server implements Serializable {
     private static VoterService voterService = new VoterService();
     private static CandidateService candidateService = new CandidateService();
     private static ProposalService proposalService = new ProposalService();
-    private Boolean electionsStarted = false;
-
-    public Boolean getElectionsStarted() {
-        return electionsStarted;
-    }
-
-    public void setElectionsStarted(Boolean electionsStarted) {
-        this.electionsStarted = electionsStarted;
-    }
+    private static StartElectionsService startElectionsService = new StartElectionsService();
 
     public void startServer(String savedDataFileName) {
         if (savedDataFileName != null) {
@@ -78,26 +71,14 @@ public class Server implements Serializable {
     }
 
     public String registerVoter(String requestJsonString) {
-        if (getElectionsStarted()) {
-            // REVU С точки зрения клиента, (JS кода в браузере, например) тяжело работать с API, которое вовзвращает то объект, то строку.
-            // Возвращайте результат всегда в виде объекта.
-            // Предусмотрите в ответе статус выполнения запроса (например подобные HTTP кодам) и (опционально) сообщение об ошибке.
-            return gson.toJson("Выборы уже начались");
-        }
         return voterService.registerVoter(requestJsonString);
     }
 
     public String loginVoter(String requestJsonString) {
-        if (getElectionsStarted()) {
-            return gson.toJson("Выборы уже начались");
-        }
         return voterService.loginVoter(requestJsonString);
     }
 
     public String logoutVoter(String requestJsonString) {
-        if (getElectionsStarted()) {
-            return gson.toJson("Выборы уже начались");
-        }
         return voterService.logoutVoter(requestJsonString);
     }
 
@@ -106,16 +87,10 @@ public class Server implements Serializable {
     }
 
     public String addCandidate(String requestJsonString) {
-        if (getElectionsStarted()) {
-            return gson.toJson("Выборы уже начались");
-        }
         return candidateService.addCandidate(requestJsonString);
     }
 
     public String agreeToBeCandidate(String requestJsonString) {
-        if (getElectionsStarted()) {
-            return gson.toJson("Выборы уже начались");
-        }
         return candidateService.agreeToBeCandidate(requestJsonString);
     }
 
@@ -124,23 +99,14 @@ public class Server implements Serializable {
     }
 
     public String makeProposal(String requestJsonString) {
-        if (getElectionsStarted()) {
-            return gson.toJson("Выборы уже начались");
-        }
         return proposalService.makeProposal(requestJsonString);
     }
 
     public String addRating(String requestJsonString) {
-        if (getElectionsStarted()) {
-            return gson.toJson("Выборы уже начались");
-        }
         return proposalService.addRatingForProposal(requestJsonString);
     }
 
     public String removeRating(String requestJsonString) {
-        if (getElectionsStarted()) {
-            return gson.toJson("Выборы уже начались");
-        }
         return proposalService.removeRatingFromProposal(requestJsonString);
     }
 
@@ -148,5 +114,16 @@ public class Server implements Serializable {
         return proposalService.getAllProposals(requestJsonString);
     }
 
+    public String startElections(String requestJsonString) {
+        return startElectionsService.startElections(requestJsonString);
+    }
+
+    public String voteForCandidate(String requestJsonString) {
+        return startElectionsService.voteForCandidate(requestJsonString);
+    }
+
+    public String chooseMajorAndStopElections(String requestJsonString) {
+        return startElectionsService.chooseMajor(requestJsonString);
+    }
 
 }
