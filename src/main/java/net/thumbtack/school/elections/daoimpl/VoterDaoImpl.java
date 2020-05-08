@@ -12,12 +12,11 @@ import java.util.Set;
 import java.util.UUID;
 
 /**
- * DataAccessObject для работы с ищбирателями.
+ * DataAccessObject для работы с избирателями.
  * Методы:
  * Регистрация избирателя,
  * логаут избирателя (выход с сервера с возможностью вернуться),
  * логин избирателя (возврат на сервер избирателя вышедшего с него),
- *
  */
 public class VoterDaoImpl implements VoterDao {
     private final Database database;
@@ -26,18 +25,30 @@ public class VoterDaoImpl implements VoterDao {
         database = Database.getInstance();
     }
 
+    /**
+     * @param voter Избиратель который регистрируется.
+     * @return возвращает идентификатор зарегестрировавшегося избирателя.
+     * @throws ElectionsException выбрасывает исключение в случае начала выборов,
+     *                            при попытке осуществления запроса от уже зарегестрировавшегося пользователя.
+     */
     @Override
     public UUID insertToDataBase(Voter voter) throws ElectionsException {
         if (database.getElectionsStarted().equals("Выборы начались")) {
             throw new ElectionsException(ExceptionErrorCode.ELECTIONS_HAVE_BEEN_STARTED);
         }
-        if (database.getVotersMap().containsKey(voter)) {  //проверяет нет ли уже такого избирателя
+        if (database.getVotersMap().containsKey(voter)) {
             throw new ElectionsException(ExceptionErrorCode.DUPLICATE_VOTER);
         }
         database.getVotersMap().put(voter, voter.getToken());
-        return voter.getToken(); //возвращает значение токена избирателя
+        return voter.getToken();
     }
 
+    /**
+     * @param token Идентификатор избирателя осуществляющего запрос.
+     * @return возвращает идентификатор избирателя если запрос был осуществлен успешно (токен больше невалидный).
+     * @throws ElectionsException выбрасывает исключение в случае начала выборов,
+     *                            при попытке осуществления запроса от пользователя с невалидным идентификатором.
+     */
     @Override
     public UUID logoutFromDatabase(UUID token) throws ElectionsException {
         if (database.getElectionsStarted().equals("Выборы начались")) {
@@ -81,6 +92,14 @@ public class VoterDaoImpl implements VoterDao {
         return token;
     }
 
+    /**
+     * @param login    Логин избирателя, покинувшего сервер (радлогинившегося).
+     * @param password Пароль избирателя, покинувшего сервер (радлогинившегося).
+     * @return возвращает новый идентификатор вернувгемуся на голосование избирателю.
+     * @throws ElectionsException выбрасывает исключение в случае начала выборов,
+     *                            при попытке осуществления запроса от пользователя с введенным неверным паролем,
+     *                            в случае отсутствия пользователя с таким логином в базе.
+     */
     @Override
     public UUID loginToDatabase(String login, String password) throws ElectionsException {
         if (database.getElectionsStarted().equals("Выборы начались")) {
@@ -102,6 +121,11 @@ public class VoterDaoImpl implements VoterDao {
         return null; //исправить
     }
 
+    /**
+     * @param token Идентификатор избирателя осуществляющего запрос.
+     * @return список всех участвующих в голосовании ищбирателей.
+     * @throws ElectionsException выбрасывает исключение в случае начала выборов.
+     */
     @Override
     public Set<Voter> getAllVotersFromDatabase(UUID token) throws ElectionsException {
         if (!database.getVotersMap().containsValue(token)) {

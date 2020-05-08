@@ -12,6 +12,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * DataAccessObject для работы с кандидатами в мэры.
+ * Методы:
+ * выдвижение кандидатуры,
+ * согласие стать кандидатом в мэры,
+ * получение списка всех согласившихся кандидатов.
+ */
 public class CandidateDaoImpl implements CandidateDao {
     private final Database database;
 
@@ -19,6 +26,14 @@ public class CandidateDaoImpl implements CandidateDao {
         database = Database.getInstance();
     }
 
+    /**
+     * @param candidate Кандидат в мэры (данные: имя и фамилия)
+     * @param token     Идентификатор избирателя осуществляющего запрос.
+     * @return возвращает идентификатор избирателя если запрос был осуществлен успешно.
+     * @throws ElectionsException выбрасывает исключение в случае начала выборов,
+     *                            при попытке осуществления запроса от пользователя с невалидным идентификатором,
+     *                            в случае ненахождения кандидата в базе.
+     */
     @Override
     public UUID addCandidateToDatabase(Candidate candidate, UUID token) throws ElectionsException {
         if (database.getElectionsStarted().equals("Выборы начались")) {
@@ -38,13 +53,23 @@ public class CandidateDaoImpl implements CandidateDao {
                 return token;
             }
         }
-        throw new ElectionsException(ExceptionErrorCode.WRONG_VOTER_TOKEN);
+        throw new ElectionsException(ExceptionErrorCode.EMPTY_CANDIDATE_LIST);
     }
 
+    /**
+     * @param token Идентификатор избирателя осуществляющего запрос.
+     * @return возвращает идентификатор избирателя если запрос был осуществлен успешно.
+     * @throws ElectionsException выбрасывает исключение в случае начала выборов,
+     *                            при попытке осуществления запроса от пользователя с невалидным идентификатором,
+     *                            в случае ненахождения кандидата в базе.
+     */
     @Override
     public UUID agreeToBeCandidate(UUID token) throws ElectionsException {
         if (database.getElectionsStarted().equals("Выборы начались")) {
             throw new ElectionsException(ExceptionErrorCode.ELECTIONS_HAVE_BEEN_STARTED);
+        }
+        if (!database.getVotersMap().containsValue(token)) {
+            throw new ElectionsException(ExceptionErrorCode.WRONG_VOTER_TOKEN);
         }
         for (Map.Entry<Voter, UUID> voterPair : database.getVotersMap().entrySet()) {
             if (voterPair.getValue().equals(token)) {
@@ -61,6 +86,11 @@ public class CandidateDaoImpl implements CandidateDao {
         throw new ElectionsException(ExceptionErrorCode.WRONG_VOTER_TOKEN);
     }
 
+    /**
+     * @param token Идентификатор избирателя осуществляющего запрос.
+     * @return возвращает список всех кандидатов, согласивщихся стать кандидатами в мэры.
+     * @throws ElectionsException при попытке осуществления запроса от пользователя с невалидным идентификатором.
+     */
     @Override
     public List<Candidate> getAllAgreedCandidates(UUID token) throws ElectionsException {
         List<Candidate> resultList = new ArrayList<>();

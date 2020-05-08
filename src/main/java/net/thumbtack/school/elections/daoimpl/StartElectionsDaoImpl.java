@@ -10,6 +10,13 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * DataAccessObject для работы с данными в случае начала голосования.
+ * Методы:
+ * начать голосование,
+ * проголосовать за кандидата,
+ * завершить голосование и подсчитать голоса (выбрать мэра).
+ */
 public class StartElectionsDaoImpl implements StartElectionsDao {
     private final Database database;
 
@@ -17,6 +24,11 @@ public class StartElectionsDaoImpl implements StartElectionsDao {
         database = Database.getInstance();
     }
 
+    /**
+     * @param token Идентификатор избирателя осуществляющего запрос.
+     * @return возвращает идентификатор избирателя если запрос был осуществлен успешно.
+     * @throws ElectionsException выбрасывает исключение в случае отсутствия прав для начала голосования (проверка токена).
+     */
     @Override
     public UUID setElectionsStarted(UUID token) throws ElectionsException {
         if (!token.equals(database.getAdminToken())) {
@@ -31,6 +43,14 @@ public class StartElectionsDaoImpl implements StartElectionsDao {
         return token;
     }
 
+    /**
+     * @param token     Идентификатор избирателя осуществляющего запрос.
+     * @param candidate Кандидат за которого голосует избиратель.
+     * @return возвращает идентификатор избирателя если запрос был осуществлен успешно.
+     * @throws ElectionsException выбрасывает исключение в случае если выборы еще не начались,
+     *                            при попытке осуществления запроса от пользователя с невалидным идентификатором,
+     *                            в случае ненахождения кандидата в базе.
+     */
     @Override
     public UUID voteForCandidate(UUID token, Candidate candidate) throws ElectionsException { //добавить проверку на повторное голосование
         if (!database.getElectionsStarted().equals("Выборы начались")) {
@@ -46,6 +66,13 @@ public class StartElectionsDaoImpl implements StartElectionsDao {
         throw new ElectionsException(ExceptionErrorCode.EMPTY_CANDIDATE_LIST);
     }
 
+    /**
+     * @param token Идентификатор избирателя осуществляющего запрос.
+     * @return возвращает кандидата который по результатам подсчета был избран мэром (если был).
+     * @throws ElectionsException выбрасывает исключение в случае если выборы еще не начались,
+     *                            в случае отсутствия прав для окончания голосования (проверка токена).
+     *                            в случае если при подсчете голосов мэр не получил большинство голосов.
+     */
     @Override
     public Candidate chooseMajor(UUID token) throws ElectionsException {
         if (!database.getElectionsStarted().equals("Выборы начались")) {
@@ -54,7 +81,6 @@ public class StartElectionsDaoImpl implements StartElectionsDao {
         if (!token.equals(database.getAdminToken())) {
             throw new ElectionsException(ExceptionErrorCode.NOT_ENOUGH_ROOT);
         }
-        //подсчитать количество голосов и выбрать мэра
         int max = Collections.max(database.getCandidatesForMajor().values());
         if (Collections.frequency(database.getCandidatesForMajor().values(), max) > 1) {
             throw new ElectionsException(ExceptionErrorCode.MAJOR_NOT_SELECTED);
@@ -65,6 +91,6 @@ public class StartElectionsDaoImpl implements StartElectionsDao {
             }
         }
         database.setElectionsStarted("Выборы закончились");
-        return null; //
+        return null; //исправить
     }
 }

@@ -12,7 +12,7 @@ public class Proposal implements Serializable {
 
     private static final long serialVersionUID = 5349904395383032185L;
 
-    private final UUID defaultAuthorToken = UUID.fromString("Токен всего общества города"); //
+    private final UUID defaultAuthorToken = UUID.fromString("Токен всего общества города"); //исправить
 
     private String proposalInfo;
     private UUID authorToken;
