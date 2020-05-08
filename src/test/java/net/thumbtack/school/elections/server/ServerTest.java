@@ -131,7 +131,7 @@ class ServerTest {
         server.startServer(null);
         int m = Database.getInstance().getCandidateMap().size();
         UUID tokenForCheck = (UUID) Database.getInstance().getVotersMap().values().toArray()[0];
-        ElectionsException exception1 = new ElectionsException(ExceptionErrorCode.WRONG_VOTER_TOKEN);
+        ElectionsException exception1 = new ElectionsException(ExceptionErrorCode.EMPTY_CANDIDATE_LIST);
 
         AddCandidateDtoRequest addCandidateRequest1 = new AddCandidateDtoRequest("Bob", "Fisher", tokenForCheck);  //первый избиратель в базе
         AddCandidateDtoRequest addCandidateRequest2 = new AddCandidateDtoRequest("Tim", "Fisher", tokenForCheck);  //второй избиратель в базе
