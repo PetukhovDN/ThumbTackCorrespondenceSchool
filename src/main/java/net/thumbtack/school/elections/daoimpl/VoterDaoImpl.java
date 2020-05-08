@@ -47,6 +47,18 @@ public class VoterDaoImpl implements VoterDao {
             throw new ElectionsException(ExceptionErrorCode.WRONG_VOTER_TOKEN);
         }
         for (Voter voter : database.getVotersMap().keySet()) {
+            /*
+             REVU Поиск элемента обходом всех ключей Map в цикле это длительная операция.
+             Map позволяет быстро (за константное время) искать значения по ключу. В данном случае это главное
+             преимущество Map перед List.
+             Вы заменили List на Map в классе Database. Но сейчас вы не используете преимущество Map перед List.
+             Подумайте о том, что можно изменить в текущем подходе в классе Database, чтобы избежать циклов в DAO.
+             Например можно использовать другое значение как ключ в Map, чтобы получать нужный элемент однократным
+             вызовом get().
+             В общем случае лучший способ работы с Map, это вызов методов get и put. Вы уже использовали подобный подход
+             в задании 10.
+             Следует избегать циклов по ключам / значениям Map.
+            */
             if (voter.getToken().equals(token)) { //проверяет есть ли такой избиратель
                 for (Candidate candidate : database.getCandidateMap().keySet()) {
                     if (candidate.getFirstName().equals(voter.getFirstName()) //проверяем ли такой согласившийся кандидат
