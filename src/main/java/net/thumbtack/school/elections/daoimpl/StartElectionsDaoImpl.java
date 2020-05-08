@@ -31,11 +31,8 @@ public class StartElectionsDaoImpl implements StartElectionsDao {
         return token;
     }
 
-    /**
-     * Добавить проверку на поторное голосование
-     */
     @Override
-    public UUID voteForCandidate(UUID token, Candidate candidate) throws ElectionsException {
+    public UUID voteForCandidate(UUID token, Candidate candidate) throws ElectionsException { //добавить проверку на повторное голосование
         if (!database.getElectionsStarted().equals("Выборы начались")) {
             throw new ElectionsException(ExceptionErrorCode.ELECTIONS_NOT_STARTED);
         }
@@ -44,8 +41,9 @@ public class StartElectionsDaoImpl implements StartElectionsDao {
         }
         if (database.getCandidatesForMajor().containsKey(candidate)) {
             database.getCandidatesForMajor().put(candidate, database.getCandidatesForMajor().get(candidate) + 1); //голосуем за выбранного кандидата
+            return token;
         }
-        return token;
+        throw new ElectionsException(ExceptionErrorCode.EMPTY_CANDIDATE_LIST);
     }
 
     @Override
