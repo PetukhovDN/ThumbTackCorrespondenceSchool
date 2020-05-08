@@ -11,6 +11,14 @@ import net.thumbtack.school.elections.model.Voter;
 import java.util.Set;
 import java.util.UUID;
 
+/**
+ * DataAccessObject для работы с ищбирателями.
+ * Методы:
+ * Регистрация избирателя,
+ * логаут избирателя (выход с сервера с возможностью вернуться),
+ * логин избирателя (возврат на сервер избирателя вышедшего с него),
+ *
+ */
 public class VoterDaoImpl implements VoterDao {
     private final Database database;
 
@@ -28,27 +36,6 @@ public class VoterDaoImpl implements VoterDao {
         }
         database.getVotersMap().put(voter, voter.getToken());
         return voter.getToken(); //возвращает значение токена избирателя
-    }
-
-    @Override
-    public UUID loginToDatabase(String login, String password) throws ElectionsException {
-        if (database.getElectionsStarted().equals("Выборы начались")) {
-            throw new ElectionsException(ExceptionErrorCode.ELECTIONS_HAVE_BEEN_STARTED);
-        }
-        for (Voter voter : database.getVotersMap().keySet()) {
-            if (voter.getLogin().equals(login)) { //проверяет есть ли такой избиратель
-                if (voter.getPassword().equals(password)) { //проверяет верный ли пароль
-                    voter.setToken(UUID.randomUUID()); //назначает новый случайный token для этого избирателя
-                    database.getVotersMap().put(voter, voter.getToken());
-                    return voter.getToken();
-                } else {
-                    throw new ElectionsException(ExceptionErrorCode.WRONG_VOTER_PASSWORD);
-                }
-            } else {
-                throw new ElectionsException(ExceptionErrorCode.NULL_VOTER_LOGIN);
-            }
-        }
-        return null; //исправить
     }
 
     @Override
@@ -80,6 +67,27 @@ public class VoterDaoImpl implements VoterDao {
             }
         }
         return token;
+    }
+
+    @Override
+    public UUID loginToDatabase(String login, String password) throws ElectionsException {
+        if (database.getElectionsStarted().equals("Выборы начались")) {
+            throw new ElectionsException(ExceptionErrorCode.ELECTIONS_HAVE_BEEN_STARTED);
+        }
+        for (Voter voter : database.getVotersMap().keySet()) {
+            if (voter.getLogin().equals(login)) { //проверяет есть ли такой избиратель
+                if (voter.getPassword().equals(password)) { //проверяет верный ли пароль
+                    voter.setToken(UUID.randomUUID()); //назначает новый случайный token для этого избирателя
+                    database.getVotersMap().put(voter, voter.getToken());
+                    return voter.getToken();
+                } else {
+                    throw new ElectionsException(ExceptionErrorCode.WRONG_VOTER_PASSWORD);
+                }
+            } else {
+                throw new ElectionsException(ExceptionErrorCode.NULL_VOTER_LOGIN);
+            }
+        }
+        return null; //исправить
     }
 
     @Override

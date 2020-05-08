@@ -10,6 +10,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * DataAccessObject для работы с предложениями избирателей.
+ * Методы:
+ * выдвижение (создание) предложения,
+ * добавление/изменение рейтинга к предложению (оценка),
+ * удаление рейтинга у предложения (удаление оценки),
+ * получение списка всех предложений с их средней оценкой (отсортированные по оценке). Пока без сортировки.
+ */
 public class ProposalDaoImpl implements ProposalDao {
     private final Database database;
 
@@ -17,6 +25,13 @@ public class ProposalDaoImpl implements ProposalDao {
         database = Database.getInstance();
     }
 
+    /**
+     * @param proposal Переданное предложение избирателя для добавления.
+     * @param token    Идентификатор избирателя осуществляющего запрос.
+     * @return возвращает идентификатор избирателя если запрос был осуществлен успешно.
+     * @throws ElectionsException выбрасывает исключение в случае начала выборов,
+     *                            при попытке осуществления запроса от пользователя с невалидным идентификатором.
+     */
     @Override
     public UUID makeProposal(Proposal proposal, UUID token) throws ElectionsException {
         if (database.getElectionsStarted().equals("Выборы начались")) {
@@ -29,6 +44,16 @@ public class ProposalDaoImpl implements ProposalDao {
         return token;
     }
 
+    /**
+     * @param proposal Переданное предложение избирателя для добавления/изменения рейтинга (оценки).
+     * @param rate     Рейтинг которым избиратель оценил предложение.
+     * @param token    Идентификатор избирателя осуществляющего запрос.
+     * @return возвращает идентификатор избирателя если запрос был осуществлен успешно.
+     * @throws ElectionsException выбрасывает исключение в случае начала выборов,
+     *                            при попытке осуществления запроса от пользователя с невалидным идентификатором,
+     *                            в случае если автор пытается изменить оценку собственного предложения (что запрещено по условиям),
+     *                            в случае если такого предложения не существовало.
+     */
     @Override
     public UUID addRatingForProposal(String proposal, int rate, UUID token) throws ElectionsException {
         if (database.getElectionsStarted().equals("Выборы начались")) {
@@ -50,6 +75,15 @@ public class ProposalDaoImpl implements ProposalDao {
         throw new ElectionsException(ExceptionErrorCode.WRONG_PROPOSAL_INFO);
     }
 
+    /**
+     * @param proposal Переданное предложение избирателя для удаления рейтинга (оценки).
+     * @param token    Идентификатор избирателя осуществляющего запрос.
+     * @return возвращает идентификатор избирателя если запрос был осуществлен успешно.
+     * @throws ElectionsException выбрасывает исключение в случае начала выборов,
+     *                            при попытке осуществления запроса от пользователя с невалидным идентификатором,
+     *                            в случае если автор пытается изменить оценку собственного предложения (что запрещено по условиям),
+     *                            в случае если такого предложения не существовало.
+     */
     @Override
     public UUID removeRatingFromProposal(String proposal, UUID token) throws ElectionsException {
         if (database.getElectionsStarted().equals("Выборы начались")) {
@@ -71,6 +105,11 @@ public class ProposalDaoImpl implements ProposalDao {
         throw new ElectionsException(ExceptionErrorCode.WRONG_PROPOSAL_INFO);
     }
 
+    /**
+     * @param token Идентификатор избирателя осуществляющего запрос.
+     * @return возвращает идентификатор избирателя если запрос был осуществлен успешно.
+     * @throws ElectionsException выбрасывает исключение при попытке осуществления запроса от пользователя с невалидным идентификатором.
+     */
     @Override
     public Map<String, Double> getAllProposals(UUID token) throws ElectionsException {
         Map<String, Double> results = new HashMap<>();
@@ -86,7 +125,12 @@ public class ProposalDaoImpl implements ProposalDao {
             }
             results.put(proposal.getProposalInfo(), sumRatings / count); //в map добавляется запись с ключом Предложением и значением Средней оценкой
         }
+
         return results;
+
+//        return results.entrySet().stream()
+//                .sorted(Map.Entry.<String, Double>comparingByValue().reversed())
+//                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 }
 
