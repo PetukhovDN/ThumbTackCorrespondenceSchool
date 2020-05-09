@@ -39,10 +39,10 @@ public class ProposalDaoImpl implements ProposalDao {
         if (database.getElectionsStarted().equals("Выборы начались")) {
             throw new ElectionsException(ExceptionErrorCode.ELECTIONS_HAVE_BEEN_STARTED);
         }
-        if (!database.getVotersMap().containsValue(token)) {
+        if (!database.getValidTokens().contains(token)) {
             throw new ElectionsException(ExceptionErrorCode.WRONG_VOTER_TOKEN);
         }
-        database.getProposalSet().add(proposal);
+        database.getProposalMap().putIfAbsent(proposal.getProposalInfo(), proposal);
         return token;
     }
 
@@ -55,28 +55,25 @@ public class ProposalDaoImpl implements ProposalDao {
      * @return возвращает идентификатор избирателя если запрос был осуществлен успешно.
      * @throws ElectionsException выбрасывает исключение в случае начала выборов,
      *                            при попытке осуществления запроса от пользователя с невалидным идентификатором,
-     *                            в случае если автор пытается изменить оценку собственного предложения (что запрещено по условиям),
-     *                            в случае если такого предложения не существовало.
+     *                            в случае если такого предложения не существовало,
+     *                            в случае если автор пытается изменить оценку собственного предложения (что запрещено по условиям).
      */
     @Override
     public UUID addRatingForProposal(String proposal, int rate, UUID token) throws ElectionsException {
         if (database.getElectionsStarted().equals("Выборы начались")) {
             throw new ElectionsException(ExceptionErrorCode.ELECTIONS_HAVE_BEEN_STARTED);
         }
-        if (!database.getVotersMap().containsValue(token)) {
+        if (!database.getValidTokens().contains(token)) {
             throw new ElectionsException(ExceptionErrorCode.WRONG_VOTER_TOKEN);
         }
-        for (Proposal proposalFromBase : database.getProposalSet()) {
-            if (proposalFromBase.getProposalInfo().equals(proposal)) {
-                if (proposalFromBase.getAuthorToken().equals(token)) {
-                    throw new ElectionsException(ExceptionErrorCode.SAME_PROPOSAL_AUTHOR);
-                } else {
-                    proposalFromBase.getRating().put(token, rate);
-                    return token;
-                }
-            }
+        if (!database.getProposalMap().containsKey(proposal)) {
+            throw new ElectionsException(ExceptionErrorCode.WRONG_PROPOSAL_INFO);
         }
-        throw new ElectionsException(ExceptionErrorCode.WRONG_PROPOSAL_INFO);
+        if (database.getProposalMap().get(proposal).getAuthorToken().equals(token)) {
+            throw new ElectionsException(ExceptionErrorCode.SAME_PROPOSAL_AUTHOR);
+        }
+        database.getProposalMap().get(proposal).getRating().put(token, rate);
+        return token;
     }
 
     /**
@@ -87,33 +84,28 @@ public class ProposalDaoImpl implements ProposalDao {
      * @return возвращает идентификатор избирателя если запрос был осуществлен успешно.
      * @throws ElectionsException выбрасывает исключение в случае начала выборов,
      *                            при попытке осуществления запроса от пользователя с невалидным идентификатором,
-     *                            в случае если автор пытается изменить оценку собственного предложения (что запрещено по условиям),
      *                            в случае если такого предложения не существовало.
+     *                            в случае если автор пытается изменить оценку собственного предложения (что запрещено по условиям).
      */
     @Override
     public UUID removeRatingFromProposal(String proposal, UUID token) throws ElectionsException {
         if (database.getElectionsStarted().equals("Выборы начались")) {
             throw new ElectionsException(ExceptionErrorCode.ELECTIONS_HAVE_BEEN_STARTED);
         }
-        if (!database.getVotersMap().containsValue(token)) {
+        if (!database.getValidTokens().contains(token)) {
             throw new ElectionsException(ExceptionErrorCode.WRONG_VOTER_TOKEN);
         }
-        for (Proposal proposalFromBase : database.getProposalSet()) {
-            if (proposalFromBase.getProposalInfo().equals(proposal)) {
-                if (proposalFromBase.getAuthorToken().equals(token)) {
-                    throw new ElectionsException(ExceptionErrorCode.SAME_PROPOSAL_AUTHOR);
-                } else {
-                    proposalFromBase.getRating().remove(token);
-                    return token;
-                }
-            }
+        if (!database.getProposalMap().containsKey(proposal)) {
+            throw new ElectionsException(ExceptionErrorCode.WRONG_PROPOSAL_INFO);
         }
-        throw new ElectionsException(ExceptionErrorCode.WRONG_PROPOSAL_INFO);
+        if (database.getProposalMap().get(proposal).getAuthorToken().equals(token)) {
+            throw new ElectionsException(ExceptionErrorCode.SAME_PROPOSAL_AUTHOR);
+        }
+        database.getProposalMap().get(proposal).getRating().remove(token);
+        return token;
     }
 
     /**
-     *
-     *
      * @param token Идентификатор избирателя осуществляющего запрос.
      * @return возвращает список всех предложений с их средним рейтингом (отсортированных по рейтингу)
      * в формате map: ключ - предложение, значение - средняя оценка.
@@ -122,10 +114,10 @@ public class ProposalDaoImpl implements ProposalDao {
     @Override
     public Map<String, Double> getAllProposals(UUID token) throws ElectionsException {
         Map<String, Double> results = new HashMap<>();
-        if (!database.getVotersMap().containsValue(token)) {
+        if (!database.getValidTokens().contains(token)) {
             throw new ElectionsException(ExceptionErrorCode.WRONG_VOTER_TOKEN);
         }
-        for (Proposal proposal : database.getProposalSet()) {
+        for (Proposal proposal : database.getProposalMap().values()) {
             double sumRatings = 0.0;
             int count = 0;
             for (Integer rating : proposal.getRating().values()) {

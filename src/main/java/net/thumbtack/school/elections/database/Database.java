@@ -12,10 +12,11 @@ public class Database implements Serializable {
     private static final long serialVersionUID = 577745366661255865L;
     private static Database instance;
     private final UUID adminToken = UUID.fromString("4d50c72b-8342-4d44-ab09-4026dd0e333d");
-    private Map<Voter, UUID> votersMap = new HashMap<>();
-    private Map<Candidate, Boolean> candidateMap = new HashMap<>();
-    private Set<Proposal> proposalSet = new HashSet<>();
+    private Map<UUID, Voter> votersMap = new HashMap<>();
+    private Map<UUID, Candidate> candidateMap = new HashMap<>();
+    private Map<String, Proposal> proposalMap = new HashMap<>();
     private Map<Candidate, Integer> candidatesForMajor = new HashMap<>();
+    private Set<UUID> validTokens = new HashSet<>();
 
     private String electionsStarted = "Выборы еще не начались";
 
@@ -26,16 +27,25 @@ public class Database implements Serializable {
         return instance;
     }
 
-    public Map<Voter, UUID> getVotersMap() {
+    public Map<UUID, Voter> getVotersMap() {
         return votersMap;
     }
 
-    public Map<Candidate, Boolean> getCandidateMap() { //boolean отвечает за согласие избирателя быть кандидатом в мэры
+    public Map<UUID, Candidate> getCandidateMap() { //boolean отвечает за согласие избирателя быть кандидатом в мэры
         return candidateMap;
     }
 
-    public Set<Proposal> getProposalSet() {
-        return proposalSet;
+    public Map<String, Proposal> getProposalMap() {
+        return proposalMap;
+    }
+
+    public Map<Candidate, Integer> getCandidatesForMajor() {
+        return candidatesForMajor;
+    }
+
+
+    public Set<UUID> getValidTokens() {
+        return validTokens;
     }
 
     public String getElectionsStarted() {
@@ -50,8 +60,5 @@ public class Database implements Serializable {
         return adminToken;
     }
 
-    public Map<Candidate, Integer> getCandidatesForMajor() {
-        return candidatesForMajor;
-    }
 
 }

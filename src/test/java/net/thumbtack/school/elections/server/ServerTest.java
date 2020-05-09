@@ -92,7 +92,7 @@ class ServerTest {
         Server server = new Server();
         server.startServer(null);
         int n = Database.getInstance().getVotersMap().size();
-        Voter testVoter = (Voter) Database.getInstance().getVotersMap().keySet().toArray()[0];
+        Voter testVoter = (Voter) Database.getInstance().getVotersMap().values().toArray()[0];
 
         LoginVoterDtoRequest loginRequest = new LoginVoterDtoRequest(testVoter.getLogin(), testVoter.getPassword());
         String jsonLoginRequest = new Gson().toJson(loginRequest);
@@ -130,12 +130,13 @@ class ServerTest {
         Server server = new Server();
         server.startServer(null);
         int m = Database.getInstance().getCandidateMap().size();
-        UUID tokenForCheck = (UUID) Database.getInstance().getVotersMap().values().toArray()[0];
+        UUID tokenForCheck1 = (UUID) Database.getInstance().getValidTokens().toArray()[0];
+        UUID tokenForCheck2 = (UUID) Database.getInstance().getValidTokens().toArray()[1];
         ElectionsException exception1 = new ElectionsException(ExceptionErrorCode.EMPTY_CANDIDATE_LIST);
 
-        AddCandidateDtoRequest addCandidateRequest1 = new AddCandidateDtoRequest("Bob", "Fisher", tokenForCheck);  //первый избиратель в базе
-        AddCandidateDtoRequest addCandidateRequest2 = new AddCandidateDtoRequest("Tim", "Fisher", tokenForCheck);  //второй избиратель в базе
-        AddCandidateDtoRequest addCandidateRequest3 = new AddCandidateDtoRequest("Bill", "Fisher", tokenForCheck); //не существует такого избирателя в базе
+        AddCandidateDtoRequest addCandidateRequest1 = new AddCandidateDtoRequest("Bob", "Fisher", tokenForCheck1);  //первый избиратель в базе
+        AddCandidateDtoRequest addCandidateRequest2 = new AddCandidateDtoRequest("Tim", "Fisher", tokenForCheck2);  //второй избиратель в базе
+        AddCandidateDtoRequest addCandidateRequest3 = new AddCandidateDtoRequest("Bill", "Fisher", tokenForCheck1); //не существует такого избирателя в базе
         String jsonAddCandidateRequest1 = new Gson().toJson(addCandidateRequest1);
         String jsonAddCandidateRequest2 = new Gson().toJson(addCandidateRequest2);
         String jsonAddCandidateRequest3 = new Gson().toJson(addCandidateRequest3);
@@ -145,8 +146,8 @@ class ServerTest {
         AddCandidateDtoResponse addCandidateResponse1 = new Gson().fromJson(jsonAddCandidateResponse1, AddCandidateDtoResponse.class);
         AddCandidateDtoResponse addCandidateResponse2 = new Gson().fromJson(jsonAddCandidateResponse2, AddCandidateDtoResponse.class);
 
-        assertEquals(new Gson().toJson(addCandidateResponse1.getToken()), new Gson().toJson(tokenForCheck));
-        assertEquals(new Gson().toJson(addCandidateResponse2.getToken()), new Gson().toJson(tokenForCheck));
+        assertEquals(new Gson().toJson(addCandidateResponse1.getToken()), new Gson().toJson(tokenForCheck1));
+        assertEquals(new Gson().toJson(addCandidateResponse2.getToken()), new Gson().toJson(tokenForCheck2));
         assertEquals(new Gson().toJson(exception1.getErrorCode().getErrorString()), jsonAddCandidateResponse3);
 
         assertEquals(m + 2, Database.getInstance().getCandidateMap().size()); // оба добавились но только первый согласен быть кандидатом
@@ -159,7 +160,7 @@ class ServerTest {
         Server server = new Server();
         server.startServer(null);
         int m = Database.getInstance().getCandidateMap().size(); //0
-        UUID tokenForCheck = (UUID) Database.getInstance().getVotersMap().values().toArray()[1];  //токен Tim Fisher
+        UUID tokenForCheck = (UUID) Database.getInstance().getValidTokens().toArray()[1];  //токен Tim Fisher
         AgreeToBeCandidateDtoRequest agreeRequest = new AgreeToBeCandidateDtoRequest(tokenForCheck);
         String jsonAgreeRequest = new Gson().toJson(agreeRequest);
         String jsonAgreeResponse = server.agreeToBeCandidate(jsonAgreeRequest);

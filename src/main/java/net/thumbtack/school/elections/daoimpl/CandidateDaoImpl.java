@@ -9,7 +9,6 @@ import net.thumbtack.school.elections.model.Voter;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -28,6 +27,8 @@ public class CandidateDaoImpl implements CandidateDao {
 
     /**
      * Выдвигает избирателя с переданными именем и фамилией в кандидаты в мэры.
+     * Если избиратель выдвигает сам себя - автоматически даёт на это согласие.
+     * Сейчас сделано так что избиратель может выдвинуть только одного кандидата.
      *
      * @param candidate Кандидат в мэры (данные: имя и фамилия)
      * @param token     Идентификатор избирателя осуществляющего запрос.
@@ -41,16 +42,16 @@ public class CandidateDaoImpl implements CandidateDao {
         if (database.getElectionsStarted().equals("Выборы начались")) {
             throw new ElectionsException(ExceptionErrorCode.ELECTIONS_HAVE_BEEN_STARTED);
         }
-        if (!database.getVotersMap().containsValue(token)) {
+        if (!database.getValidTokens().contains(token)) {
             throw new ElectionsException(ExceptionErrorCode.WRONG_VOTER_TOKEN);
         }
-        for (Map.Entry<Voter, UUID> voterPair : database.getVotersMap().entrySet()) {
-            if (voterPair.getKey().getFirstName().equals(candidate.getFirstName())
-                    && voterPair.getKey().getLastName().equals(candidate.getLastName())) {
-                if (voterPair.getKey().getToken().equals(token)) {
-                    database.getCandidateMap().put(candidate, true);
-                } else {
-                    database.getCandidateMap().put(candidate, false);
+
+        for (Voter voter : database.getVotersMap().values()) {
+            if (voter.getFirstName().equals(candidate.getFirstName())
+                    && voter.getLastName().equals(candidate.getLastName())) {
+                database.getCandidateMap().putIfAbsent(token, candidate);
+                if (voter.getToken().equals(token)) {
+                    database.getCandidateMap().get(token).setAgreement(true);
                 }
                 return token;
             }
@@ -72,22 +73,14 @@ public class CandidateDaoImpl implements CandidateDao {
         if (database.getElectionsStarted().equals("Выборы начались")) {
             throw new ElectionsException(ExceptionErrorCode.ELECTIONS_HAVE_BEEN_STARTED);
         }
-        if (!database.getVotersMap().containsValue(token)) {
+        if (!database.getValidTokens().contains(token)) {
             throw new ElectionsException(ExceptionErrorCode.WRONG_VOTER_TOKEN);
         }
-        for (Map.Entry<Voter, UUID> voterPair : database.getVotersMap().entrySet()) {
-            if (voterPair.getValue().equals(token)) {
-                for (Candidate candidate : database.getCandidateMap().keySet()) {
-                    if (candidate.getFirstName().equals(voterPair.getKey().getFirstName())
-                            && candidate.getLastName().equals(voterPair.getKey().getLastName())) {
-                        database.getCandidateMap().put(candidate, true);
-                        return token;
-                    }
-                }
-                throw new ElectionsException(ExceptionErrorCode.EMPTY_CANDIDATE_LIST);
-            }
+        if (!database.getCandidateMap().containsKey(token)) {
+            throw new ElectionsException(ExceptionErrorCode.EMPTY_CANDIDATE_LIST);
         }
-        throw new ElectionsException(ExceptionErrorCode.WRONG_VOTER_TOKEN);
+        database.getCandidateMap().get(token).setAgreement(true);
+        return token;
     }
 
     /**
@@ -100,12 +93,12 @@ public class CandidateDaoImpl implements CandidateDao {
     @Override
     public List<Candidate> getAllAgreedCandidates(UUID token) throws ElectionsException {
         List<Candidate> resultList = new ArrayList<>();
-        if (!database.getVotersMap().containsValue(token)) {
+        if (!database.getValidTokens().contains(token)) {
             throw new ElectionsException(ExceptionErrorCode.WRONG_VOTER_TOKEN);
         }
-        for (Map.Entry<Candidate, Boolean> pair : database.getCandidateMap().entrySet()) {
-            if (pair.getValue()) {
-                resultList.add(pair.getKey());
+        for (Candidate candidate : database.getCandidateMap().values()) {
+            if (candidate.isAgreement()) {
+                resultList.add(candidate);
             }
         }
         return resultList;

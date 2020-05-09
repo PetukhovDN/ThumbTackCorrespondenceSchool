@@ -2,16 +2,16 @@ package net.thumbtack.school.elections.dto.response;
 
 import net.thumbtack.school.elections.model.Voter;
 
-import java.util.Set;
+import java.util.List;
 
 public class GetAllVotersDtoResponse {
-    private Set<Voter> voterList;
+    private List<Voter> voterList;
 
-    public GetAllVotersDtoResponse(Set<Voter> voterList) {
+    public GetAllVotersDtoResponse(List<Voter> voterList) {
         this.voterList = voterList;
     }
 
-    public Set<Voter> getVoterList() {
+    public List<Voter> getVoterList() {
         return voterList;
     }
 }

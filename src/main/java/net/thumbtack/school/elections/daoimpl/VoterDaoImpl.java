@@ -4,11 +4,12 @@ import net.thumbtack.school.elections.dao.VoterDao;
 import net.thumbtack.school.elections.database.Database;
 import net.thumbtack.school.elections.exceptions.ElectionsException;
 import net.thumbtack.school.elections.exceptions.ExceptionErrorCode;
-import net.thumbtack.school.elections.model.Candidate;
 import net.thumbtack.school.elections.model.Proposal;
 import net.thumbtack.school.elections.model.Voter;
 
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -38,10 +39,11 @@ public class VoterDaoImpl implements VoterDao {
         if (database.getElectionsStarted().equals("Выборы начались")) {
             throw new ElectionsException(ExceptionErrorCode.ELECTIONS_HAVE_BEEN_STARTED);
         }
-        if (database.getVotersMap().containsKey(voter)) {
+        if (database.getVotersMap().containsValue(voter)) {
             throw new ElectionsException(ExceptionErrorCode.DUPLICATE_VOTER);
         }
-        database.getVotersMap().put(voter, voter.getToken());
+        database.getVotersMap().put(voter.getToken(), voter);
+        database.getValidTokens().add(voter.getToken());
         return voter.getToken();
     }
 
@@ -58,36 +60,17 @@ public class VoterDaoImpl implements VoterDao {
         if (database.getElectionsStarted().equals("Выборы начались")) {
             throw new ElectionsException(ExceptionErrorCode.ELECTIONS_HAVE_BEEN_STARTED);
         }
-        if (!database.getVotersMap().containsValue(token)) {
+        if (!database.getValidTokens().contains(token)) {
             throw new ElectionsException(ExceptionErrorCode.WRONG_VOTER_TOKEN);
         }
-        for (Voter voter : database.getVotersMap().keySet()) {
-            /*
-             REVU Поиск элемента обходом всех ключей Map в цикле это длительная операция.
-             Map позволяет быстро (за константное время) искать значения по ключу. В данном случае это главное
-             преимущество Map перед List.
-             Вы заменили List на Map в классе Database. Но сейчас вы не используете преимущество Map перед List.
-             Подумайте о том, что можно изменить в текущем подходе в классе Database, чтобы избежать циклов в DAO.
-             Например можно использовать другое значение как ключ в Map, чтобы получать нужный элемент однократным
-             вызовом get().
-             В общем случае лучший способ работы с Map, это вызов методов get и put. Вы уже использовали подобный подход
-             в задании 10.
-             Следует избегать циклов по ключам / значениям Map.
-            */
-            if (voter.getToken().equals(token)) { //проверяет есть ли такой избиратель
-                for (Candidate candidate : database.getCandidateMap().keySet()) {
-                    if (candidate.getFirstName().equals(voter.getFirstName()) //проверяем ли такой согласившийся кандидат
-                            && candidate.getLastName().equals(voter.getLastName())) {
-                        database.getCandidateMap().put(candidate, false);
-                        break;
-                    }
-                }
-                voter.setToken(null); //удаляем данный token
-                database.getVotersMap().put(voter, voter.getToken());
-                break;
-            }
+        database.getVotersMap().get(token).setToken(null);
+        database.getValidTokens().remove(token);
+
+        if (database.getCandidateMap().containsKey(token)) { //если является кандидатом
+            database.getCandidateMap().get(token).setAgreement(false); //отказаться им быть
         }
-        for (Proposal proposal : database.getProposalSet()) {
+
+        for (Proposal proposal : database.getProposalMap().values()) {
             if (proposal.getAuthorToken().equals(token)) { //если является автором предложения,
                 proposal.getRating().remove(token); //удалить рейтинг этого предложения
                 proposal.setDefaultAuthor(); //назначить автором всё общество города
@@ -111,20 +94,19 @@ public class VoterDaoImpl implements VoterDao {
         if (database.getElectionsStarted().equals("Выборы начались")) {
             throw new ElectionsException(ExceptionErrorCode.ELECTIONS_HAVE_BEEN_STARTED);
         }
-        for (Voter voter : database.getVotersMap().keySet()) {
-            if (voter.getLogin().equals(login)) { //проверяет есть ли такой избиратель
-                if (voter.getPassword().equals(password)) { //проверяет верный ли пароль
-                    voter.setToken(UUID.randomUUID()); //назначает новый случайный token для этого избирателя
-                    database.getVotersMap().put(voter, voter.getToken());
-                    return voter.getToken();
-                } else {
-                    throw new ElectionsException(ExceptionErrorCode.WRONG_VOTER_PASSWORD);
+        for (Map.Entry<UUID, Voter> pair : database.getVotersMap().entrySet()) {
+            if (pair.getValue().getLogin().equals(login)) { //проверяет есть ли такой избиратель
+                if (pair.getValue().getPassword().equals(password)) { //проверяет верный ли пароль
+                    pair.getValue().setToken(UUID.randomUUID()); //назначает новый случайный token для этого избирателя
+                    database.getVotersMap().put(pair.getValue().getToken(), pair.getValue()); //добавить в базу избирателя с новым токеном
+                    database.getValidTokens().add(pair.getValue().getToken()); //добавить токен в список валидных
+                    database.getVotersMap().remove(pair.getKey()); //удалить из базы избирателя со старым невалидным токеном
+                    return pair.getKey();
                 }
-            } else {
-                throw new ElectionsException(ExceptionErrorCode.NULL_VOTER_LOGIN);
+                throw new ElectionsException(ExceptionErrorCode.WRONG_VOTER_PASSWORD);
             }
         }
-        return null; //исправить
+        throw new ElectionsException(ExceptionErrorCode.NULL_VOTER_LOGIN);
     }
 
     /**
@@ -135,11 +117,11 @@ public class VoterDaoImpl implements VoterDao {
      * @throws ElectionsException выбрасывает исключение в случае начала выборов.
      */
     @Override
-    public Set<Voter> getAllVotersFromDatabase(UUID token) throws ElectionsException {
-        if (!database.getVotersMap().containsValue(token)) {
+    public List<Voter> getAllVotersFromDatabase(UUID token) throws ElectionsException {
+        if (!database.getValidTokens().contains(token)) {
             throw new ElectionsException(ExceptionErrorCode.WRONG_VOTER_TOKEN);
         }
-        return database.getVotersMap().keySet();
+        return new ArrayList<>(database.getVotersMap().values());
     }
 }
 
