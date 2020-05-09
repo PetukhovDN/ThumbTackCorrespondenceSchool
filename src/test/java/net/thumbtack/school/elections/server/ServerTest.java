@@ -155,19 +155,24 @@ class ServerTest {
         server.stopServer(null);
     }
 
-    @Ignore
+    @Test
     void agreeToBeCandidate() {
         Server server = new Server();
         server.startServer(null);
         int m = Database.getInstance().getCandidateMap().size(); //0
         UUID tokenForCheck = (UUID) Database.getInstance().getValidTokens().toArray()[1];  //токен Tim Fisher
+
+        AddCandidateDtoRequest addCandidateRequest = new AddCandidateDtoRequest("Bob", "Fisher", tokenForCheck);
+        String jsonAddCandidateRequest = new Gson().toJson(addCandidateRequest);
+        String jsonAddCandidateResponse = server.addCandidate(jsonAddCandidateRequest);
+
         AgreeToBeCandidateDtoRequest agreeRequest = new AgreeToBeCandidateDtoRequest(tokenForCheck);
         String jsonAgreeRequest = new Gson().toJson(agreeRequest);
         String jsonAgreeResponse = server.agreeToBeCandidate(jsonAgreeRequest);
         AgreeToBeCandidateDtoResponse agreeResponse = new Gson().fromJson(jsonAgreeResponse, AgreeToBeCandidateDtoResponse.class);
 
         assertEquals(new Gson().toJson(agreeResponse.getToken()), new Gson().toJson(tokenForCheck));
-        assertEquals(m + 2, Database.getInstance().getCandidateMap().size());
+        assertEquals(m + 1, Database.getInstance().getCandidateMap().size());
 
         server.stopServer(null);
     }
