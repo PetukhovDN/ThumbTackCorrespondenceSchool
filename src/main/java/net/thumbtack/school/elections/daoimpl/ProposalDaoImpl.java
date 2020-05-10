@@ -4,6 +4,7 @@ import net.thumbtack.school.elections.dao.ProposalDao;
 import net.thumbtack.school.elections.database.Database;
 import net.thumbtack.school.elections.exceptions.ElectionsException;
 import net.thumbtack.school.elections.exceptions.ExceptionErrorCode;
+import net.thumbtack.school.elections.model.CandidateProgram;
 import net.thumbtack.school.elections.model.Proposal;
 
 import java.util.HashMap;
@@ -43,6 +44,12 @@ public class ProposalDaoImpl implements ProposalDao {
             throw new ElectionsException(ExceptionErrorCode.WRONG_VOTER_TOKEN);
         }
         database.getProposalMap().putIfAbsent(proposal.getProposalInfo(), proposal);
+        if (!database.getProposalsFromCandidateMap().containsKey(database.getVotersMap().get(token).getFullName())) {
+            CandidateProgram candidateProgram = new CandidateProgram();
+            candidateProgram.getProposals().add(proposal);
+            database.getProposalsFromCandidateMap().put(database.getVotersMap().get(token).getFullName(), candidateProgram);
+        }
+        database.getProposalsFromCandidateMap().get(database.getVotersMap().get(token).getFullName()).getProposals().add(proposal);
         return token;
     }
 
@@ -112,11 +119,11 @@ public class ProposalDaoImpl implements ProposalDao {
      * @throws ElectionsException выбрасывает исключение при попытке осуществления запроса от пользователя с невалидным идентификатором.
      */
     @Override
-    public Map<String, Double> getAllProposals(UUID token) throws ElectionsException {
-        Map<String, Double> results = new HashMap<>();
+    public Map<String, Double> getAllProposalsWithRate(UUID token) throws ElectionsException {
         if (!database.getValidTokens().contains(token)) {
             throw new ElectionsException(ExceptionErrorCode.WRONG_VOTER_TOKEN);
         }
+        Map<String, Double> results = new HashMap<>();
         for (Proposal proposal : database.getProposalMap().values()) {
             double sumRatings = 0.0;
             int count = 0;
@@ -132,6 +139,28 @@ public class ProposalDaoImpl implements ProposalDao {
 //        return results.entrySet().stream()
 //                .sorted(Map.Entry.<String, Double>comparingByValue().reversed())
 //                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
+
+    /**
+     * @param token          Идентификатор избирателя осуществляющего запрос.
+     * @param voterFullNames массив полных имён избирателей, чьи предложения необходимо получить.
+     * @return возвращает map в формате: ключ - имя избирателя чьи предложения необходимо было получить, значение - список предложений (его кандидатская программа).
+     * @throws ElectionsException выбрасывает исключение при попытке осуществления запроса от пользователя с невалидным идентификатором,
+     *                            если у избирателя не было ни одного предложения.
+     */
+    @Override
+    public Map<String, CandidateProgram> getAllProposalsFromVoter(UUID token, String[] voterFullNames) throws ElectionsException {
+        if (!database.getValidTokens().contains(token)) {
+            throw new ElectionsException(ExceptionErrorCode.WRONG_VOTER_TOKEN);
+        }
+        Map<String, CandidateProgram> results = new HashMap<>();
+        for (String voterFullName : voterFullNames) {
+            if (!database.getProposalsFromCandidateMap().containsKey(voterFullName)) {
+                throw new ElectionsException(ExceptionErrorCode.EMPTY_CANDIDATE_PROGRAM);
+            }
+            results.put(voterFullName, database.getProposalsFromCandidateMap().get(voterFullName));
+        }
+        return results;
     }
 }
 

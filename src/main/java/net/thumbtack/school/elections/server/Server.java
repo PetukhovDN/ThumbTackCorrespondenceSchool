@@ -33,7 +33,6 @@ import java.io.*;
 /*
  * TODO:
  *  Дописать документацию.
- *  Добавить объект и функционал кандидатской программы.
  *  Добавить кандидата "против всех".
  *  Тесты, тесты...
  */
@@ -102,6 +101,14 @@ public class Server implements Serializable {
         return candidateService.agreeToBeCandidate(requestJsonString);
     }
 
+    public String addProposalToCandidateProgram(String requestJsonString) {
+        return candidateService.addProposalToCandidateProgram(requestJsonString);
+    }
+
+    public String removeProposalFromCandidateProgram(String requestJsonString) {
+        return candidateService.removeProposalFromCandidateProgram(requestJsonString);
+    }
+
     public String getAllCandidates(String requestJsonString) {
         return candidateService.getAllAgreedCandidates(requestJsonString);
     }
@@ -118,8 +125,12 @@ public class Server implements Serializable {
         return proposalService.removeRatingFromProposal(requestJsonString);
     }
 
-    public String getAllProposals(String requestJsonString) {
-        return proposalService.getAllProposals(requestJsonString);
+    public String getAllProposalsWithRate(String requestJsonString) {
+        return proposalService.getAllProposalsWithRate(requestJsonString);
+    }
+
+    public String getAllProposalsFromVoter(String requestJsonString) {
+        return proposalService.getAllProposalsFromVoter(requestJsonString);
     }
 
     public String startElections(String requestJsonString) {

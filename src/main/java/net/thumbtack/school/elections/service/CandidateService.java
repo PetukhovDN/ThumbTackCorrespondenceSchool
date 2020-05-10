@@ -2,12 +2,8 @@ package net.thumbtack.school.elections.service;
 
 import net.thumbtack.school.elections.dao.CandidateDao;
 import net.thumbtack.school.elections.daoimpl.CandidateDaoImpl;
-import net.thumbtack.school.elections.dto.request.AddCandidateDtoRequest;
-import net.thumbtack.school.elections.dto.request.AgreeToBeCandidateDtoRequest;
-import net.thumbtack.school.elections.dto.request.GetAllAgreedCandidatesDtoRequest;
-import net.thumbtack.school.elections.dto.response.AddCandidateDtoResponse;
-import net.thumbtack.school.elections.dto.response.AgreeToBeCandidateDtoResponse;
-import net.thumbtack.school.elections.dto.response.GetAllAgreedCandidatesDtoResponse;
+import net.thumbtack.school.elections.dto.request.*;
+import net.thumbtack.school.elections.dto.response.*;
 import net.thumbtack.school.elections.exceptions.ElectionsException;
 import net.thumbtack.school.elections.model.Candidate;
 
@@ -38,6 +34,28 @@ public class CandidateService {
             agreeRequest.validate();
             AgreeToBeCandidateDtoResponse agreeResponse = new AgreeToBeCandidateDtoResponse(candidateDao.agreeToBeCandidate(agreeRequest.getToken()));
             return gson.toJson(agreeResponse);
+        } catch (ElectionsException e) {
+            return gson.toJson(e.getErrorCode().getErrorString());
+        }
+    }
+
+    public String addProposalToCandidateProgram(String requestJsonString) {
+        try {
+            AddProposalToCandidateProgramDtoRequest addRequest = gson.fromJson(requestJsonString, AddProposalToCandidateProgramDtoRequest.class);
+            addRequest.validate();
+            AddProposalToCandidateProgramDtoResponse addResponse = new AddProposalToCandidateProgramDtoResponse(candidateDao.addProposalToCandidateProgram(addRequest.getProposal(), addRequest.getToken()));
+            return gson.toJson(addResponse);
+        } catch (ElectionsException e) {
+            return gson.toJson(e.getErrorCode().getErrorString());
+        }
+    }
+
+    public String removeProposalFromCandidateProgram(String requestJsonString) {
+        try {
+            RemoveProposalFromCandidateProgramDtoRequest removeRequest = gson.fromJson(requestJsonString, RemoveProposalFromCandidateProgramDtoRequest.class);
+            removeRequest.validate();
+            RemoveProposalFromCandidateProgramDtoResponse removeResponse = new RemoveProposalFromCandidateProgramDtoResponse(candidateDao.removeProposalFromCandidateProgram(removeRequest.getProposal(), removeRequest.getToken()));
+            return gson.toJson(removeResponse);
         } catch (ElectionsException e) {
             return gson.toJson(e.getErrorCode().getErrorString());
         }

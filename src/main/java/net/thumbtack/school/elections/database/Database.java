@@ -1,6 +1,7 @@
 package net.thumbtack.school.elections.database;
 
 import net.thumbtack.school.elections.model.Candidate;
+import net.thumbtack.school.elections.model.CandidateProgram;
 import net.thumbtack.school.elections.model.Proposal;
 import net.thumbtack.school.elections.model.Voter;
 
@@ -15,6 +16,7 @@ public class Database implements Serializable {
     private Map<UUID, Voter> votersMap = new HashMap<>();
     private Map<UUID, Candidate> candidateMap = new HashMap<>();
     private Map<String, Proposal> proposalMap = new HashMap<>();
+    private Map<String, CandidateProgram> proposalsFromCandidateMap = new HashMap<>();
     private Map<Candidate, Integer> candidatesForMajor = new HashMap<>();
     private Set<UUID> validTokens = new HashSet<>();
 
@@ -37,6 +39,10 @@ public class Database implements Serializable {
 
     public Map<String, Proposal> getProposalMap() {
         return proposalMap;
+    }
+
+    public Map<String, CandidateProgram> getProposalsFromCandidateMap() {
+        return proposalsFromCandidateMap;
     }
 
     public Map<Candidate, Integer> getCandidatesForMajor() {

@@ -2,8 +2,9 @@ package net.thumbtack.school.elections.dao;
 
 import net.thumbtack.school.elections.exceptions.ElectionsException;
 import net.thumbtack.school.elections.model.Candidate;
+import net.thumbtack.school.elections.model.CandidateProgram;
 
-import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public interface CandidateDao {
@@ -11,6 +12,10 @@ public interface CandidateDao {
 
     UUID agreeToBeCandidate(UUID token) throws ElectionsException;
 
-    List<Candidate> getAllAgreedCandidates(UUID token) throws ElectionsException;
+    UUID addProposalToCandidateProgram(String proposal, UUID token) throws ElectionsException;
+
+    UUID removeProposalFromCandidateProgram(String proposal, UUID token) throws ElectionsException;
+
+    Map<Candidate, CandidateProgram> getAllAgreedCandidates(UUID token) throws ElectionsException;
 
 }

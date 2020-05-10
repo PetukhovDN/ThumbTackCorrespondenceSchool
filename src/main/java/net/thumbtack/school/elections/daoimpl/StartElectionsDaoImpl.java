@@ -37,9 +37,10 @@ public class StartElectionsDaoImpl implements StartElectionsDao {
             throw new ElectionsException(ExceptionErrorCode.NOT_ENOUGH_ROOT);
         }
         database.setElectionsStarted("Выборы начались");
-        for (Map.Entry<UUID, Candidate> pair : database.getCandidateMap().entrySet()) {
-            if (pair.getValue().isAgreement()) {
-                database.getCandidatesForMajor().putIfAbsent(pair.getValue(), 0);
+        for (Candidate candidate : database.getCandidateMap().values()) {
+            if (candidate.isAgreement()
+                    && !candidate.getCandidateProgram().getProposals().isEmpty()) {
+                database.getCandidatesForMajor().putIfAbsent(candidate, 0);
             }
         }
         return token;

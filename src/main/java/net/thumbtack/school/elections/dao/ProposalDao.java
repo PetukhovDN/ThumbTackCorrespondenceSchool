@@ -1,6 +1,7 @@
 package net.thumbtack.school.elections.dao;
 
 import net.thumbtack.school.elections.exceptions.ElectionsException;
+import net.thumbtack.school.elections.model.CandidateProgram;
 import net.thumbtack.school.elections.model.Proposal;
 
 import java.util.Map;
@@ -13,6 +14,8 @@ public interface ProposalDao {
 
     UUID removeRatingFromProposal(String proposal, UUID token) throws ElectionsException;
 
-    Map<String, Double> getAllProposals(UUID token) throws ElectionsException;
+    Map<String, Double> getAllProposalsWithRate(UUID token) throws ElectionsException;
+
+    Map<String, CandidateProgram> getAllProposalsFromVoter(UUID token, String[] voterNames) throws ElectionsException;
 
 }

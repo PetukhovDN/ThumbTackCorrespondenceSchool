@@ -12,6 +12,7 @@ public class Voter implements Serializable {
 
     private String firstName;
     private String lastName;
+    private String fullName;
     private String middleName;
     private String street;
     private int house;
@@ -23,6 +24,7 @@ public class Voter implements Serializable {
     public Voter(RegisterVoterDtoRequest registerVoterDtoRequest) {
         this.firstName = registerVoterDtoRequest.getFirstName();
         this.lastName = registerVoterDtoRequest.getLastName();
+        this.fullName = this.firstName + " " + this.lastName;
         this.middleName = registerVoterDtoRequest.getMiddleName();
         this.street = registerVoterDtoRequest.getStreet();
         this.house = registerVoterDtoRequest.getHouse();
@@ -38,6 +40,10 @@ public class Voter implements Serializable {
 
     public String getLastName() {
         return lastName;
+    }
+
+    public String getFullName() {
+        return fullName;
     }
 
     public String getMiddleName() {

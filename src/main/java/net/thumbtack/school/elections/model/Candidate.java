@@ -12,11 +12,13 @@ public class Candidate implements Serializable {
     private String firstName;
     private String lastName;
     private boolean agreement;
+    private CandidateProgram candidateProgram;
 
     public Candidate(AddCandidateDtoRequest candidateDtoRequest) {
         this.firstName = candidateDtoRequest.getFirstName();
         this.lastName = candidateDtoRequest.getLastName();
         this.agreement = false;
+        this.candidateProgram = new CandidateProgram();
     }
 
     public String getFirstName() {
@@ -33,6 +35,10 @@ public class Candidate implements Serializable {
 
     public void setAgreement(boolean agreement) {
         this.agreement = agreement;
+    }
+
+    public CandidateProgram getCandidateProgram() {
+        return candidateProgram;
     }
 
     @Override
