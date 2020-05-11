@@ -2,6 +2,7 @@ package net.thumbtack.school.elections.daoimpl;
 
 import net.thumbtack.school.elections.dao.VoterDao;
 import net.thumbtack.school.elections.database.Database;
+import net.thumbtack.school.elections.enums.ElectionsStatus;
 import net.thumbtack.school.elections.exceptions.ElectionsException;
 import net.thumbtack.school.elections.exceptions.ExceptionErrorCode;
 import net.thumbtack.school.elections.model.Proposal;
@@ -36,7 +37,7 @@ public class VoterDaoImpl implements VoterDao {
      */
     @Override
     public UUID insertToDataBase(Voter voter) throws ElectionsException {
-        if (database.getElectionsStarted().equals("Выборы начались")) {
+        if (database.getElectionsStatus().equals(ElectionsStatus.ELECTIONS_STARTED)) {
             throw new ElectionsException(ExceptionErrorCode.ELECTIONS_HAVE_BEEN_STARTED);
         }
         if (database.getVotersMap().containsValue(voter)) {
@@ -57,7 +58,7 @@ public class VoterDaoImpl implements VoterDao {
      */
     @Override
     public UUID logoutFromDatabase(UUID token) throws ElectionsException {
-        if (database.getElectionsStarted().equals("Выборы начались")) {
+        if (database.getElectionsStatus().equals(ElectionsStatus.ELECTIONS_STARTED)) {
             throw new ElectionsException(ExceptionErrorCode.ELECTIONS_HAVE_BEEN_STARTED);
         }
         if (!database.getValidTokens().contains(token)) {
@@ -91,7 +92,7 @@ public class VoterDaoImpl implements VoterDao {
      */
     @Override
     public UUID loginToDatabase(String login, String password) throws ElectionsException {
-        if (database.getElectionsStarted().equals("Выборы начались")) {
+        if (database.getElectionsStatus().equals(ElectionsStatus.ELECTIONS_STARTED)) {
             throw new ElectionsException(ExceptionErrorCode.ELECTIONS_HAVE_BEEN_STARTED);
         }
         for (Map.Entry<UUID, Voter> pair : database.getVotersMap().entrySet()) {

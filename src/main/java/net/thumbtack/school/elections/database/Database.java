@@ -1,5 +1,6 @@
 package net.thumbtack.school.elections.database;
 
+import net.thumbtack.school.elections.enums.ElectionsStatus;
 import net.thumbtack.school.elections.model.Candidate;
 import net.thumbtack.school.elections.model.CandidateProgram;
 import net.thumbtack.school.elections.model.Proposal;
@@ -20,7 +21,7 @@ public class Database implements Serializable {
     private Map<Candidate, Integer> candidatesForMajor = new HashMap<>();
     private Set<UUID> validTokens = new HashSet<>();
 
-    private String electionsStarted = "Выборы еще не начались";
+    private ElectionsStatus electionsStatus = ElectionsStatus.ELECTIONS_NOT_STARTED;
 
     public static Database getInstance() {
         if (instance == null) {
@@ -54,12 +55,12 @@ public class Database implements Serializable {
         return validTokens;
     }
 
-    public String getElectionsStarted() {
-        return electionsStarted;
+    public ElectionsStatus getElectionsStatus() {
+        return electionsStatus;
     }
 
-    public void setElectionsStarted(String electionsStarted) {
-        this.electionsStarted = electionsStarted;
+    public void setElectionsStatus(ElectionsStatus electionsStatus) {
+        this.electionsStatus = electionsStatus;
     }
 
     public UUID getAdminToken() {

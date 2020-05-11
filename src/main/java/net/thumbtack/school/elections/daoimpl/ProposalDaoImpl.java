@@ -2,6 +2,7 @@ package net.thumbtack.school.elections.daoimpl;
 
 import net.thumbtack.school.elections.dao.ProposalDao;
 import net.thumbtack.school.elections.database.Database;
+import net.thumbtack.school.elections.enums.ElectionsStatus;
 import net.thumbtack.school.elections.exceptions.ElectionsException;
 import net.thumbtack.school.elections.exceptions.ExceptionErrorCode;
 import net.thumbtack.school.elections.model.CandidateProgram;
@@ -37,7 +38,7 @@ public class ProposalDaoImpl implements ProposalDao {
      */
     @Override
     public UUID makeProposal(Proposal proposal, UUID token) throws ElectionsException {
-        if (database.getElectionsStarted().equals("Выборы начались")) {
+        if (database.getElectionsStatus().equals(ElectionsStatus.ELECTIONS_STARTED)) {
             throw new ElectionsException(ExceptionErrorCode.ELECTIONS_HAVE_BEEN_STARTED);
         }
         if (!database.getValidTokens().contains(token)) {
@@ -67,7 +68,7 @@ public class ProposalDaoImpl implements ProposalDao {
      */
     @Override
     public UUID addRatingForProposal(String proposal, int rate, UUID token) throws ElectionsException {
-        if (database.getElectionsStarted().equals("Выборы начались")) {
+        if (database.getElectionsStatus().equals(ElectionsStatus.ELECTIONS_STARTED)) {
             throw new ElectionsException(ExceptionErrorCode.ELECTIONS_HAVE_BEEN_STARTED);
         }
         if (!database.getValidTokens().contains(token)) {
@@ -96,7 +97,7 @@ public class ProposalDaoImpl implements ProposalDao {
      */
     @Override
     public UUID removeRatingFromProposal(String proposal, UUID token) throws ElectionsException {
-        if (database.getElectionsStarted().equals("Выборы начались")) {
+        if (database.getElectionsStatus().equals(ElectionsStatus.ELECTIONS_STARTED)) {
             throw new ElectionsException(ExceptionErrorCode.ELECTIONS_HAVE_BEEN_STARTED);
         }
         if (!database.getValidTokens().contains(token)) {

@@ -2,6 +2,7 @@ package net.thumbtack.school.elections.daoimpl;
 
 import net.thumbtack.school.elections.dao.CandidateDao;
 import net.thumbtack.school.elections.database.Database;
+import net.thumbtack.school.elections.enums.ElectionsStatus;
 import net.thumbtack.school.elections.exceptions.ElectionsException;
 import net.thumbtack.school.elections.exceptions.ExceptionErrorCode;
 import net.thumbtack.school.elections.model.Candidate;
@@ -41,7 +42,7 @@ public class CandidateDaoImpl implements CandidateDao {
      */
     @Override
     public UUID addCandidateToDatabase(Candidate candidate, UUID token) throws ElectionsException {
-        if (database.getElectionsStarted().equals("Выборы начались")) {
+        if (database.getElectionsStatus().equals(ElectionsStatus.ELECTIONS_STARTED)) {
             throw new ElectionsException(ExceptionErrorCode.ELECTIONS_HAVE_BEEN_STARTED);
         }
         if (!database.getValidTokens().contains(token)) {
@@ -73,7 +74,7 @@ public class CandidateDaoImpl implements CandidateDao {
      */
     @Override
     public UUID agreeToBeCandidate(UUID token) throws ElectionsException {
-        if (database.getElectionsStarted().equals("Выборы начались")) {
+        if (database.getElectionsStatus().equals(ElectionsStatus.ELECTIONS_STARTED)) {
             throw new ElectionsException(ExceptionErrorCode.ELECTIONS_HAVE_BEEN_STARTED);
         }
         if (!database.getValidTokens().contains(token)) {
@@ -104,7 +105,7 @@ public class CandidateDaoImpl implements CandidateDao {
      */
     @Override
     public UUID addProposalToCandidateProgram(String proposal, UUID token) throws ElectionsException {
-        if (database.getElectionsStarted().equals("Выборы начались")) {
+        if (database.getElectionsStatus().equals(ElectionsStatus.ELECTIONS_STARTED)) {
             throw new ElectionsException(ExceptionErrorCode.ELECTIONS_HAVE_BEEN_STARTED);
         }
         if (!database.getValidTokens().contains(token)) {
@@ -134,7 +135,7 @@ public class CandidateDaoImpl implements CandidateDao {
      */
     @Override
     public UUID removeProposalFromCandidateProgram(String proposal, UUID token) throws ElectionsException {
-        if (database.getElectionsStarted().equals("Выборы начались")) {
+        if (database.getElectionsStatus().equals(ElectionsStatus.ELECTIONS_STARTED)) {
             throw new ElectionsException(ExceptionErrorCode.ELECTIONS_HAVE_BEEN_STARTED);
         }
         if (!database.getValidTokens().contains(token)) {

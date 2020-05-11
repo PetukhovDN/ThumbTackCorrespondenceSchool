@@ -2,6 +2,7 @@ package net.thumbtack.school.elections.daoimpl;
 
 import net.thumbtack.school.elections.dao.StartElectionsDao;
 import net.thumbtack.school.elections.database.Database;
+import net.thumbtack.school.elections.enums.ElectionsStatus;
 import net.thumbtack.school.elections.exceptions.ElectionsException;
 import net.thumbtack.school.elections.exceptions.ExceptionErrorCode;
 import net.thumbtack.school.elections.model.Candidate;
@@ -36,7 +37,7 @@ public class StartElectionsDaoImpl implements StartElectionsDao {
         if (!token.equals(database.getAdminToken())) {
             throw new ElectionsException(ExceptionErrorCode.NOT_ENOUGH_ROOT);
         }
-        database.setElectionsStarted("Выборы начались");
+        database.setElectionsStatus(ElectionsStatus.ELECTIONS_STARTED);
         for (Candidate candidate : database.getCandidateMap().values()) {
             if (candidate.isAgreement()
                     && !candidate.getCandidateProgram().getProposals().isEmpty()) {
@@ -58,7 +59,7 @@ public class StartElectionsDaoImpl implements StartElectionsDao {
      */
     @Override
     public UUID voteForCandidate(UUID token, Candidate candidate) throws ElectionsException { //добавить проверку на повторное голосование
-        if (!database.getElectionsStarted().equals("Выборы начались")) {
+        if (!database.getElectionsStatus().equals(ElectionsStatus.ELECTIONS_STARTED)) {
             throw new ElectionsException(ExceptionErrorCode.ELECTIONS_NOT_STARTED);
         }
         if (!database.getValidTokens().contains(token)) {
@@ -82,7 +83,7 @@ public class StartElectionsDaoImpl implements StartElectionsDao {
      */
     @Override
     public Candidate chooseMajor(UUID token) throws ElectionsException {
-        if (!database.getElectionsStarted().equals("Выборы начались")) {
+        if (!database.getElectionsStatus().equals(ElectionsStatus.ELECTIONS_STARTED)) {
             throw new ElectionsException(ExceptionErrorCode.ELECTIONS_NOT_STARTED);
         }
         if (!token.equals(database.getAdminToken())) {
@@ -97,7 +98,7 @@ public class StartElectionsDaoImpl implements StartElectionsDao {
                 return pair.getKey();
             }
         }
-        database.setElectionsStarted("Выборы закончились");
+        database.setElectionsStatus(ElectionsStatus.ELECTIONS_ENDED);
         return null; //исправить
     }
 }
