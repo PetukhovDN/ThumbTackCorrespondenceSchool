@@ -34,7 +34,7 @@ public class StartElectionsService {
         try {
             VoteForCandidateDtoRequest voteRequest = gson.fromJson(requestJsonString, VoteForCandidateDtoRequest.class);
             voteRequest.validate();
-            VoteForCandidateDtoResponse voteResponse = new VoteForCandidateDtoResponse(startElectionsDao.voteForCandidate(voteRequest.getToken(), voteRequest.getCandidate()));
+            VoteForCandidateDtoResponse voteResponse = new VoteForCandidateDtoResponse(startElectionsDao.voteForCandidate(voteRequest.getToken(), voteRequest.getCandidateFullName()));
             return gson.toJson(voteResponse);
         } catch (ElectionsException e) {
             return gson.toJson(e.getErrorCode().getErrorString());

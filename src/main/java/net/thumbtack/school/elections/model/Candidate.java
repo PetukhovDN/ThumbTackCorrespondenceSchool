@@ -11,12 +11,14 @@ public class Candidate implements Serializable {
 
     private String firstName;
     private String lastName;
+    private String fullName;
     private boolean agreement;
     private CandidateProgram candidateProgram;
 
     public Candidate(AddCandidateDtoRequest candidateDtoRequest) {
         this.firstName = candidateDtoRequest.getFirstName();
         this.lastName = candidateDtoRequest.getLastName();
+        this.fullName = this.firstName + " " + this.lastName;
         this.agreement = false;
         this.candidateProgram = new CandidateProgram();
     }
@@ -27,6 +29,10 @@ public class Candidate implements Serializable {
 
     public String getLastName() {
         return lastName;
+    }
+
+    public String getFullName() {
+        return fullName;
     }
 
     public boolean isAgreement() {

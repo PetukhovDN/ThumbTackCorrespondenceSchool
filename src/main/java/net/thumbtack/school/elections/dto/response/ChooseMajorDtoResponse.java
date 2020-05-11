@@ -1,15 +1,13 @@
 package net.thumbtack.school.elections.dto.response;
 
-import net.thumbtack.school.elections.model.Candidate;
-
 public class ChooseMajorDtoResponse {
-    private Candidate candidate;
+    private String candidateFullName;
 
-    public ChooseMajorDtoResponse(Candidate candidate) {
-        this.candidate = candidate;
+    public ChooseMajorDtoResponse(String candidate) {
+        this.candidateFullName = candidate;
     }
 
-    public Candidate getCandidate() {
-        return candidate;
+    public String getCandidateFullName() {
+        return candidateFullName;
     }
 }

@@ -41,7 +41,7 @@ public class StartElectionsDaoImpl implements StartElectionsDao {
         for (Candidate candidate : database.getCandidateMap().values()) {
             if (candidate.isAgreement()
                     && !candidate.getCandidateProgram().getProposals().isEmpty()) {
-                database.getCandidatesForMajor().putIfAbsent(candidate, 0);
+                database.getCandidatesForMajor().putIfAbsent(candidate.getFullName(), 0);
             }
         }
         return token;
@@ -51,22 +51,22 @@ public class StartElectionsDaoImpl implements StartElectionsDao {
      * Голосование за определенного кандидата.
      *
      * @param token     Идентификатор избирателя осуществляющего запрос.
-     * @param candidate Кандидат за которого голосует избиратель.
+     * @param candidateFullName Кандидат за которого голосует избиратель.
      * @return возвращает идентификатор избирателя если запрос был осуществлен успешно.
      * @throws ElectionsException выбрасывает исключение в случае если выборы еще не начались,
      *                            при попытке осуществления запроса от пользователя с невалидным идентификатором,
      *                            в случае ненахождения кандидата в базе.
      */
     @Override
-    public UUID voteForCandidate(UUID token, Candidate candidate) throws ElectionsException { //добавить проверку на повторное голосование
+    public UUID voteForCandidate(UUID token, String candidateFullName) throws ElectionsException { //добавить проверку на повторное голосование
         if (!database.getElectionsStatus().equals(ElectionsStatus.ELECTIONS_STARTED)) {
             throw new ElectionsException(ExceptionErrorCode.ELECTIONS_NOT_STARTED);
         }
         if (!database.getValidTokens().contains(token)) {
             throw new ElectionsException(ExceptionErrorCode.WRONG_VOTER_TOKEN);
         }
-        if (database.getCandidatesForMajor().containsKey(candidate)) {
-            database.getCandidatesForMajor().put(candidate, database.getCandidatesForMajor().get(candidate) + 1); //голосуем за выбранного кандидата
+        if (database.getCandidatesForMajor().containsKey(candidateFullName)) {
+            database.getCandidatesForMajor().put(candidateFullName, database.getCandidatesForMajor().get(candidateFullName) + 1); //голосуем за выбранного кандидата
             return token;
         }
         throw new ElectionsException(ExceptionErrorCode.EMPTY_CANDIDATE_LIST);
@@ -76,13 +76,13 @@ public class StartElectionsDaoImpl implements StartElectionsDao {
      * Окончание голосования и подсчет голосов.
      *
      * @param token Идентификатор избирателя осуществляющего запрос.
-     * @return возвращает кандидата который по результатам подсчета был избран мэром (если был).
+     * @return возвращает полное имя кандидата который по результатам подсчета был избран мэром (если был).
      * @throws ElectionsException выбрасывает исключение в случае если выборы еще не начались,
      *                            в случае отсутствия прав для окончания голосования (проверка токена).
      *                            в случае если при подсчете голосов мэр не получил большинство голосов.
      */
     @Override
-    public Candidate chooseMajor(UUID token) throws ElectionsException {
+    public String chooseMajor(UUID token) throws ElectionsException {
         if (!database.getElectionsStatus().equals(ElectionsStatus.ELECTIONS_STARTED)) {
             throw new ElectionsException(ExceptionErrorCode.ELECTIONS_NOT_STARTED);
         }
@@ -93,7 +93,7 @@ public class StartElectionsDaoImpl implements StartElectionsDao {
         if (Collections.frequency(database.getCandidatesForMajor().values(), max) > 1) {
             throw new ElectionsException(ExceptionErrorCode.MAJOR_NOT_SELECTED);
         }
-        for (Map.Entry<Candidate, Integer> pair : database.getCandidatesForMajor().entrySet()) {
+        for (Map.Entry<String, Integer> pair : database.getCandidatesForMajor().entrySet()) {
             if (pair.getValue().equals(max)) {
                 return pair.getKey();
             }

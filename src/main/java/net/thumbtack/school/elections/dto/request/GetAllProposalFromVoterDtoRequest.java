@@ -7,26 +7,26 @@ import java.util.UUID;
 
 public class GetAllProposalFromVoterDtoRequest {
     private UUID token;
-    private String[] voterFullNames;
+    private String[] votersFullNames;
 
-    public GetAllProposalFromVoterDtoRequest(UUID token, String... voters) {
+    public GetAllProposalFromVoterDtoRequest(UUID token, String... votersFullNames) {
         this.token = token;
-        this.voterFullNames = voters;
+        this.votersFullNames = votersFullNames;
     }
 
     public UUID getToken() {
         return token;
     }
 
-    public String[] getVoterFullNames() {
-        return voterFullNames;
+    public String[] getVotersFullNames() {
+        return votersFullNames;
     }
 
     public void validate() throws ElectionsException {
         if (this.token == null || this.token.toString().isEmpty()) {
             throw new ElectionsException(ExceptionErrorCode.WRONG_VOTER_TOKEN);
         }
-        for (String voterName : voterFullNames) {
+        for (String voterName : votersFullNames) {
             if (voterName == null || voterName.isEmpty()) {
                 throw new ElectionsException(ExceptionErrorCode.EMPTY_VOTER_FIRSTNAME);
             }

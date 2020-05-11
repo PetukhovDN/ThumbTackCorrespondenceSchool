@@ -2,21 +2,20 @@ package net.thumbtack.school.elections.dto.request;
 
 import net.thumbtack.school.elections.exceptions.ElectionsException;
 import net.thumbtack.school.elections.exceptions.ExceptionErrorCode;
-import net.thumbtack.school.elections.model.Candidate;
 
 import java.util.UUID;
 
 public class VoteForCandidateDtoRequest {
-    private Candidate candidate;
+    private String candidateFullName;
     private UUID token;
 
-    public VoteForCandidateDtoRequest(Candidate candidate, UUID token) {
-        this.candidate = candidate;
+    public VoteForCandidateDtoRequest(String candidateFullName, UUID token) {
+        this.candidateFullName = candidateFullName;
         this.token = token;
     }
 
-    public Candidate getCandidate() {
-        return candidate;
+    public String getCandidateFullName() {
+        return candidateFullName;
     }
 
     public UUID getToken() {

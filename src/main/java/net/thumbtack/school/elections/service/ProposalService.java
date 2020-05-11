@@ -65,7 +65,7 @@ public class ProposalService {
         try {
             GetAllProposalFromVoterDtoRequest getAllProposalsRequest = gson.fromJson(requestJsonString, GetAllProposalFromVoterDtoRequest.class);
             getAllProposalsRequest.validate();
-            GetAllProposalFromVoterDtoResponse getAllProposalsResponse = new GetAllProposalFromVoterDtoResponse(proposalDao.getAllProposalsFromVoter(getAllProposalsRequest.getToken(), getAllProposalsRequest.getVoterFullNames()));
+            GetAllProposalFromVoterDtoResponse getAllProposalsResponse = new GetAllProposalFromVoterDtoResponse(proposalDao.getAllProposalsFromVoter(getAllProposalsRequest.getToken(), getAllProposalsRequest.getVotersFullNames()));
             return gson.toJson(getAllProposalsResponse);
         } catch (ElectionsException e) {
             return gson.toJson(e.getErrorCode().getErrorString());
