@@ -12,10 +12,10 @@ import net.thumbtack.school.elections.exceptions.ElectionsException;
 
 import static net.thumbtack.school.elections.server.Server.gson;
 
-public class StartElectionsService {
+public class ElectionsService {
     private final StartElectionsDao startElectionsDao;
 
-    public StartElectionsService() {
+    public ElectionsService() {
         startElectionsDao = new StartElectionsDaoImpl();
     }
 

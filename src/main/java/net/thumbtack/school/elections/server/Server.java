@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import net.thumbtack.school.elections.database.Database;
 import net.thumbtack.school.elections.service.CandidateService;
 import net.thumbtack.school.elections.service.ProposalService;
-import net.thumbtack.school.elections.service.StartElectionsService;
+import net.thumbtack.school.elections.service.ElectionsService;
 import net.thumbtack.school.elections.service.VoterService;
 
 import java.io.*;
@@ -44,7 +44,7 @@ public class Server implements Serializable {
     private static VoterService voterService = new VoterService();
     private static CandidateService candidateService = new CandidateService();
     private static ProposalService proposalService = new ProposalService();
-    private static StartElectionsService startElectionsService = new StartElectionsService();
+    private static ElectionsService startElectionsService = new ElectionsService();
 
     public void startServer(String savedDataFileName) {
         if (savedDataFileName != null) {

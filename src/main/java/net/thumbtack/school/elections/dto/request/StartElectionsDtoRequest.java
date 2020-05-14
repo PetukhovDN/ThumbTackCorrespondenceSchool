@@ -7,19 +7,13 @@ import java.util.UUID;
 
 public class StartElectionsDtoRequest {
     private UUID token;
-    private String electionsStarted;
 
-    public StartElectionsDtoRequest(UUID token, String electionsStarted) {
+    public StartElectionsDtoRequest(UUID token) {
         this.token = token;
-        this.electionsStarted = electionsStarted;
     }
 
     public UUID getToken() {
         return token;
-    }
-
-    public String isElectionsStarted() {
-        return electionsStarted;
     }
 
     public void validate() throws ElectionsException {

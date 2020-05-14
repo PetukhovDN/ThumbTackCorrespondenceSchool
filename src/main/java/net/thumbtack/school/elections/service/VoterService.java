@@ -33,23 +33,23 @@ public class VoterService {
         }
     }
 
-    public String loginVoter(String requestJsonString) {
-        try {
-            LoginVoterDtoRequest loginRequest = gson.fromJson(requestJsonString, LoginVoterDtoRequest.class);
-            loginRequest.validate();
-            LoginVoterDtoResponse loginResponse = new LoginVoterDtoResponse(voterDao.loginToDatabase(loginRequest.getLogin(), loginRequest.getPassword()));
-            return gson.toJson(loginResponse);
-        } catch (ElectionsException e) {
-            return gson.toJson(e.getErrorCode().getErrorString());
-        }
-    }
-
     public String logoutVoter(String requestJsonString) {
         try {
             LogoutVoterDtoRequest logoutRequest = gson.fromJson(requestJsonString, LogoutVoterDtoRequest.class);
             logoutRequest.validate();
             LogoutVoterDtoResponse logoutResponse = new LogoutVoterDtoResponse(voterDao.logoutFromDatabase(logoutRequest.getToken()));
             return gson.toJson(logoutResponse);
+        } catch (ElectionsException e) {
+            return gson.toJson(e.getErrorCode().getErrorString());
+        }
+    }
+
+    public String loginVoter(String requestJsonString) {
+        try {
+            LoginVoterDtoRequest loginRequest = gson.fromJson(requestJsonString, LoginVoterDtoRequest.class);
+            loginRequest.validate();
+            LoginVoterDtoResponse loginResponse = new LoginVoterDtoResponse(voterDao.loginToDatabase(loginRequest.getLogin(), loginRequest.getPassword()));
+            return gson.toJson(loginResponse);
         } catch (ElectionsException e) {
             return gson.toJson(e.getErrorCode().getErrorString());
         }
