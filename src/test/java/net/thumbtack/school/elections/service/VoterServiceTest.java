@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -69,13 +71,29 @@ class VoterServiceTest {
 
     @Test
     void logoutVoter() throws ElectionsException {
+        when(voterDao.logoutFromDatabase(firstVoter.getToken())).thenReturn(firstVoter.getToken());
+        UUID firstVoterResultToken = voterDao.logoutFromDatabase(firstVoter.getToken());
+        assertNotNull(firstVoterResultToken);
+        assertEquals(firstVoter.getToken(), firstVoterResultToken);
+        verify(voterDao).logoutFromDatabase(firstVoter.getToken());
     }
 
     @Test
     void loginVoter() throws ElectionsException {
+        when(voterDao.loginToDatabase(firstVoter.getFirstName(),firstVoter.getLastName())).thenReturn(firstVoter.getToken());
+        UUID firstVoterResultToken = voterDao.loginToDatabase(firstVoter.getFirstName(),firstVoter.getLastName());
+        assertNotNull(firstVoterResultToken);
+        assertEquals(firstVoter.getToken(), firstVoterResultToken);
+        verify(voterDao).loginToDatabase(firstVoter.getFirstName(),firstVoter.getLastName());
     }
 
     @Test
-    void getAllVoters() {
+    void getAllVoters() throws ElectionsException {
+        ArrayList<Voter> votersList = new ArrayList<>();
+        when(voterDao.getAllVotersFromDatabase(firstVoter.getToken())).thenReturn(votersList);
+        List<Voter> firstVoterResultToken = voterDao.getAllVotersFromDatabase(firstVoter.getToken());
+        assertNotNull(firstVoterResultToken);
+        assertEquals(votersList, firstVoterResultToken);
+        verify(voterDao).getAllVotersFromDatabase(firstVoter.getToken());
     }
 }
