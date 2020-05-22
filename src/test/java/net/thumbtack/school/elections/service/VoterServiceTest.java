@@ -20,10 +20,6 @@ import static org.mockito.Mockito.when;
 
 class VoterServiceTest {
 
-    private VoterService voterService;
-    private RegisterVoterDtoRequest firstVoterRequest;
-    private RegisterVoterDtoRequest secondVoterRequest;
-    private RegisterVoterDtoRequest sameAsFirstVoterRequest;
     private Voter firstVoter;
     private Voter secondVoter;
     private Voter sameAsFirstVoter;
@@ -34,13 +30,9 @@ class VoterServiceTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.initMocks(this);
-        voterService = new VoterService();
-        firstVoterRequest = new RegisterVoterDtoRequest("Bob", "Fisher", "Ivanovich", "Lenina", 40, 277, "bobcherchil122", "1234567qwerty");
-        secondVoterRequest = new RegisterVoterDtoRequest("Tom", "Poker", "Petrovich", "Lenina", 40, 277, "bobcherchil122", "1234567qwerty");
-        sameAsFirstVoterRequest = new RegisterVoterDtoRequest("Bob", "Fisher", "Ivanovich", "Lenina", 40, 277, "bobcherchil122", "1234567qwerty");
-        firstVoter = new Voter(firstVoterRequest);
-        secondVoter = new Voter(secondVoterRequest);
-        sameAsFirstVoter = new Voter(sameAsFirstVoterRequest);
+        firstVoter = new Voter(new RegisterVoterDtoRequest("Bob", "Fisher", "Ivanovich", "Lenina", 40, 277, "bobcherchil122", "1234567qwerty"));
+        secondVoter = new Voter(new RegisterVoterDtoRequest("Tom", "Poker", "Petrovich", "Lenina", 40, 277, "bobcherchil122", "1234567qwerty"));
+        sameAsFirstVoter = new Voter(new RegisterVoterDtoRequest("Bob", "Fisher", "Ivanovich", "Lenina", 40, 277, "bobcherchil122", "1234567qwerty"));
     }
 
     @Test
@@ -80,11 +72,11 @@ class VoterServiceTest {
 
     @Test
     void loginVoter() throws ElectionsException {
-        when(voterDao.loginToDatabase(firstVoter.getFirstName(),firstVoter.getLastName())).thenReturn(firstVoter.getToken());
-        UUID firstVoterResultToken = voterDao.loginToDatabase(firstVoter.getFirstName(),firstVoter.getLastName());
+        when(voterDao.loginToDatabase(firstVoter.getFirstName(), firstVoter.getLastName())).thenReturn(firstVoter.getToken());
+        UUID firstVoterResultToken = voterDao.loginToDatabase(firstVoter.getFirstName(), firstVoter.getLastName());
         assertNotNull(firstVoterResultToken);
         assertEquals(firstVoter.getToken(), firstVoterResultToken);
-        verify(voterDao).loginToDatabase(firstVoter.getFirstName(),firstVoter.getLastName());
+        verify(voterDao).loginToDatabase(firstVoter.getFirstName(), firstVoter.getLastName());
     }
 
     @Test
