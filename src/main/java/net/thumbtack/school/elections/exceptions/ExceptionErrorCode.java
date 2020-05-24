@@ -30,7 +30,8 @@ public enum ExceptionErrorCode {
     ELECTIONS_HAVE_BEEN_STARTED("Выборы уже начались"),
     ELECTIONS_NOT_STARTED("Выборы еще не начались"),
     MAJOR_NOT_SELECTED("Мэр не выбран"),
-    NOT_ENOUGH_ROOT("Недостаточно прав");
+    NOT_ENOUGH_ROOT("Недостаточно прав"),
+    SOMETHING_WRONG("Что-то не так");
 
     private String errorString;
 

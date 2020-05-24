@@ -44,13 +44,14 @@ public class StartElectionsDaoImpl implements StartElectionsDao {
                 database.getCandidatesForMajor().putIfAbsent(candidate.getFullName(), 0);
             }
         }
+        database.getCandidatesForMajor().put("Against All", 0); //добавялем кандидата против всех
         return token;
     }
 
     /**
      * Голосование за определенного кандидата.
      *
-     * @param token     Идентификатор избирателя осуществляющего запрос.
+     * @param token             Идентификатор избирателя осуществляющего запрос.
      * @param candidateFullName Кандидат за которого голосует избиратель.
      * @return возвращает идентификатор избирателя если запрос был осуществлен успешно.
      * @throws ElectionsException выбрасывает исключение в случае если выборы еще не начались,
@@ -89,16 +90,21 @@ public class StartElectionsDaoImpl implements StartElectionsDao {
         if (!token.equals(database.getAdminToken())) {
             throw new ElectionsException(ExceptionErrorCode.NOT_ENOUGH_ROOT);
         }
-        int max = Collections.max(database.getCandidatesForMajor().values());
+        final int max = Collections.max(database.getCandidatesForMajor().values());
+        //если у нескольких кандидатов одинаковое количество голосов - мэр не выбран
         if (Collections.frequency(database.getCandidatesForMajor().values(), max) > 1) {
+            throw new ElectionsException(ExceptionErrorCode.MAJOR_NOT_SELECTED);
+        }
+        //если у кандидата "против всех" больше всего голосов - мэр не выбран
+        if (database.getCandidatesForMajor().get("Against All") == max) {
             throw new ElectionsException(ExceptionErrorCode.MAJOR_NOT_SELECTED);
         }
         for (Map.Entry<String, Integer> pair : database.getCandidatesForMajor().entrySet()) {
             if (pair.getValue().equals(max)) {
+                database.setElectionsStatus(ElectionsStatus.ELECTIONS_ENDED);
                 return pair.getKey();
             }
         }
-        database.setElectionsStatus(ElectionsStatus.ELECTIONS_ENDED);
-        return null; //исправить
+        throw new ElectionsException(ExceptionErrorCode.SOMETHING_WRONG);
     }
 }
