@@ -40,7 +40,7 @@ public class VoterDaoImpl implements VoterDao {
         if (database.getElectionsStatus().equals(ElectionsStatus.ELECTIONS_STARTED)) {
             throw new ElectionsException(ExceptionErrorCode.ELECTIONS_HAVE_BEEN_STARTED);
         }
-        if (database.getVotersMap().containsValue(voter)) {
+        if (database.getVotersMap().containsValue(voter)) { // REVU Это медленная операция.
             throw new ElectionsException(ExceptionErrorCode.DUPLICATE_VOTER);
         }
         database.getVotersMap().put(voter.getToken(), voter);
@@ -97,14 +97,14 @@ public class VoterDaoImpl implements VoterDao {
         }
         for (Map.Entry<UUID, Voter> pair : database.getVotersMap().entrySet()) {
             if (pair.getValue().getLogin().equals(login)) { //проверяет есть ли такой избиратель
-                if (pair.getValue().getPassword().equals(password)) { //проверяет верный ли пароль
+                if (pair.getValue().getPassword().equals(password)) { //проверяет верный ли пароль // REVU pair.getValue() повторяется 6 раз. Вынесите в переменную.
                     pair.getValue().setToken(UUID.randomUUID()); //назначает новый случайный token для этого избирателя
                     database.getVotersMap().put(pair.getValue().getToken(), pair.getValue()); //добавить в базу избирателя с новым токеном
                     database.getValidTokens().add(pair.getValue().getToken()); //добавить токен в список валидных
                     database.getVotersMap().remove(pair.getKey()); //удалить из базы избирателя со старым невалидным токеном
                     return pair.getKey();
                 }
-                throw new ElectionsException(ExceptionErrorCode.WRONG_VOTER_PASSWORD);
+                throw new ElectionsException(ExceptionErrorCode.WRONG_VOTER_PASSWORD); // REVU Различать несущестующий логин и неправильный пароль это небезопасно. Нужно вернуть ошибку о неверной паре логин/пароль.
             }
         }
         throw new ElectionsException(ExceptionErrorCode.NULL_VOTER_LOGIN);

@@ -25,7 +25,7 @@ public class Database implements Serializable {
 
     public static Database getInstance() {
         if (instance == null) {
-            instance = new Database();
+            instance = new Database(); // REVU Сделайте этот конструктор приватным и работайте с этим конструктором только в пределах этого класса, чтобы класс действительно был "Одиночкой".
         }
         return instance;
     }

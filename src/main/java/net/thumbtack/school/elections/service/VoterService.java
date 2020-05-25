@@ -26,10 +26,10 @@ public class VoterService {
         try {
             RegisterVoterDtoRequest registerRequest = gson.fromJson(requestJsonString, RegisterVoterDtoRequest.class);
             registerRequest.validate();
-            RegisterVoterDtoResponse registerResponse = new RegisterVoterDtoResponse(voterDao.insertToDataBase(new Voter(registerRequest)));
+            RegisterVoterDtoResponse registerResponse = new RegisterVoterDtoResponse(voterDao.insertToDataBase(new Voter(registerRequest))); // REVU Не пытайтесь поместить в одну строчку максимум действий. Это тяжело читать и неудобно отлаживать.
             return gson.toJson(registerResponse);
         } catch (ElectionsException e) {
-            return gson.toJson(e.getErrorCode().getErrorString());
+            return gson.toJson(e.getErrorCode().getErrorString()); // REVU Обратите внимание на раздел "Обработка ошибок" в документе "Рекомендации к заданию 11".
         }
     }
 

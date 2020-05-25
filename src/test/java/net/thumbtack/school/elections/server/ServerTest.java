@@ -54,10 +54,10 @@ class ServerTest {
         int n = Database.getInstance().getVotersMap().size();
         ElectionsException exception1 = new ElectionsException(ExceptionErrorCode.EMPTY_VOTER_LASTNAME);
         ElectionsException exception2 = new ElectionsException(ExceptionErrorCode.DUPLICATE_VOTER);
-        RegisterVoterDtoRequest request1 = new RegisterVoterDtoRequest("Bob", "", "Ivanovich", "Lenina", 40, 277, "bobcherchil122", "1234567qwerty"); //пустое поле фамилии
+        RegisterVoterDtoRequest request1 = new RegisterVoterDtoRequest("Bob", "", "Ivanovich", "Lenina", 40, 277, "bobcherchil122", "1234567qwerty"); //пустое поле фамилии // REVU Очень длинные строки
         RegisterVoterDtoRequest request2 = new RegisterVoterDtoRequest("Tim", "Fisher", "Ivanovich", "Lenina", 40, 277, "bobcherchil122", "1234567qwerty"); //валидный запрос
         RegisterVoterDtoRequest request3 = new RegisterVoterDtoRequest("Tim", "Fisher", "Ivanovich", "Lenina", 40, 277, "bobcherchil122", "1234567qwerty"); //идентичный предыдущему запрос
-        String jsonRequest1 = new Gson().toJson(request1);
+        String jsonRequest1 = new Gson().toJson(request1); // REVU Вынесите new Gson() в поле тестового класса
         String jsonRequest2 = new Gson().toJson(request2);
         String jsonRequest3 = new Gson().toJson(request3);
         String jsonResult1 = server.registerVoter(jsonRequest1);
@@ -95,7 +95,7 @@ class ServerTest {
     @Test
     void testLoginVoter() {
         int n = Database.getInstance().getVotersMap().size();
-        Voter testVoter = (Voter) Database.getInstance().getVotersMap().values().toArray()[0];
+        Voter testVoter = (Voter) Database.getInstance().getVotersMap().values().toArray()[0]; // REVU Тесты должны быть независимыми. Зарегистрируйте пользователя, если он необходим для теста. Или используйте заранее зарегистрированного из файла.
 
         LoginVoterDtoRequest loginRequest = new LoginVoterDtoRequest(testVoter.getLogin(), testVoter.getPassword());
         String jsonLoginRequest = new Gson().toJson(loginRequest);

@@ -54,7 +54,7 @@ public class CandidateService {
         try {
             RemoveProposalFromCandidateProgramDtoRequest removeRequest = gson.fromJson(requestJsonString, RemoveProposalFromCandidateProgramDtoRequest.class);
             removeRequest.validate();
-            RemoveProposalFromCandidateProgramDtoResponse removeResponse = new RemoveProposalFromCandidateProgramDtoResponse(candidateDao.removeProposalFromCandidateProgram(removeRequest.getProposal(), removeRequest.getToken()));
+            RemoveProposalFromCandidateProgramDtoResponse removeResponse = new RemoveProposalFromCandidateProgramDtoResponse(candidateDao.removeProposalFromCandidateProgram(removeRequest.getProposal(), removeRequest.getToken())); // REVU Очень длинные строки
             return gson.toJson(removeResponse);
         } catch (ElectionsException e) {
             return gson.toJson(e.getErrorCode().getErrorString());
