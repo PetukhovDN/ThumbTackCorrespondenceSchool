@@ -24,7 +24,7 @@ public class CandidateService {
             AddCandidateResponse addCandidateResponse = new AddCandidateResponse(candidateDao.addCandidateToDatabase(candidate, addCandidateRequest.getToken()));
             return gson.toJson(addCandidateResponse);
         } catch (ElectionsException e) {
-            return gson.toJson(e);
+            return gson.toJson(e.getExceptionErrorInfo().getErrorCode() + "\n" + e.getExceptionErrorInfo().getErrorString());
         }
     }
 
@@ -35,7 +35,7 @@ public class CandidateService {
             AgreeToBeCandidateResponse agreeResponse = new AgreeToBeCandidateResponse(candidateDao.agreeToBeCandidate(agreeRequest.getToken()));
             return gson.toJson(agreeResponse);
         } catch (ElectionsException e) {
-            return gson.toJson(e);
+            return gson.toJson(e.getExceptionErrorInfo().getErrorCode() + "\n" + e.getExceptionErrorInfo().getErrorString());
         }
     }
 
@@ -46,7 +46,7 @@ public class CandidateService {
             AddProposalResponse addResponse = new AddProposalResponse(candidateDao.addProposalToCandidateProgram(addRequest.getProposal(), addRequest.getToken()));
             return gson.toJson(addResponse);
         } catch (ElectionsException e) {
-            return gson.toJson(e);
+            return gson.toJson(e.getExceptionErrorInfo().getErrorCode() + "\n" + e.getExceptionErrorInfo().getErrorString());
         }
     }
 
@@ -57,7 +57,7 @@ public class CandidateService {
             RemoveProposalResponse removeResponse = new RemoveProposalResponse(candidateDao.removeProposal(removeRequest.getProposal(), removeRequest.getToken()));
             return gson.toJson(removeResponse);
         } catch (ElectionsException e) {
-            return gson.toJson(e);
+            return gson.toJson(e.getExceptionErrorInfo().getErrorCode() + "\n" + e.getExceptionErrorInfo().getErrorString());
         }
     }
 
@@ -68,7 +68,7 @@ public class CandidateService {
             GetAllAgreedCandidatesResponse allCandidatesResponse = new GetAllAgreedCandidatesResponse(candidateDao.getAllAgreedCandidates(allCandidatesRequest.getToken()));
             return gson.toJson(allCandidatesResponse);
         } catch (ElectionsException e) {
-            return gson.toJson(e);
+            return gson.toJson(e.getExceptionErrorInfo().getErrorCode() + "\n" + e.getExceptionErrorInfo().getErrorString());
         }
     }
 }

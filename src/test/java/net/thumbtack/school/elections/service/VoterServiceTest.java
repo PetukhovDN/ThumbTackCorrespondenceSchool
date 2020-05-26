@@ -58,7 +58,7 @@ class VoterServiceTest {
         //работа с третьим избирателем (идентичным первому), проверка что исключение было выброшено, проверка что метод отработал
         when(voterDao.insertToDataBase(sameAsFirstVoter)).thenThrow(ElectionsException.class);
         ElectionsException thrown = assertThrows(ElectionsException.class, () -> voterDao.insertToDataBase(sameAsFirstVoter));
-        assertNotEquals("", thrown.getErrorCode());
+        assertNotEquals("", thrown.getExceptionErrorInfo());
         verify(voterDao).insertToDataBase(sameAsFirstVoter);
     }
 

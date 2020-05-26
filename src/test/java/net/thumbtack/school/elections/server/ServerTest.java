@@ -6,7 +6,7 @@ import net.thumbtack.school.elections.dto.request.*;
 import net.thumbtack.school.elections.dto.response.*;
 import net.thumbtack.school.elections.enums.ResultsOfRequests;
 import net.thumbtack.school.elections.exceptions.ElectionsException;
-import net.thumbtack.school.elections.exceptions.ExceptionErrorCode;
+import net.thumbtack.school.elections.exceptions.ExceptionErrorInfo;
 import org.junit.Ignore;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -55,8 +55,8 @@ class ServerTest {
     @Test
     public void testRegisterVoterWrongInfo() {
         int n = database.getVotersMap().size();
-        ElectionsException exception1 = new ElectionsException(ExceptionErrorCode.EMPTY_VOTER_LASTNAME);
-        ElectionsException exception2 = new ElectionsException(ExceptionErrorCode.DUPLICATE_VOTER);
+        ElectionsException exception1 = new ElectionsException(ExceptionErrorInfo.EMPTY_VOTER_LASTNAME);
+        ElectionsException exception2 = new ElectionsException(ExceptionErrorInfo.DUPLICATE_VOTER);
         RegisterVoterRequest request1 = new RegisterVoterRequest("Bob", "", "Ivanovich", "Lenina", 40, 277, "bobcherchil122", "1234567qwerty"); //пустое поле фамилии // REVU Очень длинные строки
         RegisterVoterRequest request2 = new RegisterVoterRequest("Tim", "Fisher", "Ivanovich", "Lenina", 40, 277, "bobcherchil122", "1234567qwerty"); //валидный запрос
         RegisterVoterRequest request3 = new RegisterVoterRequest("Tim", "Fisher", "Ivanovich", "Lenina", 40, 277, "bobcherchil122", "1234567qwerty"); //идентичный предыдущему запрос
@@ -69,8 +69,8 @@ class ServerTest {
         String jsonResult3 = server.registerVoter(jsonRequest3);
 
         assertEquals(gson.toJson(registerResponse), jsonResult2);
-        assertEquals(gson.toJson(exception1), jsonResult1);
-        assertEquals(gson.toJson(exception2), jsonResult3);
+        assertEquals(gson.toJson(exception1.getExceptionErrorInfo().getErrorCode() + "\n" + exception1.getExceptionErrorInfo().getErrorString()), jsonResult1);
+        assertEquals(gson.toJson(exception2.getExceptionErrorInfo().getErrorCode() + "\n" + exception2.getExceptionErrorInfo().getErrorString()), jsonResult3);
         assertEquals(n + 1, database.getVotersMap().size()); //проверка что сработал только request2
     }
 
@@ -129,7 +129,7 @@ class ServerTest {
     @Test
     void testAddCandidate() {
         int m = database.getCandidateMap().size();
-        ElectionsException exception1 = new ElectionsException(ExceptionErrorCode.EMPTY_CANDIDATE_LIST);
+        ElectionsException exception1 = new ElectionsException(ExceptionErrorInfo.EMPTY_CANDIDATE_LIST);
         RegisterVoterRequest registerRequest1 = new RegisterVoterRequest("Test1", "Voter1", "", "First", 1, 1, "TestVoter1", "testPassword1");
         RegisterVoterRequest registerRequest2 = new RegisterVoterRequest("Test2", "Voter2", "", "Second", 1, 1, "TestVoter1", "testPassword1");
         String jsonRegisterRequest1 = gson.toJson(registerRequest1);
@@ -153,7 +153,7 @@ class ServerTest {
 
         assertEquals(gson.toJson(ResultsOfRequests.SUCCESSFUL_REQUEST), gson.toJson(addCandidateResponse1.getResult()));
         assertEquals(gson.toJson(ResultsOfRequests.SUCCESSFUL_REQUEST), gson.toJson(addCandidateResponse2.getResult()));
-        assertEquals(gson.toJson(exception1), jsonAddCandidateResponse3);
+        assertEquals(gson.toJson(exception1.getExceptionErrorInfo().getErrorCode() + "\n" + exception1.getExceptionErrorInfo().getErrorString()), jsonAddCandidateResponse3);
 
         assertEquals(m + 2, database.getCandidateMap().size()); // оба добавились но только первый согласен быть кандидатом
     }

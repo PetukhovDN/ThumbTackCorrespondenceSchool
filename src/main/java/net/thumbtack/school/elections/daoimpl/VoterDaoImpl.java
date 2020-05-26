@@ -5,7 +5,7 @@ import net.thumbtack.school.elections.database.Database;
 import net.thumbtack.school.elections.enums.ElectionsStatus;
 import net.thumbtack.school.elections.enums.ResultsOfRequests;
 import net.thumbtack.school.elections.exceptions.ElectionsException;
-import net.thumbtack.school.elections.exceptions.ExceptionErrorCode;
+import net.thumbtack.school.elections.exceptions.ExceptionErrorInfo;
 import net.thumbtack.school.elections.model.Proposal;
 import net.thumbtack.school.elections.model.Voter;
 
@@ -39,10 +39,10 @@ public class VoterDaoImpl implements VoterDao {
     @Override
     public UUID insertToDataBase(Voter voter) throws ElectionsException {
         if (database.getElectionsStatus().equals(ElectionsStatus.ELECTIONS_STARTED)) {
-            throw new ElectionsException(ExceptionErrorCode.ELECTIONS_HAVE_BEEN_STARTED);
+            throw new ElectionsException(ExceptionErrorInfo.ELECTIONS_HAVE_BEEN_STARTED);
         }
         if (database.getVotersMap().containsValue(voter)) { // REVU Это медленная операция.
-            throw new ElectionsException(ExceptionErrorCode.DUPLICATE_VOTER);
+            throw new ElectionsException(ExceptionErrorInfo.DUPLICATE_VOTER);
         }
         database.getVotersMap().put(voter.getToken(), voter);
         database.getValidTokens().add(voter.getToken());
@@ -60,10 +60,10 @@ public class VoterDaoImpl implements VoterDao {
     @Override
     public ResultsOfRequests logoutFromDatabase(UUID token) throws ElectionsException {
         if (database.getElectionsStatus().equals(ElectionsStatus.ELECTIONS_STARTED)) {
-            throw new ElectionsException(ExceptionErrorCode.ELECTIONS_HAVE_BEEN_STARTED);
+            throw new ElectionsException(ExceptionErrorInfo.ELECTIONS_HAVE_BEEN_STARTED);
         }
         if (!database.getValidTokens().contains(token)) {
-            throw new ElectionsException(ExceptionErrorCode.WRONG_VOTER_TOKEN);
+            throw new ElectionsException(ExceptionErrorInfo.WRONG_VOTER_TOKEN);
         }
         database.getVotersMap().get(token).setToken(null);
         database.getValidTokens().remove(token);
@@ -94,19 +94,19 @@ public class VoterDaoImpl implements VoterDao {
     @Override
     public UUID loginToDatabase(String login, String password) throws ElectionsException {
         if (database.getElectionsStatus().equals(ElectionsStatus.ELECTIONS_STARTED)) {
-            throw new ElectionsException(ExceptionErrorCode.ELECTIONS_HAVE_BEEN_STARTED);
+            throw new ElectionsException(ExceptionErrorInfo.ELECTIONS_HAVE_BEEN_STARTED);
         }
         for (Map.Entry<UUID, Voter> pair : database.getVotersMap().entrySet()) {
             final Voter voter = pair.getValue();
             if (voter.getLogin().equals(login) && voter.getPassword().equals(password)) { //проверяет есть ли такой избиратель и верный ли пароль
-                    voter.setToken(UUID.randomUUID()); //назначает новый случайный token для этого избирателя
-                    database.getVotersMap().put(voter.getToken(), voter); //добавить в базу избирателя с новым токеном
-                    database.getValidTokens().add(voter.getToken()); //добавить токен в список валидных
-                    database.getVotersMap().remove(pair.getKey()); //удалить из базы избирателя со старым невалидным токеном
-                    return pair.getKey();
+                voter.setToken(UUID.randomUUID()); //назначает новый случайный token для этого избирателя
+                database.getVotersMap().put(voter.getToken(), voter); //добавить в базу избирателя с новым токеном
+                database.getValidTokens().add(voter.getToken()); //добавить токен в список валидных
+                database.getVotersMap().remove(pair.getKey()); //удалить из базы избирателя со старым невалидным токеном
+                return pair.getKey();
             }
         }
-        throw new ElectionsException(ExceptionErrorCode.WRONG_VOTER_LOGIN);
+        throw new ElectionsException(ExceptionErrorInfo.WRONG_VOTER_LOGIN);
     }
 
     /**
@@ -119,7 +119,7 @@ public class VoterDaoImpl implements VoterDao {
     @Override
     public List<Voter> getAllVotersFromDatabase(UUID token) throws ElectionsException {
         if (!database.getValidTokens().contains(token)) {
-            throw new ElectionsException(ExceptionErrorCode.WRONG_VOTER_TOKEN);
+            throw new ElectionsException(ExceptionErrorInfo.WRONG_VOTER_TOKEN);
         }
         return new ArrayList<>(database.getVotersMap().values());
     }

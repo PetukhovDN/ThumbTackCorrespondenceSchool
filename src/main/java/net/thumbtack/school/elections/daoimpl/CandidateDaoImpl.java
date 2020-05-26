@@ -5,7 +5,7 @@ import net.thumbtack.school.elections.database.Database;
 import net.thumbtack.school.elections.enums.ElectionsStatus;
 import net.thumbtack.school.elections.enums.ResultsOfRequests;
 import net.thumbtack.school.elections.exceptions.ElectionsException;
-import net.thumbtack.school.elections.exceptions.ExceptionErrorCode;
+import net.thumbtack.school.elections.exceptions.ExceptionErrorInfo;
 import net.thumbtack.school.elections.model.Candidate;
 import net.thumbtack.school.elections.model.CandidateProgram;
 import net.thumbtack.school.elections.model.Proposal;
@@ -44,10 +44,10 @@ public class CandidateDaoImpl implements CandidateDao {
     @Override
     public ResultsOfRequests addCandidateToDatabase(Candidate candidate, UUID token) throws ElectionsException {
         if (database.getElectionsStatus().equals(ElectionsStatus.ELECTIONS_STARTED)) {
-            throw new ElectionsException(ExceptionErrorCode.ELECTIONS_HAVE_BEEN_STARTED);
+            throw new ElectionsException(ExceptionErrorInfo.ELECTIONS_HAVE_BEEN_STARTED);
         }
         if (!database.getValidTokens().contains(token)) {
-            throw new ElectionsException(ExceptionErrorCode.WRONG_VOTER_TOKEN);
+            throw new ElectionsException(ExceptionErrorInfo.WRONG_VOTER_TOKEN);
         }
 
         for (Voter voter : database.getVotersMap().values()) {
@@ -60,7 +60,7 @@ public class CandidateDaoImpl implements CandidateDao {
                 return ResultsOfRequests.SUCCESSFUL_REQUEST;
             }
         }
-        throw new ElectionsException(ExceptionErrorCode.EMPTY_CANDIDATE_LIST);
+        throw new ElectionsException(ExceptionErrorInfo.EMPTY_CANDIDATE_LIST);
     }
 
     /**
@@ -76,13 +76,13 @@ public class CandidateDaoImpl implements CandidateDao {
     @Override
     public ResultsOfRequests agreeToBeCandidate(UUID token) throws ElectionsException {
         if (database.getElectionsStatus().equals(ElectionsStatus.ELECTIONS_STARTED)) {
-            throw new ElectionsException(ExceptionErrorCode.ELECTIONS_HAVE_BEEN_STARTED);
+            throw new ElectionsException(ExceptionErrorInfo.ELECTIONS_HAVE_BEEN_STARTED);
         }
         if (!database.getValidTokens().contains(token)) {
-            throw new ElectionsException(ExceptionErrorCode.WRONG_VOTER_TOKEN);
+            throw new ElectionsException(ExceptionErrorInfo.WRONG_VOTER_TOKEN);
         }
         if (!database.getCandidateMap().containsKey(token)) {
-            throw new ElectionsException(ExceptionErrorCode.EMPTY_CANDIDATE_LIST);
+            throw new ElectionsException(ExceptionErrorInfo.EMPTY_CANDIDATE_LIST);
         }
         database.getCandidateMap().get(token).setAgreement(true);
         for (Proposal proposal : database.getProposalMap().values()) {
@@ -107,16 +107,16 @@ public class CandidateDaoImpl implements CandidateDao {
     @Override
     public ResultsOfRequests addProposalToCandidateProgram(String proposal, UUID token) throws ElectionsException {
         if (database.getElectionsStatus().equals(ElectionsStatus.ELECTIONS_STARTED)) {
-            throw new ElectionsException(ExceptionErrorCode.ELECTIONS_HAVE_BEEN_STARTED);
+            throw new ElectionsException(ExceptionErrorInfo.ELECTIONS_HAVE_BEEN_STARTED);
         }
         if (!database.getValidTokens().contains(token)) {
-            throw new ElectionsException(ExceptionErrorCode.WRONG_VOTER_TOKEN);
+            throw new ElectionsException(ExceptionErrorInfo.WRONG_VOTER_TOKEN);
         }
         if (!database.getCandidateMap().containsKey(token)) {
-            throw new ElectionsException(ExceptionErrorCode.EMPTY_CANDIDATE_LIST);
+            throw new ElectionsException(ExceptionErrorInfo.EMPTY_CANDIDATE_LIST);
         }
         if (!database.getProposalMap().containsKey(proposal)) {
-            throw new ElectionsException(ExceptionErrorCode.WRONG_PROPOSAL_INFO);
+            throw new ElectionsException(ExceptionErrorInfo.WRONG_PROPOSAL_INFO);
         }
         database.getCandidateMap().get(token).getCandidateProgram().getProposals().add(database.getProposalMap().get(proposal));
         return ResultsOfRequests.SUCCESSFUL_REQUEST;
@@ -137,22 +137,22 @@ public class CandidateDaoImpl implements CandidateDao {
     @Override
     public ResultsOfRequests removeProposal(String proposal, UUID token) throws ElectionsException {
         if (database.getElectionsStatus().equals(ElectionsStatus.ELECTIONS_STARTED)) {
-            throw new ElectionsException(ExceptionErrorCode.ELECTIONS_HAVE_BEEN_STARTED);
+            throw new ElectionsException(ExceptionErrorInfo.ELECTIONS_HAVE_BEEN_STARTED);
         }
         if (!database.getValidTokens().contains(token)) {
-            throw new ElectionsException(ExceptionErrorCode.WRONG_VOTER_TOKEN);
+            throw new ElectionsException(ExceptionErrorInfo.WRONG_VOTER_TOKEN);
         }
         if (!database.getCandidateMap().containsKey(token)) {
-            throw new ElectionsException(ExceptionErrorCode.EMPTY_CANDIDATE_LIST);
+            throw new ElectionsException(ExceptionErrorInfo.EMPTY_CANDIDATE_LIST);
         }
         if (!database.getProposalMap().containsKey(proposal)) {
-            throw new ElectionsException(ExceptionErrorCode.WRONG_PROPOSAL_INFO);
+            throw new ElectionsException(ExceptionErrorInfo.WRONG_PROPOSAL_INFO);
         }
         if (!database.getCandidateMap().get(token).getCandidateProgram().getProposals().contains(database.getProposalMap().get(proposal))) {
-            throw new ElectionsException(ExceptionErrorCode.WRONG_CANDIDATE_PROPOSAL);
+            throw new ElectionsException(ExceptionErrorInfo.WRONG_CANDIDATE_PROPOSAL);
         }
         if (database.getProposalMap().get(proposal).getAuthorToken().equals(token)) {
-            throw new ElectionsException(ExceptionErrorCode.SAME_PROPOSAL_AUTHOR);
+            throw new ElectionsException(ExceptionErrorInfo.SAME_PROPOSAL_AUTHOR);
         }
         database.getCandidateMap().get(token).getCandidateProgram().getProposals().remove(database.getProposalMap().get(proposal));
 
@@ -170,7 +170,7 @@ public class CandidateDaoImpl implements CandidateDao {
     public Map<Candidate, CandidateProgram> getAllAgreedCandidates(UUID token) throws ElectionsException {
         Map<Candidate, CandidateProgram> resultMap = new HashMap<>();
         if (!database.getValidTokens().contains(token)) {
-            throw new ElectionsException(ExceptionErrorCode.WRONG_VOTER_TOKEN);
+            throw new ElectionsException(ExceptionErrorInfo.WRONG_VOTER_TOKEN);
         }
         for (Candidate candidate : database.getCandidateMap().values()) {
             if (candidate.isAgreement()) {

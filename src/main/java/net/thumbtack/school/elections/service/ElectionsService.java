@@ -28,7 +28,7 @@ public class ElectionsService {
             StartElectionsResponse startResponse = new StartElectionsResponse(result);
             return gson.toJson(startResponse);
         } catch (ElectionsException e) {
-            return gson.toJson(e);
+            return gson.toJson(e.getExceptionErrorInfo().getErrorCode() + "\n" + e.getExceptionErrorInfo().getErrorString());
         }
     }
 
@@ -39,7 +39,7 @@ public class ElectionsService {
             VoteForCandidateResponse voteResponse = new VoteForCandidateResponse(startElectionsDao.voteForCandidate(voteRequest.getToken(), voteRequest.getCandidateFullName()));
             return gson.toJson(voteResponse);
         } catch (ElectionsException e) {
-            return gson.toJson(e);
+            return gson.toJson(e.getExceptionErrorInfo().getErrorCode() + "\n" + e.getExceptionErrorInfo().getErrorString());
         }
     }
 
@@ -50,7 +50,7 @@ public class ElectionsService {
             ChooseMajorResponse chooseMajorResponse = new ChooseMajorResponse(startElectionsDao.chooseMajor(chooseMajorRequest.getToken()));
             return gson.toJson(chooseMajorResponse);
         } catch (ElectionsException e) {
-            return gson.toJson(e);
+            return gson.toJson(e.getExceptionErrorInfo().getErrorCode() + "\n" + e.getExceptionErrorInfo().getErrorString());
         }
     }
 }

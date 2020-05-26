@@ -1,7 +1,7 @@
 package net.thumbtack.school.elections.dto.request;
 
 import net.thumbtack.school.elections.exceptions.ElectionsException;
-import net.thumbtack.school.elections.exceptions.ExceptionErrorCode;
+import net.thumbtack.school.elections.exceptions.ExceptionErrorInfo;
 
 import java.util.UUID;
 
@@ -24,11 +24,11 @@ public class GetAllVoterProposalsRequest {
 
     public void validate() throws ElectionsException {
         if (this.token == null || this.token.toString().isEmpty()) {
-            throw new ElectionsException(ExceptionErrorCode.WRONG_VOTER_TOKEN);
+            throw new ElectionsException(ExceptionErrorInfo.WRONG_VOTER_TOKEN);
         }
         for (String voterName : votersFullNames) {
             if (voterName == null || voterName.isEmpty()) {
-                throw new ElectionsException(ExceptionErrorCode.EMPTY_VOTER_FIRSTNAME);
+                throw new ElectionsException(ExceptionErrorInfo.EMPTY_VOTER_FIRSTNAME);
             }
         }
     }

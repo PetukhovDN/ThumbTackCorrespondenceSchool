@@ -5,7 +5,7 @@ import net.thumbtack.school.elections.database.Database;
 import net.thumbtack.school.elections.enums.ElectionsStatus;
 import net.thumbtack.school.elections.enums.ResultsOfRequests;
 import net.thumbtack.school.elections.exceptions.ElectionsException;
-import net.thumbtack.school.elections.exceptions.ExceptionErrorCode;
+import net.thumbtack.school.elections.exceptions.ExceptionErrorInfo;
 import net.thumbtack.school.elections.model.Candidate;
 
 import java.util.Collections;
@@ -36,7 +36,7 @@ public class StartElectionsDaoImpl implements StartElectionsDao {
     @Override
     public ResultsOfRequests setElectionsStarted(UUID token) throws ElectionsException {
         if (!token.equals(database.getAdminToken())) {
-            throw new ElectionsException(ExceptionErrorCode.NOT_ENOUGH_ROOT);
+            throw new ElectionsException(ExceptionErrorInfo.NOT_ENOUGH_ROOT);
         }
         database.setElectionsStatus(ElectionsStatus.ELECTIONS_STARTED);
         for (Candidate candidate : database.getCandidateMap().values()) {
@@ -62,10 +62,10 @@ public class StartElectionsDaoImpl implements StartElectionsDao {
     @Override
     public ResultsOfRequests voteForCandidate(UUID token, String candidateFullName) throws ElectionsException { //добавить проверку на повторное голосование
         if (!database.getElectionsStatus().equals(ElectionsStatus.ELECTIONS_STARTED)) {
-            throw new ElectionsException(ExceptionErrorCode.ELECTIONS_NOT_STARTED);
+            throw new ElectionsException(ExceptionErrorInfo.ELECTIONS_NOT_STARTED);
         }
         if (!database.getValidTokens().contains(token)) {
-            throw new ElectionsException(ExceptionErrorCode.WRONG_VOTER_TOKEN);
+            throw new ElectionsException(ExceptionErrorInfo.WRONG_VOTER_TOKEN);
         }
         if (database.getCandidatesForMajor().containsKey(candidateFullName)) {
             database.getCandidatesForMajor().put(candidateFullName, database.getCandidatesForMajor().get(candidateFullName) + 1); //голосуем за выбранного кандидата
@@ -85,19 +85,19 @@ public class StartElectionsDaoImpl implements StartElectionsDao {
     @Override
     public String chooseMajor(UUID token) throws ElectionsException {
         if (!database.getElectionsStatus().equals(ElectionsStatus.ELECTIONS_STARTED)) {
-            throw new ElectionsException(ExceptionErrorCode.ELECTIONS_NOT_STARTED);
+            throw new ElectionsException(ExceptionErrorInfo.ELECTIONS_NOT_STARTED);
         }
         if (!token.equals(database.getAdminToken())) {
-            throw new ElectionsException(ExceptionErrorCode.NOT_ENOUGH_ROOT);
+            throw new ElectionsException(ExceptionErrorInfo.NOT_ENOUGH_ROOT);
         }
         final int max = Collections.max(database.getCandidatesForMajor().values());
         //если у нескольких кандидатов одинаковое количество голосов - мэр не выбран
         if (Collections.frequency(database.getCandidatesForMajor().values(), max) > 1) {
-            throw new ElectionsException(ExceptionErrorCode.MAJOR_NOT_SELECTED);
+            throw new ElectionsException(ExceptionErrorInfo.MAJOR_NOT_SELECTED);
         }
         //если у кандидата "против всех" больше всего голосов - мэр не выбран
         if (database.getCandidatesForMajor().get("Against All") == max) {
-            throw new ElectionsException(ExceptionErrorCode.MAJOR_NOT_SELECTED);
+            throw new ElectionsException(ExceptionErrorInfo.MAJOR_NOT_SELECTED);
         }
         for (Map.Entry<String, Integer> pair : database.getCandidatesForMajor().entrySet()) {
             if (pair.getValue().equals(max)) {
@@ -105,6 +105,6 @@ public class StartElectionsDaoImpl implements StartElectionsDao {
                 return pair.getKey();
             }
         }
-        throw new ElectionsException(ExceptionErrorCode.SOMETHING_WRONG);
+        throw new ElectionsException(ExceptionErrorInfo.SOMETHING_WRONG);
     }
 }

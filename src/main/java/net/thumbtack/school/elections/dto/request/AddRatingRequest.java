@@ -1,7 +1,7 @@
 package net.thumbtack.school.elections.dto.request;
 
 import net.thumbtack.school.elections.exceptions.ElectionsException;
-import net.thumbtack.school.elections.exceptions.ExceptionErrorCode;
+import net.thumbtack.school.elections.exceptions.ExceptionErrorInfo;
 
 import java.util.UUID;
 
@@ -30,13 +30,13 @@ public class AddRatingRequest {
 
     public void validate() throws ElectionsException {
         if (this.proposal == null || this.proposal.isEmpty()) {
-            throw new ElectionsException(ExceptionErrorCode.EMPTY_VOTER_PROPOSAL);
+            throw new ElectionsException(ExceptionErrorInfo.EMPTY_VOTER_PROPOSAL);
         }
         if (this.rating < 1 || this.rating > 5) {
-            throw new ElectionsException(ExceptionErrorCode.WRONG_PROPOSAL_RATING);
+            throw new ElectionsException(ExceptionErrorInfo.WRONG_PROPOSAL_RATING);
         }
         if (this.token == null || this.token.toString().isEmpty()) {
-            throw new ElectionsException(ExceptionErrorCode.WRONG_VOTER_TOKEN);
+            throw new ElectionsException(ExceptionErrorInfo.WRONG_VOTER_TOKEN);
         }
     }
 }

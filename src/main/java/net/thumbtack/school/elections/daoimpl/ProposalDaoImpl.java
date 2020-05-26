@@ -5,7 +5,7 @@ import net.thumbtack.school.elections.database.Database;
 import net.thumbtack.school.elections.enums.ElectionsStatus;
 import net.thumbtack.school.elections.enums.ResultsOfRequests;
 import net.thumbtack.school.elections.exceptions.ElectionsException;
-import net.thumbtack.school.elections.exceptions.ExceptionErrorCode;
+import net.thumbtack.school.elections.exceptions.ExceptionErrorInfo;
 import net.thumbtack.school.elections.model.CandidateProgram;
 import net.thumbtack.school.elections.model.Proposal;
 
@@ -40,10 +40,10 @@ public class ProposalDaoImpl implements ProposalDao {
     @Override
     public ResultsOfRequests makeProposal(Proposal proposal, UUID token) throws ElectionsException {
         if (database.getElectionsStatus().equals(ElectionsStatus.ELECTIONS_STARTED)) {
-            throw new ElectionsException(ExceptionErrorCode.ELECTIONS_HAVE_BEEN_STARTED);
+            throw new ElectionsException(ExceptionErrorInfo.ELECTIONS_HAVE_BEEN_STARTED);
         }
         if (!database.getValidTokens().contains(token)) {
-            throw new ElectionsException(ExceptionErrorCode.WRONG_VOTER_TOKEN);
+            throw new ElectionsException(ExceptionErrorInfo.WRONG_VOTER_TOKEN);
         }
         database.getProposalMap().putIfAbsent(proposal.getProposalInfo(), proposal);
         if (!database.getProposalsFromCandidateMap().containsKey(database.getVotersMap().get(token).getFullName())) {
@@ -70,16 +70,16 @@ public class ProposalDaoImpl implements ProposalDao {
     @Override
     public ResultsOfRequests addRating(String proposal, int rate, UUID token) throws ElectionsException {
         if (database.getElectionsStatus().equals(ElectionsStatus.ELECTIONS_STARTED)) {
-            throw new ElectionsException(ExceptionErrorCode.ELECTIONS_HAVE_BEEN_STARTED);
+            throw new ElectionsException(ExceptionErrorInfo.ELECTIONS_HAVE_BEEN_STARTED);
         }
         if (!database.getValidTokens().contains(token)) {
-            throw new ElectionsException(ExceptionErrorCode.WRONG_VOTER_TOKEN);
+            throw new ElectionsException(ExceptionErrorInfo.WRONG_VOTER_TOKEN);
         }
         if (!database.getProposalMap().containsKey(proposal)) {
-            throw new ElectionsException(ExceptionErrorCode.WRONG_PROPOSAL_INFO);
+            throw new ElectionsException(ExceptionErrorInfo.WRONG_PROPOSAL_INFO);
         }
         if (database.getProposalMap().get(proposal).getAuthorToken().equals(token)) {
-            throw new ElectionsException(ExceptionErrorCode.SAME_PROPOSAL_AUTHOR);
+            throw new ElectionsException(ExceptionErrorInfo.SAME_PROPOSAL_AUTHOR);
         }
         database.getProposalMap().get(proposal).getRating().put(token, rate);
         return ResultsOfRequests.SUCCESSFUL_REQUEST;
@@ -99,16 +99,16 @@ public class ProposalDaoImpl implements ProposalDao {
     @Override
     public ResultsOfRequests removeRating(String proposal, UUID token) throws ElectionsException {
         if (database.getElectionsStatus().equals(ElectionsStatus.ELECTIONS_STARTED)) {
-            throw new ElectionsException(ExceptionErrorCode.ELECTIONS_HAVE_BEEN_STARTED);
+            throw new ElectionsException(ExceptionErrorInfo.ELECTIONS_HAVE_BEEN_STARTED);
         }
         if (!database.getValidTokens().contains(token)) {
-            throw new ElectionsException(ExceptionErrorCode.WRONG_VOTER_TOKEN);
+            throw new ElectionsException(ExceptionErrorInfo.WRONG_VOTER_TOKEN);
         }
         if (!database.getProposalMap().containsKey(proposal)) {
-            throw new ElectionsException(ExceptionErrorCode.WRONG_PROPOSAL_INFO);
+            throw new ElectionsException(ExceptionErrorInfo.WRONG_PROPOSAL_INFO);
         }
         if (database.getProposalMap().get(proposal).getAuthorToken().equals(token)) {
-            throw new ElectionsException(ExceptionErrorCode.SAME_PROPOSAL_AUTHOR);
+            throw new ElectionsException(ExceptionErrorInfo.SAME_PROPOSAL_AUTHOR);
         }
         database.getProposalMap().get(proposal).getRating().remove(token);
         return ResultsOfRequests.SUCCESSFUL_REQUEST;
@@ -123,7 +123,7 @@ public class ProposalDaoImpl implements ProposalDao {
     @Override
     public Map<String, Double> getAllProposalsWithRate(UUID token) throws ElectionsException {
         if (!database.getValidTokens().contains(token)) {
-            throw new ElectionsException(ExceptionErrorCode.WRONG_VOTER_TOKEN);
+            throw new ElectionsException(ExceptionErrorInfo.WRONG_VOTER_TOKEN);
         }
         Map<String, Double> results = new HashMap<>();
         for (Proposal proposal : database.getProposalMap().values()) {
@@ -153,12 +153,12 @@ public class ProposalDaoImpl implements ProposalDao {
     @Override
     public Map<String, CandidateProgram> getAllProposalsFromVoter(UUID token, String[] voterFullNames) throws ElectionsException {
         if (!database.getValidTokens().contains(token)) {
-            throw new ElectionsException(ExceptionErrorCode.WRONG_VOTER_TOKEN);
+            throw new ElectionsException(ExceptionErrorInfo.WRONG_VOTER_TOKEN);
         }
         Map<String, CandidateProgram> results = new HashMap<>();
         for (String voterFullName : voterFullNames) {
             if (!database.getProposalsFromCandidateMap().containsKey(voterFullName)) {
-                throw new ElectionsException(ExceptionErrorCode.EMPTY_CANDIDATE_PROGRAM);
+                throw new ElectionsException(ExceptionErrorInfo.EMPTY_CANDIDATE_PROGRAM);
             }
             results.put(voterFullName, database.getProposalsFromCandidateMap().get(voterFullName));
         }
