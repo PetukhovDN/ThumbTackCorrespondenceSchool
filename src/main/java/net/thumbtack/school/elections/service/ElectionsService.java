@@ -10,6 +10,8 @@ import net.thumbtack.school.elections.dto.response.StartElectionsResponse;
 import net.thumbtack.school.elections.dto.response.VoteForCandidateResponse;
 import net.thumbtack.school.elections.exceptions.ElectionsException;
 
+import java.util.UUID;
+
 import static net.thumbtack.school.elections.server.Server.gson;
 
 public class ElectionsService {
@@ -23,10 +25,11 @@ public class ElectionsService {
         try {
             StartElectionsRequest startRequest = gson.fromJson(requestJsonString, StartElectionsRequest.class);
             startRequest.validate();
-            StartElectionsResponse startResponse = new StartElectionsResponse(startElectionsDao.setElectionsStarted(startRequest.getToken()));
+            UUID result = startElectionsDao.setElectionsStarted(startRequest.getToken());
+            StartElectionsResponse startResponse = new StartElectionsResponse(result);
             return gson.toJson(startResponse);
         } catch (ElectionsException e) {
-            return gson.toJson(e.getErrorCode().getErrorString());
+            return gson.toJson(e);
         }
     }
 
@@ -37,7 +40,7 @@ public class ElectionsService {
             VoteForCandidateResponse voteResponse = new VoteForCandidateResponse(startElectionsDao.voteForCandidate(voteRequest.getToken(), voteRequest.getCandidateFullName()));
             return gson.toJson(voteResponse);
         } catch (ElectionsException e) {
-            return gson.toJson(e.getErrorCode().getErrorString());
+            return gson.toJson(e);
         }
     }
 
@@ -48,7 +51,7 @@ public class ElectionsService {
             ChooseMajorResponse chooseMajorResponse = new ChooseMajorResponse(startElectionsDao.chooseMajor(chooseMajorRequest.getToken()));
             return gson.toJson(chooseMajorResponse);
         } catch (ElectionsException e) {
-            return gson.toJson(e.getErrorCode().getErrorString());
+            return gson.toJson(e);
         }
     }
 }

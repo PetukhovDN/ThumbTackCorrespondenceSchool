@@ -21,6 +21,7 @@ class ServerTest {
     private static UUID adminTokenForCheck = UUID.fromString("4d50c72b-8342-4d44-ab09-4026dd0e333d"); //токен из базы
     Server server;
     Database database;
+    Gson gson = new Gson();
 
     @BeforeEach
     void setUp() {
@@ -39,12 +40,12 @@ class ServerTest {
         int n = database.getVotersMap().size();
         RegisterVoterRequest request1 = new RegisterVoterRequest("Bob", "Fisher", "Ivanovich", "Lenina", 40, 277, "bobcherchil122", "1234567qwerty");
         RegisterVoterRequest request2 = new RegisterVoterRequest("Tom", "Fisher", "", "Lenina", 40, 277, "bobcherchil122", "1234567qwerty");
-        String jsonRequest1 = new Gson().toJson(request1);
-        String jsonRequest2 = new Gson().toJson(request2);
+        String jsonRequest1 = gson.toJson(request1);
+        String jsonRequest2 = gson.toJson(request2);
         String jsonResult1 = server.registerVoter(jsonRequest1);
         String jsonResult2 = server.registerVoter(jsonRequest2);
-        RegisterVoterResponse result1 = new Gson().fromJson(jsonResult1, RegisterVoterResponse.class);
-        RegisterVoterResponse result2 = new Gson().fromJson(jsonResult2, RegisterVoterResponse.class);
+        RegisterVoterResponse result1 = gson.fromJson(jsonResult1, RegisterVoterResponse.class);
+        RegisterVoterResponse result2 = gson.fromJson(jsonResult2, RegisterVoterResponse.class);
 
         assertEquals(n + 2, database.getVotersMap().size()); //проверка что запрос был успешным и количество избирателей увеличилось
         assertEquals(new Gson().toJson(result1), jsonResult1);
@@ -59,17 +60,17 @@ class ServerTest {
         RegisterVoterRequest request1 = new RegisterVoterRequest("Bob", "", "Ivanovich", "Lenina", 40, 277, "bobcherchil122", "1234567qwerty"); //пустое поле фамилии // REVU Очень длинные строки
         RegisterVoterRequest request2 = new RegisterVoterRequest("Tim", "Fisher", "Ivanovich", "Lenina", 40, 277, "bobcherchil122", "1234567qwerty"); //валидный запрос
         RegisterVoterRequest request3 = new RegisterVoterRequest("Tim", "Fisher", "Ivanovich", "Lenina", 40, 277, "bobcherchil122", "1234567qwerty"); //идентичный предыдущему запрос
-        String jsonRequest1 = new Gson().toJson(request1); // REVU Вынесите new Gson() в поле тестового класса
-        String jsonRequest2 = new Gson().toJson(request2);
-        String jsonRequest3 = new Gson().toJson(request3);
+        String jsonRequest1 = gson.toJson(request1); // REVU Вынесите new Gson() в поле тестового класса
+        String jsonRequest2 = gson.toJson(request2);
+        String jsonRequest3 = gson.toJson(request3);
         String jsonResult1 = server.registerVoter(jsonRequest1);
         String jsonResult2 = server.registerVoter(jsonRequest2); //запрос для дублирования избирателей
-        RegisterVoterResponse registerResponse = new Gson().fromJson(jsonResult2, RegisterVoterResponse.class);
+        RegisterVoterResponse registerResponse = gson.fromJson(jsonResult2, RegisterVoterResponse.class);
         String jsonResult3 = server.registerVoter(jsonRequest3);
 
-        assertEquals(new Gson().toJson(registerResponse), jsonResult2);
-        assertEquals(new Gson().toJson(exception1.getErrorCode().getErrorString()), jsonResult1);
-        assertEquals(new Gson().toJson(exception2.getErrorCode().getErrorString()), jsonResult3);
+        assertEquals(gson.toJson(registerResponse), jsonResult2);
+        assertEquals(gson.toJson(exception1), jsonResult1);
+        assertEquals(gson.toJson(exception2), jsonResult3);
         assertEquals(n + 1, database.getVotersMap().size()); //проверка что сработал только request2
     }
 
@@ -77,18 +78,18 @@ class ServerTest {
     void testLogoutVoter() {
         int n = database.getVotersMap().size();
         RegisterVoterRequest registerRequest = new RegisterVoterRequest("Andrey", "Petrov", "Sergeevich", "Zukova", 13, 45, "petrov12345", "qwertyasdf");
-        String jsonRegisterRequest = new Gson().toJson(registerRequest);
+        String jsonRegisterRequest = gson.toJson(registerRequest);
         String jsonRegisterResult = server.registerVoter(jsonRegisterRequest);
-        RegisterVoterResponse registerResult = new Gson().fromJson(jsonRegisterResult, RegisterVoterResponse.class);
+        RegisterVoterResponse registerResult = gson.fromJson(jsonRegisterResult, RegisterVoterResponse.class);
         UUID tokenForCheck = registerResult.getToken();
 
         LogoutVoterRequest logoutRequest = new LogoutVoterRequest(tokenForCheck);
-        String jsonLogoutRequest = new Gson().toJson(logoutRequest);
+        String jsonLogoutRequest = gson.toJson(logoutRequest);
         String jsonLogoutResult = server.logoutVoter(jsonLogoutRequest);
-        LogoutVoterResponse logoutResponse = new Gson().fromJson(jsonLogoutResult, LogoutVoterResponse.class);
+        LogoutVoterResponse logoutResponse = gson.fromJson(jsonLogoutResult, LogoutVoterResponse.class);
 
         assertEquals(n + 1, database.getVotersMap().size()); //проверка что тестовый избиратель добавился
-        assertEquals(new Gson().toJson(logoutResponse), jsonLogoutResult);
+        assertEquals(gson.toJson(logoutResponse), jsonLogoutResult);
     }
 
     /**
@@ -100,12 +101,12 @@ class ServerTest {
         Voter testVoter = (Voter) database.getVotersMap().values().toArray()[0]; // REVU Тесты должны быть независимыми. Зарегистрируйте пользователя, если он необходим для теста. Или используйте заранее зарегистрированного из файла.
 
         LoginVoterRequest loginRequest = new LoginVoterRequest(testVoter.getLogin(), testVoter.getPassword());
-        String jsonLoginRequest = new Gson().toJson(loginRequest);
+        String jsonLoginRequest = gson.toJson(loginRequest);
         String jsonLoginResult = server.loginVoter(jsonLoginRequest);
-        LoginVoterResponse loginVDResponse = new Gson().fromJson(jsonLoginResult, LoginVoterResponse.class);
+        LoginVoterResponse loginVDResponse = gson.fromJson(jsonLoginResult, LoginVoterResponse.class);
 
         assertEquals(n, database.getVotersMap().size());
-        assertEquals(new Gson().toJson(loginVDResponse), jsonLoginResult);
+        assertEquals(gson.toJson(loginVDResponse), jsonLoginResult);
     }
 
     @Test
@@ -113,16 +114,16 @@ class ServerTest {
         int n = database.getVotersMap().size();
 
         RegisterVoterRequest registerRequest = new RegisterVoterRequest("Ivan", "Makarov", "Sergeevich", "Zukova", 13, 45, "petrov12345", "qwertyasdf");
-        String jsonRegisterRequest = new Gson().toJson(registerRequest);
+        String jsonRegisterRequest = gson.toJson(registerRequest);
         String jsonRegisterResult = server.registerVoter(jsonRegisterRequest);
-        RegisterVoterResponse registerResponse = new Gson().fromJson(jsonRegisterResult, RegisterVoterResponse.class); //добавление избирателя для проверки
+        RegisterVoterResponse registerResponse = gson.fromJson(jsonRegisterResult, RegisterVoterResponse.class); //добавление избирателя для проверки
         UUID tokenForCheck = registerResponse.getToken();
         GetAllVotersRequest getVotersRequest = new GetAllVotersRequest(tokenForCheck);
-        String jsonGetVotersRequest = new Gson().toJson(getVotersRequest);
+        String jsonGetVotersRequest = gson.toJson(getVotersRequest);
         String jsonGetVotersResult = server.getAllVoters(jsonGetVotersRequest);
-        GetAllVotersResponse result = new Gson().fromJson(jsonGetVotersResult, GetAllVotersResponse.class);
+        GetAllVotersResponse result = gson.fromJson(jsonGetVotersResult, GetAllVotersResponse.class);
 
-        assertEquals(new Gson().toJson(result), jsonGetVotersResult);
+        assertEquals(gson.toJson(result), jsonGetVotersResult);
         assertEquals(n + 1, database.getVotersMap().size()); //проверка что тестовый избиратель добавился
     }
 
@@ -136,18 +137,18 @@ class ServerTest {
         AddCandidateRequest addCandidateRequest1 = new AddCandidateRequest("Bob", "Fisher", tokenForCheck1);  //первый избиратель в базе
         AddCandidateRequest addCandidateRequest2 = new AddCandidateRequest("Tim", "Fisher", tokenForCheck2);  //второй избиратель в базе
         AddCandidateRequest addCandidateRequest3 = new AddCandidateRequest("Bill", "Fisher", tokenForCheck1); //не существует такого избирателя в базе
-        String jsonAddCandidateRequest1 = new Gson().toJson(addCandidateRequest1);
-        String jsonAddCandidateRequest2 = new Gson().toJson(addCandidateRequest2);
-        String jsonAddCandidateRequest3 = new Gson().toJson(addCandidateRequest3);
+        String jsonAddCandidateRequest1 = gson.toJson(addCandidateRequest1);
+        String jsonAddCandidateRequest2 = gson.toJson(addCandidateRequest2);
+        String jsonAddCandidateRequest3 = gson.toJson(addCandidateRequest3);
         String jsonAddCandidateResponse1 = server.addCandidate(jsonAddCandidateRequest1);
         String jsonAddCandidateResponse2 = server.addCandidate(jsonAddCandidateRequest2);
         String jsonAddCandidateResponse3 = server.addCandidate(jsonAddCandidateRequest3);
-        AddCandidateResponse addCandidateResponse1 = new Gson().fromJson(jsonAddCandidateResponse1, AddCandidateResponse.class);
-        AddCandidateResponse addCandidateResponse2 = new Gson().fromJson(jsonAddCandidateResponse2, AddCandidateResponse.class);
+        AddCandidateResponse addCandidateResponse1 = gson.fromJson(jsonAddCandidateResponse1, AddCandidateResponse.class);
+        AddCandidateResponse addCandidateResponse2 = gson.fromJson(jsonAddCandidateResponse2, AddCandidateResponse.class);
 
-        assertEquals(new Gson().toJson(addCandidateResponse1.getToken()), new Gson().toJson(tokenForCheck1));
-        assertEquals(new Gson().toJson(addCandidateResponse2.getToken()), new Gson().toJson(tokenForCheck2));
-        assertEquals(new Gson().toJson(exception1.getErrorCode().getErrorString()), jsonAddCandidateResponse3);
+        assertEquals(gson.toJson(addCandidateResponse1.getToken()), gson.toJson(tokenForCheck1));
+        assertEquals(gson.toJson(addCandidateResponse2.getToken()), gson.toJson(tokenForCheck2));
+        assertEquals(gson.toJson(exception1), jsonAddCandidateResponse3);
 
         assertEquals(m + 2, database.getCandidateMap().size()); // оба добавились но только первый согласен быть кандидатом
     }
@@ -159,15 +160,15 @@ class ServerTest {
         UUID tokenForCheck = (UUID) database.getValidTokens().toArray()[1];  //токен Tim Fisher
 
         AddCandidateRequest addCandidateRequest = new AddCandidateRequest("Bob", "Fisher", tokenForCheck);
-        String jsonAddCandidateRequest = new Gson().toJson(addCandidateRequest);
+        String jsonAddCandidateRequest = gson.toJson(addCandidateRequest);
         String jsonAddCandidateResponse = server.addCandidate(jsonAddCandidateRequest);
 
         AgreeToBeCandidateRequest agreeRequest = new AgreeToBeCandidateRequest(tokenForCheck);
-        String jsonAgreeRequest = new Gson().toJson(agreeRequest);
+        String jsonAgreeRequest = gson.toJson(agreeRequest);
         String jsonAgreeResponse = server.agreeToBeCandidate(jsonAgreeRequest);
-        AgreeToBeCandidateResponse agreeResponse = new Gson().fromJson(jsonAgreeResponse, AgreeToBeCandidateResponse.class);
+        AgreeToBeCandidateResponse agreeResponse = gson.fromJson(jsonAgreeResponse, AgreeToBeCandidateResponse.class);
 
-        assertEquals(new Gson().toJson(agreeResponse.getToken()), new Gson().toJson(tokenForCheck));
+        assertEquals(gson.toJson(agreeResponse.getToken()), gson.toJson(tokenForCheck));
         assertEquals(m + 1, database.getCandidateMap().size());
     }
 

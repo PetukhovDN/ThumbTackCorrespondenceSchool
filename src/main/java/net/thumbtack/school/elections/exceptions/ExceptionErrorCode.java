@@ -18,7 +18,7 @@ public enum ExceptionErrorCode {
     WRONG_VOTER_PASSWORD_LENGTH("Пароль должен быть длиннее 6 символов"),
     WRONG_VOTER_PASSWORD("Неверный пароль"),
     WRONG_VOTER_TOKEN("Неверный токен"),
-    DUPLICATE_VOTER("Такой избиратель уже зарегестрирован"),
+    DUPLICATE_VOTER("Такой избиратель уже зарегистрирован"),
     EMPTY_VOTER_PROPOSAL("Предложение не может быть пустым"),
     EMPTY_CANDIDATE_LIST("Такой кандидат не выдвинут"),
     DUPLICATE_CANDIDATE("Такой кандидат уже выдвинут"),

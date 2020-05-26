@@ -24,7 +24,7 @@ public class ProposalService {
             MakeProposalResponse makeProposalResponse = new MakeProposalResponse(proposalDao.makeProposal(proposal, makeProposalRequest.getToken()));
             return gson.toJson(makeProposalResponse);
         } catch (ElectionsException e) {
-            return gson.toJson(e.getErrorCode().getErrorString());
+            return gson.toJson(e);
         }
     }
 
@@ -35,7 +35,7 @@ public class ProposalService {
             AddRatingResponse addRatingResponse = new AddRatingResponse(proposalDao.addRating(addRatingRequest.getProposal(), addRatingRequest.getRating(), addRatingRequest.getToken()));
             return gson.toJson(addRatingResponse);
         } catch (ElectionsException e) {
-            return gson.toJson(e.getErrorCode().getErrorString());
+            return gson.toJson(e);
         }
     }
 
@@ -46,7 +46,7 @@ public class ProposalService {
             RemoveRatingResponse removeRatingResponse = new RemoveRatingResponse(proposalDao.removeRating(removeRatingRequest.getProposal(), removeRatingRequest.getToken()));
             return gson.toJson(removeRatingResponse);
         } catch (ElectionsException e) {
-            return gson.toJson(e.getErrorCode().getErrorString());
+            return gson.toJson(e);
         }
     }
 
@@ -57,7 +57,7 @@ public class ProposalService {
             GetAllProposalsResponse getAllProposalsResponse = new GetAllProposalsResponse(proposalDao.getAllProposalsWithRate(getAllProposalsRequest.getToken()));
             return gson.toJson(getAllProposalsResponse);
         } catch (ElectionsException e) {
-            return gson.toJson(e.getErrorCode().getErrorString());
+            return gson.toJson(e);
         }
     }
 
@@ -68,7 +68,7 @@ public class ProposalService {
             GetAllVoterProposalsResponse getAllProposalsResponse = new GetAllVoterProposalsResponse(proposalDao.getAllProposalsFromVoter(getAllProposalsRequest.getToken(), getAllProposalsRequest.getVotersFullNames()));
             return gson.toJson(getAllProposalsResponse);
         } catch (ElectionsException e) {
-            return gson.toJson(e.getErrorCode().getErrorString());
+            return gson.toJson(e);
         }
     }
 }

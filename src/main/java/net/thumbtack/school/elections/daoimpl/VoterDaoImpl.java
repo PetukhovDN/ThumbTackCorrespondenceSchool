@@ -98,11 +98,11 @@ public class VoterDaoImpl implements VoterDao {
         for (Map.Entry<UUID, Voter> pair : database.getVotersMap().entrySet()) {
             final Voter voter = pair.getValue();
             if (voter.getLogin().equals(login) && voter.getPassword().equals(password)) { //проверяет есть ли такой избиратель и верный ли пароль
-                voter.setToken(UUID.randomUUID()); //назначает новый случайный token для этого избирателя
-                database.getVotersMap().put(voter.getToken(), voter); //добавить в базу избирателя с новым токеном
-                database.getValidTokens().add(voter.getToken()); //добавить токен в список валидных
-                database.getVotersMap().remove(pair.getKey()); //удалить из базы избирателя со старым невалидным токеном
-                return pair.getKey();
+                    voter.setToken(UUID.randomUUID()); //назначает новый случайный token для этого избирателя
+                    database.getVotersMap().put(voter.getToken(), voter); //добавить в базу избирателя с новым токеном
+                    database.getValidTokens().add(voter.getToken()); //добавить токен в список валидных
+                    database.getVotersMap().remove(pair.getKey()); //удалить из базы избирателя со старым невалидным токеном
+                    return pair.getKey();
             }
         }
         throw new ElectionsException(ExceptionErrorCode.WRONG_VOTER_LOGIN);

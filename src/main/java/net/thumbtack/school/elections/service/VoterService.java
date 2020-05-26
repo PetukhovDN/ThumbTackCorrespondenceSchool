@@ -30,7 +30,7 @@ public class VoterService {
             RegisterVoterResponse registerResponse = new RegisterVoterResponse(voterDao.insertToDataBase(voter));
             return gson.toJson(registerResponse);
         } catch (ElectionsException e) {
-            return gson.toJson(e.getErrorCode().getErrorString()); // REVU Обратите внимание на раздел "Обработка ошибок" в документе "Рекомендации к заданию 11".
+            return gson.toJson(e);
         }
     }
 
@@ -41,7 +41,7 @@ public class VoterService {
             LogoutVoterResponse logoutResponse = new LogoutVoterResponse(voterDao.logoutFromDatabase(logoutRequest.getToken()));
             return gson.toJson(logoutResponse);
         } catch (ElectionsException e) {
-            return gson.toJson(e.getErrorCode().getErrorString());
+            return gson.toJson(e);
         }
     }
 
@@ -52,7 +52,7 @@ public class VoterService {
             LoginVoterResponse loginResponse = new LoginVoterResponse(voterDao.loginToDatabase(loginRequest.getLogin(), loginRequest.getPassword()));
             return gson.toJson(loginResponse);
         } catch (ElectionsException e) {
-            return gson.toJson(e.getErrorCode().getErrorString());
+            return gson.toJson(e);
         }
     }
 
@@ -63,7 +63,7 @@ public class VoterService {
             GetAllVotersResponse getVotersResponse = new GetAllVotersResponse(voterDao.getAllVotersFromDatabase(getVotersRequest.getToken()));
             return gson.toJson(getVotersResponse);
         } catch (ElectionsException e) {
-            return gson.toJson(e.getErrorCode().getErrorString());
+            return gson.toJson(e);
         }
     }
 }
