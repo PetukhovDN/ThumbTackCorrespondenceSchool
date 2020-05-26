@@ -1,15 +1,15 @@
 package net.thumbtack.school.elections.dto.response;
 
-import java.util.UUID;
+import net.thumbtack.school.elections.enums.ResultsOfRequests;
 
 public class AddProposalResponse {
-    private UUID token; // REVU Много ответов с токеном. Для чего постоянно возвращать токен клиенту?
+    private ResultsOfRequests result;
 
-    public AddProposalResponse(UUID token) {
-        this.token = token;
+    public AddProposalResponse(ResultsOfRequests result) {
+        this.result = result;
     }
 
-    public UUID getToken() {
-        return token;
+    public ResultsOfRequests getResult() {
+        return result;
     }
 }

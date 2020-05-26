@@ -3,6 +3,7 @@ package net.thumbtack.school.elections.daoimpl;
 import net.thumbtack.school.elections.dao.CandidateDao;
 import net.thumbtack.school.elections.database.Database;
 import net.thumbtack.school.elections.enums.ElectionsStatus;
+import net.thumbtack.school.elections.enums.ResultsOfRequests;
 import net.thumbtack.school.elections.exceptions.ElectionsException;
 import net.thumbtack.school.elections.exceptions.ExceptionErrorCode;
 import net.thumbtack.school.elections.model.Candidate;
@@ -41,7 +42,7 @@ public class CandidateDaoImpl implements CandidateDao {
      *                            в случае ненахождения кандидата в базе.
      */
     @Override
-    public UUID addCandidateToDatabase(Candidate candidate, UUID token) throws ElectionsException {
+    public ResultsOfRequests addCandidateToDatabase(Candidate candidate, UUID token) throws ElectionsException {
         if (database.getElectionsStatus().equals(ElectionsStatus.ELECTIONS_STARTED)) {
             throw new ElectionsException(ExceptionErrorCode.ELECTIONS_HAVE_BEEN_STARTED);
         }
@@ -56,7 +57,7 @@ public class CandidateDaoImpl implements CandidateDao {
                 if (voter.getToken().equals(token)) {
                     database.getCandidateMap().get(token).setAgreement(true);
                 }
-                return token;
+                return ResultsOfRequests.SUCCESSFUL_REQUEST;
             }
         }
         throw new ElectionsException(ExceptionErrorCode.EMPTY_CANDIDATE_LIST);
@@ -73,7 +74,7 @@ public class CandidateDaoImpl implements CandidateDao {
      *                            в случае ненахождения кандидата в базе.
      */
     @Override
-    public UUID agreeToBeCandidate(UUID token) throws ElectionsException {
+    public ResultsOfRequests agreeToBeCandidate(UUID token) throws ElectionsException {
         if (database.getElectionsStatus().equals(ElectionsStatus.ELECTIONS_STARTED)) {
             throw new ElectionsException(ExceptionErrorCode.ELECTIONS_HAVE_BEEN_STARTED);
         }
@@ -90,7 +91,7 @@ public class CandidateDaoImpl implements CandidateDao {
             }
         }
 
-        return token;
+        return ResultsOfRequests.SUCCESSFUL_REQUEST;
     }
 
     /**
@@ -104,7 +105,7 @@ public class CandidateDaoImpl implements CandidateDao {
      *                            в случае если такое предложение еще не было сделано.
      */
     @Override
-    public UUID addProposalToCandidateProgram(String proposal, UUID token) throws ElectionsException {
+    public ResultsOfRequests addProposalToCandidateProgram(String proposal, UUID token) throws ElectionsException {
         if (database.getElectionsStatus().equals(ElectionsStatus.ELECTIONS_STARTED)) {
             throw new ElectionsException(ExceptionErrorCode.ELECTIONS_HAVE_BEEN_STARTED);
         }
@@ -118,7 +119,7 @@ public class CandidateDaoImpl implements CandidateDao {
             throw new ElectionsException(ExceptionErrorCode.WRONG_PROPOSAL_INFO);
         }
         database.getCandidateMap().get(token).getCandidateProgram().getProposals().add(database.getProposalMap().get(proposal));
-        return token;
+        return ResultsOfRequests.SUCCESSFUL_REQUEST;
     }
 
     /**
@@ -134,7 +135,7 @@ public class CandidateDaoImpl implements CandidateDao {
      *                            в случае если является автором предложения которое хочет удалить.
      */
     @Override
-    public UUID removeProposal(String proposal, UUID token) throws ElectionsException {
+    public ResultsOfRequests removeProposal(String proposal, UUID token) throws ElectionsException {
         if (database.getElectionsStatus().equals(ElectionsStatus.ELECTIONS_STARTED)) {
             throw new ElectionsException(ExceptionErrorCode.ELECTIONS_HAVE_BEEN_STARTED);
         }
@@ -155,7 +156,7 @@ public class CandidateDaoImpl implements CandidateDao {
         }
         database.getCandidateMap().get(token).getCandidateProgram().getProposals().remove(database.getProposalMap().get(proposal));
 
-        return token;
+        return ResultsOfRequests.SUCCESSFUL_REQUEST;
     }
 
     /**

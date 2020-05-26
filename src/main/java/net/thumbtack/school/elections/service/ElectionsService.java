@@ -8,9 +8,8 @@ import net.thumbtack.school.elections.dto.request.VoteForCandidateRequest;
 import net.thumbtack.school.elections.dto.response.ChooseMajorResponse;
 import net.thumbtack.school.elections.dto.response.StartElectionsResponse;
 import net.thumbtack.school.elections.dto.response.VoteForCandidateResponse;
+import net.thumbtack.school.elections.enums.ResultsOfRequests;
 import net.thumbtack.school.elections.exceptions.ElectionsException;
-
-import java.util.UUID;
 
 import static net.thumbtack.school.elections.server.Server.gson;
 
@@ -25,7 +24,7 @@ public class ElectionsService {
         try {
             StartElectionsRequest startRequest = gson.fromJson(requestJsonString, StartElectionsRequest.class);
             startRequest.validate();
-            UUID result = startElectionsDao.setElectionsStarted(startRequest.getToken());
+            ResultsOfRequests result = startElectionsDao.setElectionsStarted(startRequest.getToken());
             StartElectionsResponse startResponse = new StartElectionsResponse(result);
             return gson.toJson(startResponse);
         } catch (ElectionsException e) {

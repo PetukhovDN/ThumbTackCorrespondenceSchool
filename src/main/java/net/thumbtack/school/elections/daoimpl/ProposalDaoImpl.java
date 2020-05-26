@@ -3,6 +3,7 @@ package net.thumbtack.school.elections.daoimpl;
 import net.thumbtack.school.elections.dao.ProposalDao;
 import net.thumbtack.school.elections.database.Database;
 import net.thumbtack.school.elections.enums.ElectionsStatus;
+import net.thumbtack.school.elections.enums.ResultsOfRequests;
 import net.thumbtack.school.elections.exceptions.ElectionsException;
 import net.thumbtack.school.elections.exceptions.ExceptionErrorCode;
 import net.thumbtack.school.elections.model.CandidateProgram;
@@ -37,7 +38,7 @@ public class ProposalDaoImpl implements ProposalDao {
      *                            при попытке осуществления запроса от пользователя с невалидным идентификатором.
      */
     @Override
-    public UUID makeProposal(Proposal proposal, UUID token) throws ElectionsException {
+    public ResultsOfRequests makeProposal(Proposal proposal, UUID token) throws ElectionsException {
         if (database.getElectionsStatus().equals(ElectionsStatus.ELECTIONS_STARTED)) {
             throw new ElectionsException(ExceptionErrorCode.ELECTIONS_HAVE_BEEN_STARTED);
         }
@@ -51,7 +52,7 @@ public class ProposalDaoImpl implements ProposalDao {
             database.getProposalsFromCandidateMap().put(database.getVotersMap().get(token).getFullName(), candidateProgram);
         }
         database.getProposalsFromCandidateMap().get(database.getVotersMap().get(token).getFullName()).getProposals().add(proposal);
-        return token;
+        return ResultsOfRequests.SUCCESSFUL_REQUEST;
     }
 
     /**
@@ -67,7 +68,7 @@ public class ProposalDaoImpl implements ProposalDao {
      *                            в случае если автор пытается изменить оценку собственного предложения (что запрещено по условиям).
      */
     @Override
-    public UUID addRating(String proposal, int rate, UUID token) throws ElectionsException {
+    public ResultsOfRequests addRating(String proposal, int rate, UUID token) throws ElectionsException {
         if (database.getElectionsStatus().equals(ElectionsStatus.ELECTIONS_STARTED)) {
             throw new ElectionsException(ExceptionErrorCode.ELECTIONS_HAVE_BEEN_STARTED);
         }
@@ -81,7 +82,7 @@ public class ProposalDaoImpl implements ProposalDao {
             throw new ElectionsException(ExceptionErrorCode.SAME_PROPOSAL_AUTHOR);
         }
         database.getProposalMap().get(proposal).getRating().put(token, rate);
-        return token;
+        return ResultsOfRequests.SUCCESSFUL_REQUEST;
     }
 
     /**
@@ -96,7 +97,7 @@ public class ProposalDaoImpl implements ProposalDao {
      *                            в случае если автор пытается изменить оценку собственного предложения (что запрещено по условиям).
      */
     @Override
-    public UUID removeRating(String proposal, UUID token) throws ElectionsException {
+    public ResultsOfRequests removeRating(String proposal, UUID token) throws ElectionsException {
         if (database.getElectionsStatus().equals(ElectionsStatus.ELECTIONS_STARTED)) {
             throw new ElectionsException(ExceptionErrorCode.ELECTIONS_HAVE_BEEN_STARTED);
         }
@@ -110,7 +111,7 @@ public class ProposalDaoImpl implements ProposalDao {
             throw new ElectionsException(ExceptionErrorCode.SAME_PROPOSAL_AUTHOR);
         }
         database.getProposalMap().get(proposal).getRating().remove(token);
-        return token;
+        return ResultsOfRequests.SUCCESSFUL_REQUEST;
     }
 
     /**

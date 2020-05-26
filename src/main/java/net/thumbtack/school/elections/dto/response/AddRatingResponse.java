@@ -1,15 +1,15 @@
 package net.thumbtack.school.elections.dto.response;
 
-import java.util.UUID;
+import net.thumbtack.school.elections.enums.ResultsOfRequests;
 
 public class AddRatingResponse {
-    private UUID token;
+    private ResultsOfRequests result;
 
-    public AddRatingResponse(UUID token) {
-        this.token = token;
+    public AddRatingResponse(ResultsOfRequests result) {
+        this.result = result;
     }
 
-    public UUID getToken() {
-        return token;
+    public ResultsOfRequests getResult() {
+        return result;
     }
 }

@@ -3,6 +3,7 @@ package net.thumbtack.school.elections.daoimpl;
 import net.thumbtack.school.elections.dao.VoterDao;
 import net.thumbtack.school.elections.database.Database;
 import net.thumbtack.school.elections.enums.ElectionsStatus;
+import net.thumbtack.school.elections.enums.ResultsOfRequests;
 import net.thumbtack.school.elections.exceptions.ElectionsException;
 import net.thumbtack.school.elections.exceptions.ExceptionErrorCode;
 import net.thumbtack.school.elections.model.Proposal;
@@ -57,7 +58,7 @@ public class VoterDaoImpl implements VoterDao {
      *                            при попытке осуществления запроса от пользователя с невалидным идентификатором.
      */
     @Override
-    public UUID logoutFromDatabase(UUID token) throws ElectionsException {
+    public ResultsOfRequests logoutFromDatabase(UUID token) throws ElectionsException {
         if (database.getElectionsStatus().equals(ElectionsStatus.ELECTIONS_STARTED)) {
             throw new ElectionsException(ExceptionErrorCode.ELECTIONS_HAVE_BEEN_STARTED);
         }
@@ -77,7 +78,7 @@ public class VoterDaoImpl implements VoterDao {
                 proposal.setDefaultAuthor(); //назначить автором всё общество города
             }
         }
-        return token;
+        return ResultsOfRequests.SUCCESSFUL_REQUEST;
     }
 
     /**

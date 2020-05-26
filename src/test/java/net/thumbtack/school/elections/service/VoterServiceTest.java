@@ -2,6 +2,7 @@ package net.thumbtack.school.elections.service;
 
 import net.thumbtack.school.elections.dao.VoterDao;
 import net.thumbtack.school.elections.dto.request.RegisterVoterRequest;
+import net.thumbtack.school.elections.enums.ResultsOfRequests;
 import net.thumbtack.school.elections.exceptions.ElectionsException;
 import net.thumbtack.school.elections.model.Voter;
 import org.junit.jupiter.api.BeforeEach;
@@ -63,10 +64,10 @@ class VoterServiceTest {
 
     @Test
     void logoutVoter() throws ElectionsException {
-        when(voterDao.logoutFromDatabase(firstVoter.getToken())).thenReturn(firstVoter.getToken());
-        UUID firstVoterResultToken = voterDao.logoutFromDatabase(firstVoter.getToken());
-        assertNotNull(firstVoterResultToken);
-        assertEquals(firstVoter.getToken(), firstVoterResultToken);
+        when(voterDao.logoutFromDatabase(firstVoter.getToken())).thenReturn(ResultsOfRequests.SUCCESSFUL_REQUEST);
+        ResultsOfRequests resultOfLogout = voterDao.logoutFromDatabase(firstVoter.getToken());
+        assertNotNull(resultOfLogout);
+        assertEquals(ResultsOfRequests.SUCCESSFUL_REQUEST, resultOfLogout);
         verify(voterDao).logoutFromDatabase(firstVoter.getToken());
     }
 

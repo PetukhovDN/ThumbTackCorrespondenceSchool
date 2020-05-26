@@ -3,6 +3,7 @@ package net.thumbtack.school.elections.daoimpl;
 import net.thumbtack.school.elections.dao.StartElectionsDao;
 import net.thumbtack.school.elections.database.Database;
 import net.thumbtack.school.elections.enums.ElectionsStatus;
+import net.thumbtack.school.elections.enums.ResultsOfRequests;
 import net.thumbtack.school.elections.exceptions.ElectionsException;
 import net.thumbtack.school.elections.exceptions.ExceptionErrorCode;
 import net.thumbtack.school.elections.model.Candidate;
@@ -33,7 +34,7 @@ public class StartElectionsDaoImpl implements StartElectionsDao {
      * @throws ElectionsException выбрасывает исключение в случае отсутствия прав для начала голосования (проверка токена).
      */
     @Override
-    public UUID setElectionsStarted(UUID token) throws ElectionsException {
+    public ResultsOfRequests setElectionsStarted(UUID token) throws ElectionsException {
         if (!token.equals(database.getAdminToken())) {
             throw new ElectionsException(ExceptionErrorCode.NOT_ENOUGH_ROOT);
         }
@@ -45,7 +46,7 @@ public class StartElectionsDaoImpl implements StartElectionsDao {
             }
         }
         database.getCandidatesForMajor().put("Against All", 0); //добавялем кандидата против всех
-        return token;
+        return ResultsOfRequests.SUCCESSFUL_REQUEST;
     }
 
     /**
@@ -59,7 +60,7 @@ public class StartElectionsDaoImpl implements StartElectionsDao {
      *                            в случае ненахождения кандидата в базе.
      */
     @Override
-    public UUID voteForCandidate(UUID token, String candidateFullName) throws ElectionsException { //добавить проверку на повторное голосование
+    public ResultsOfRequests voteForCandidate(UUID token, String candidateFullName) throws ElectionsException { //добавить проверку на повторное голосование
         if (!database.getElectionsStatus().equals(ElectionsStatus.ELECTIONS_STARTED)) {
             throw new ElectionsException(ExceptionErrorCode.ELECTIONS_NOT_STARTED);
         }
@@ -68,9 +69,8 @@ public class StartElectionsDaoImpl implements StartElectionsDao {
         }
         if (database.getCandidatesForMajor().containsKey(candidateFullName)) {
             database.getCandidatesForMajor().put(candidateFullName, database.getCandidatesForMajor().get(candidateFullName) + 1); //голосуем за выбранного кандидата
-            return token;
         }
-        throw new ElectionsException(ExceptionErrorCode.EMPTY_CANDIDATE_LIST);
+        return ResultsOfRequests.SUCCESSFUL_REQUEST;
     }
 
     /**

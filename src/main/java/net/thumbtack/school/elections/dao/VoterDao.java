@@ -1,5 +1,6 @@
 package net.thumbtack.school.elections.dao;
 
+import net.thumbtack.school.elections.enums.ResultsOfRequests;
 import net.thumbtack.school.elections.exceptions.ElectionsException;
 import net.thumbtack.school.elections.model.Voter;
 
@@ -11,7 +12,7 @@ public interface VoterDao {
 
     UUID loginToDatabase(String login, String password) throws ElectionsException;
 
-    UUID logoutFromDatabase(UUID token) throws ElectionsException;
+    ResultsOfRequests logoutFromDatabase(UUID token) throws ElectionsException;
 
     List<Voter> getAllVotersFromDatabase(UUID token) throws ElectionsException;
 
