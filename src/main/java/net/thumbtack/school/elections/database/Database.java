@@ -20,6 +20,7 @@ public class Database implements Serializable {
     private Map<String, CandidateProgram> proposalsFromCandidateMap = new HashMap<>();
     private Map<String, Integer> candidatesForMajor = new HashMap<>();
     private Set<UUID> validTokens = new HashSet<>();
+    private Set<Voter> registeredVoters = new HashSet<>();
 
     private ElectionsStatus electionsStatus = ElectionsStatus.ELECTIONS_NOT_STARTED;
 
@@ -53,9 +54,12 @@ public class Database implements Serializable {
         return candidatesForMajor;
     }
 
-
     public Set<UUID> getValidTokens() {
         return validTokens;
+    }
+
+    public Set<Voter> getRegisteredVoters() {
+        return registeredVoters;
     }
 
     public ElectionsStatus getElectionsStatus() {

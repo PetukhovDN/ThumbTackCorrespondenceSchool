@@ -41,11 +41,13 @@ public class VoterDaoImpl implements VoterDao {
         if (database.getElectionsStatus().equals(ElectionsStatus.ELECTIONS_STARTED)) {
             throw new ElectionsException(ExceptionErrorInfo.ELECTIONS_HAVE_BEEN_STARTED);
         }
-        if (database.getVotersMap().containsValue(voter)) { // REVU Это медленная операция.
+        if (database.getRegisteredVoters().contains(voter)) {
             throw new ElectionsException(ExceptionErrorInfo.DUPLICATE_VOTER);
         }
         database.getVotersMap().put(voter.getToken(), voter);
         database.getValidTokens().add(voter.getToken());
+
+        database.getRegisteredVoters().add(voter);
         return voter.getToken();
     }
 
@@ -67,6 +69,7 @@ public class VoterDaoImpl implements VoterDao {
         }
         database.getVotersMap().get(token).setToken(null);
         database.getValidTokens().remove(token);
+        database.getRegisteredVoters().remove(database.getVotersMap().get(token));
 
         if (database.getCandidateMap().containsKey(token)) { //если является кандидатом
             database.getCandidateMap().get(token).setAgreement(false); //отказаться им быть
