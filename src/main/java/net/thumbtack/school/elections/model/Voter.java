@@ -1,6 +1,6 @@
 package net.thumbtack.school.elections.model;
 
-import net.thumbtack.school.elections.dto.request.RegisterVoterDtoRequest;
+import net.thumbtack.school.elections.dto.request.RegisterVoterRequest;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -21,7 +21,7 @@ public class Voter implements Serializable {
     private String password;
     private UUID token;
 
-    public Voter(RegisterVoterDtoRequest registerVoterDtoRequest) {
+    public Voter(RegisterVoterRequest registerVoterDtoRequest) {
         this.firstName = registerVoterDtoRequest.getFirstName();
         this.lastName = registerVoterDtoRequest.getLastName();
         this.fullName = this.firstName + " " + this.lastName;

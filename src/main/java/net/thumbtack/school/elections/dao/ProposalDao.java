@@ -10,9 +10,9 @@ import java.util.UUID;
 public interface ProposalDao {
     UUID makeProposal(Proposal proposal, UUID token) throws ElectionsException;
 
-    UUID addRatingForProposal(String proposal, int rate, UUID token) throws ElectionsException;
+    UUID addRating(String proposal, int rate, UUID token) throws ElectionsException;
 
-    UUID removeRatingFromProposal(String proposal, UUID token) throws ElectionsException;
+    UUID removeRating(String proposal, UUID token) throws ElectionsException;
 
     Map<String, Double> getAllProposalsWithRate(UUID token) throws ElectionsException;
 

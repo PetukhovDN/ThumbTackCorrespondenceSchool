@@ -1,6 +1,6 @@
 package net.thumbtack.school.elections.model;
 
-import net.thumbtack.school.elections.dto.request.MakeProposalDtoRequest;
+import net.thumbtack.school.elections.dto.request.MakeProposalRequest;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -18,7 +18,7 @@ public class Proposal implements Serializable {
     private UUID authorToken;
     private Map<UUID, Integer> rating;
 
-    public Proposal(MakeProposalDtoRequest makeProposalDtoRequest) {
+    public Proposal(MakeProposalRequest makeProposalDtoRequest) {
         this.proposalInfo = makeProposalDtoRequest.getProposal();
         this.authorToken = makeProposalDtoRequest.getToken();
         this.rating = new HashMap<>();

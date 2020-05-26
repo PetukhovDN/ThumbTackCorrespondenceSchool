@@ -3,8 +3,8 @@ package net.thumbtack.school.elections.server;
 import com.google.gson.Gson;
 import net.thumbtack.school.elections.database.Database;
 import net.thumbtack.school.elections.service.CandidateService;
-import net.thumbtack.school.elections.service.ProposalService;
 import net.thumbtack.school.elections.service.ElectionsService;
+import net.thumbtack.school.elections.service.ProposalService;
 import net.thumbtack.school.elections.service.VoterService;
 
 import java.io.*;
@@ -33,7 +33,6 @@ import java.io.*;
 /*
  * TODO:
  *  Дописать документацию.
- *  Добавить кандидата "против всех".
  *  Тесты, тесты...
  */
 
@@ -54,13 +53,13 @@ public class Server implements Serializable {
                         database = (Database) objectInputStream.readObject();
                     }
                 } else {
-                    database = new Database();
+                    database = Database.getInstance();
                 }
             } catch (ClassNotFoundException | IOException e) {
                 e.printStackTrace();
             }
         } else {
-            database = new Database();
+            database = Database.getInstance();
         }
     }
 

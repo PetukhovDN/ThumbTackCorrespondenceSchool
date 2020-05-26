@@ -134,7 +134,7 @@ public class CandidateDaoImpl implements CandidateDao {
      *                            в случае если является автором предложения которое хочет удалить.
      */
     @Override
-    public UUID removeProposalFromCandidateProgram(String proposal, UUID token) throws ElectionsException {
+    public UUID removeProposal(String proposal, UUID token) throws ElectionsException {
         if (database.getElectionsStatus().equals(ElectionsStatus.ELECTIONS_STARTED)) {
             throw new ElectionsException(ExceptionErrorCode.ELECTIONS_HAVE_BEEN_STARTED);
         }

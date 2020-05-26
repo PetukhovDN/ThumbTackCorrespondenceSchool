@@ -18,10 +18,10 @@ public class ProposalService {
 
     public String makeProposal(String requestJsonString) {
         try {
-            MakeProposalDtoRequest makeProposalRequest = gson.fromJson(requestJsonString, MakeProposalDtoRequest.class);
+            MakeProposalRequest makeProposalRequest = gson.fromJson(requestJsonString, MakeProposalRequest.class);
             makeProposalRequest.validate();
             Proposal proposal = new Proposal(makeProposalRequest);
-            MakeProposalDtoResponse makeProposalResponse = new MakeProposalDtoResponse(proposalDao.makeProposal(proposal, makeProposalRequest.getToken()));
+            MakeProposalResponse makeProposalResponse = new MakeProposalResponse(proposalDao.makeProposal(proposal, makeProposalRequest.getToken()));
             return gson.toJson(makeProposalResponse);
         } catch (ElectionsException e) {
             return gson.toJson(e.getErrorCode().getErrorString());
@@ -30,9 +30,9 @@ public class ProposalService {
 
     public String addRatingForProposal(String requestJsonString) {
         try {
-            AddRatingForProposalDtoRequest addRatingRequest = gson.fromJson(requestJsonString, AddRatingForProposalDtoRequest.class);
+            AddRatingRequest addRatingRequest = gson.fromJson(requestJsonString, AddRatingRequest.class);
             addRatingRequest.validate();
-            AddRatingForProposalDtoResponse addRatingResponse = new AddRatingForProposalDtoResponse(proposalDao.addRatingForProposal(addRatingRequest.getProposal(), addRatingRequest.getRating(), addRatingRequest.getToken()));
+            AddRatingResponse addRatingResponse = new AddRatingResponse(proposalDao.addRating(addRatingRequest.getProposal(), addRatingRequest.getRating(), addRatingRequest.getToken()));
             return gson.toJson(addRatingResponse);
         } catch (ElectionsException e) {
             return gson.toJson(e.getErrorCode().getErrorString());
@@ -41,9 +41,9 @@ public class ProposalService {
 
     public String removeRatingFromProposal(String requestJsonString) {
         try {
-            RemoveRatingFromProposalDtoRequest removeRatingRequest = gson.fromJson(requestJsonString, RemoveRatingFromProposalDtoRequest.class);
+            RemoveRatingRequest removeRatingRequest = gson.fromJson(requestJsonString, RemoveRatingRequest.class);
             removeRatingRequest.validate();
-            RemoveRatingFromProposalDtoResponse removeRatingResponse = new RemoveRatingFromProposalDtoResponse(proposalDao.removeRatingFromProposal(removeRatingRequest.getProposal(), removeRatingRequest.getToken()));
+            RemoveRatingResponse removeRatingResponse = new RemoveRatingResponse(proposalDao.removeRating(removeRatingRequest.getProposal(), removeRatingRequest.getToken()));
             return gson.toJson(removeRatingResponse);
         } catch (ElectionsException e) {
             return gson.toJson(e.getErrorCode().getErrorString());
@@ -52,9 +52,9 @@ public class ProposalService {
 
     public String getAllProposalsWithRate(String requestJsonString) {
         try {
-            GetAllProposalsDtoRequest getAllProposalsRequest = gson.fromJson(requestJsonString, GetAllProposalsDtoRequest.class);
+            GetAllProposalsRequest getAllProposalsRequest = gson.fromJson(requestJsonString, GetAllProposalsRequest.class);
             getAllProposalsRequest.validate();
-            GetAllProposalsDtoResponse getAllProposalsResponse = new GetAllProposalsDtoResponse(proposalDao.getAllProposalsWithRate(getAllProposalsRequest.getToken()));
+            GetAllProposalsResponse getAllProposalsResponse = new GetAllProposalsResponse(proposalDao.getAllProposalsWithRate(getAllProposalsRequest.getToken()));
             return gson.toJson(getAllProposalsResponse);
         } catch (ElectionsException e) {
             return gson.toJson(e.getErrorCode().getErrorString());
@@ -63,9 +63,9 @@ public class ProposalService {
 
     public String getAllProposalsFromVoter(String requestJsonString) {
         try {
-            GetAllProposalFromVoterDtoRequest getAllProposalsRequest = gson.fromJson(requestJsonString, GetAllProposalFromVoterDtoRequest.class);
+            GetAllVoterProposalsRequest getAllProposalsRequest = gson.fromJson(requestJsonString, GetAllVoterProposalsRequest.class);
             getAllProposalsRequest.validate();
-            GetAllProposalFromVoterDtoResponse getAllProposalsResponse = new GetAllProposalFromVoterDtoResponse(proposalDao.getAllProposalsFromVoter(getAllProposalsRequest.getToken(), getAllProposalsRequest.getVotersFullNames()));
+            GetAllVoterProposalsResponse getAllProposalsResponse = new GetAllVoterProposalsResponse(proposalDao.getAllProposalsFromVoter(getAllProposalsRequest.getToken(), getAllProposalsRequest.getVotersFullNames()));
             return gson.toJson(getAllProposalsResponse);
         } catch (ElectionsException e) {
             return gson.toJson(e.getErrorCode().getErrorString());

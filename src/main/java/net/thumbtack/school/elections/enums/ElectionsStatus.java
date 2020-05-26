@@ -4,5 +4,5 @@ public enum ElectionsStatus {
     ELECTIONS_STARTED,
     ELECTIONS_ENDED,
     ELECTIONS_PAUSED, //на будущее
-    ELECTIONS_NOT_STARTED;
+    ELECTIONS_NOT_STARTED
 }

@@ -96,18 +96,16 @@ public class VoterDaoImpl implements VoterDao {
             throw new ElectionsException(ExceptionErrorCode.ELECTIONS_HAVE_BEEN_STARTED);
         }
         for (Map.Entry<UUID, Voter> pair : database.getVotersMap().entrySet()) {
-            if (pair.getValue().getLogin().equals(login)) { //проверяет есть ли такой избиратель
-                if (pair.getValue().getPassword().equals(password)) { //проверяет верный ли пароль // REVU pair.getValue() повторяется 6 раз. Вынесите в переменную.
-                    pair.getValue().setToken(UUID.randomUUID()); //назначает новый случайный token для этого избирателя
-                    database.getVotersMap().put(pair.getValue().getToken(), pair.getValue()); //добавить в базу избирателя с новым токеном
-                    database.getValidTokens().add(pair.getValue().getToken()); //добавить токен в список валидных
-                    database.getVotersMap().remove(pair.getKey()); //удалить из базы избирателя со старым невалидным токеном
-                    return pair.getKey();
-                }
-                throw new ElectionsException(ExceptionErrorCode.WRONG_VOTER_PASSWORD); // REVU Различать несущестующий логин и неправильный пароль это небезопасно. Нужно вернуть ошибку о неверной паре логин/пароль.
+            final Voter voter = pair.getValue();
+            if (voter.getLogin().equals(login) && voter.getPassword().equals(password)) { //проверяет есть ли такой избиратель и верный ли пароль
+                voter.setToken(UUID.randomUUID()); //назначает новый случайный token для этого избирателя
+                database.getVotersMap().put(voter.getToken(), voter); //добавить в базу избирателя с новым токеном
+                database.getValidTokens().add(voter.getToken()); //добавить токен в список валидных
+                database.getVotersMap().remove(pair.getKey()); //удалить из базы избирателя со старым невалидным токеном
+                return pair.getKey();
             }
         }
-        throw new ElectionsException(ExceptionErrorCode.NULL_VOTER_LOGIN);
+        throw new ElectionsException(ExceptionErrorCode.WRONG_VOTER_LOGIN);
     }
 
     /**

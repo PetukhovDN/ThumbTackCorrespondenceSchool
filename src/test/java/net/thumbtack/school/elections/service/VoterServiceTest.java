@@ -1,7 +1,7 @@
 package net.thumbtack.school.elections.service;
 
 import net.thumbtack.school.elections.dao.VoterDao;
-import net.thumbtack.school.elections.dto.request.RegisterVoterDtoRequest;
+import net.thumbtack.school.elections.dto.request.RegisterVoterRequest;
 import net.thumbtack.school.elections.exceptions.ElectionsException;
 import net.thumbtack.school.elections.model.Voter;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,9 +30,9 @@ class VoterServiceTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.initMocks(this);
-        firstVoter = new Voter(new RegisterVoterDtoRequest("Bob", "Fisher", "Ivanovich", "Lenina", 40, 277, "bobcherchil122", "1234567qwerty")); // REVU Очень длинные строки
-        secondVoter = new Voter(new RegisterVoterDtoRequest("Tom", "Poker", "Petrovich", "Lenina", 40, 277, "bobcherchil122", "1234567qwerty"));
-        sameAsFirstVoter = new Voter(new RegisterVoterDtoRequest("Bob", "Fisher", "Ivanovich", "Lenina", 40, 277, "bobcherchil122", "1234567qwerty"));
+        firstVoter = new Voter(new RegisterVoterRequest("Bob", "Fisher", "Ivanovich", "Lenina", 40, 277, "bobcherchil122", "1234567qwerty")); // REVU Очень длинные строки
+        secondVoter = new Voter(new RegisterVoterRequest("Tom", "Poker", "Petrovich", "Lenina", 40, 277, "bobcherchil122", "1234567qwerty"));
+        sameAsFirstVoter = new Voter(new RegisterVoterRequest("Bob", "Fisher", "Ivanovich", "Lenina", 40, 277, "bobcherchil122", "1234567qwerty"));
     }
 
     @Test

@@ -14,7 +14,7 @@ public interface CandidateDao {
 
     UUID addProposalToCandidateProgram(String proposal, UUID token) throws ElectionsException;
 
-    UUID removeProposalFromCandidateProgram(String proposal, UUID token) throws ElectionsException;
+    UUID removeProposal(String proposal, UUID token) throws ElectionsException;
 
     Map<Candidate, CandidateProgram> getAllAgreedCandidates(UUID token) throws ElectionsException;
 

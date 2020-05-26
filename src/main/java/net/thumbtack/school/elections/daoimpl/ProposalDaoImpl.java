@@ -67,7 +67,7 @@ public class ProposalDaoImpl implements ProposalDao {
      *                            в случае если автор пытается изменить оценку собственного предложения (что запрещено по условиям).
      */
     @Override
-    public UUID addRatingForProposal(String proposal, int rate, UUID token) throws ElectionsException {
+    public UUID addRating(String proposal, int rate, UUID token) throws ElectionsException {
         if (database.getElectionsStatus().equals(ElectionsStatus.ELECTIONS_STARTED)) {
             throw new ElectionsException(ExceptionErrorCode.ELECTIONS_HAVE_BEEN_STARTED);
         }
@@ -96,7 +96,7 @@ public class ProposalDaoImpl implements ProposalDao {
      *                            в случае если автор пытается изменить оценку собственного предложения (что запрещено по условиям).
      */
     @Override
-    public UUID removeRatingFromProposal(String proposal, UUID token) throws ElectionsException {
+    public UUID removeRating(String proposal, UUID token) throws ElectionsException {
         if (database.getElectionsStatus().equals(ElectionsStatus.ELECTIONS_STARTED)) {
             throw new ElectionsException(ExceptionErrorCode.ELECTIONS_HAVE_BEEN_STARTED);
         }

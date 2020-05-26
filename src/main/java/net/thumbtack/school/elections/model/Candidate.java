@@ -1,6 +1,6 @@
 package net.thumbtack.school.elections.model;
 
-import net.thumbtack.school.elections.dto.request.AddCandidateDtoRequest;
+import net.thumbtack.school.elections.dto.request.AddCandidateRequest;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -15,7 +15,7 @@ public class Candidate implements Serializable {
     private boolean agreement;
     private CandidateProgram candidateProgram;
 
-    public Candidate(AddCandidateDtoRequest candidateDtoRequest) {
+    public Candidate(AddCandidateRequest candidateDtoRequest) {
         this.firstName = candidateDtoRequest.getFirstName();
         this.lastName = candidateDtoRequest.getLastName();
         this.fullName = this.firstName + " " + this.lastName;
