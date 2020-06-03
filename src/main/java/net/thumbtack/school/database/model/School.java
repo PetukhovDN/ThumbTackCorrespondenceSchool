@@ -22,17 +22,11 @@ public class School {
     }
 
     public School(int id, String name, int year) {
-        this.id = id;
-        this.name = name;
-        this.year = year;
-        groups = new ArrayList<>();
+        this(id, name, year, new ArrayList<>());
     }
 
     public School(String name, int year) {
-        this.id = 0;
-        this.name = name;
-        this.year = year;
-        groups = new ArrayList<>();
+        this(0, name, year, new ArrayList<>());
     }
 
     public void addGroup(Group group) {

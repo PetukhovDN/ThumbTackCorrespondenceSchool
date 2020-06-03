@@ -24,19 +24,11 @@ public class Group {
     }
 
     public Group(int id, String name, String room) {
-        this.id = id;
-        this.name = name;
-        this.room = room;
-        this.trainees = new ArrayList<>();
-        this.subjects = new ArrayList<>();
+        this(id, name, room, new ArrayList<>(), new ArrayList<>());
     }
 
     public Group(String name, String room) {
-        this.id = 0;
-        this.name = name;
-        this.room = room;
-        this.trainees = new ArrayList<>();
-        this.subjects = new ArrayList<>();
+        this(0, name, room, new ArrayList<>(), new ArrayList<>());
     }
 
     public void addTrainee(Trainee trainee) {

@@ -16,8 +16,7 @@ public class Subject {
     }
 
     public Subject(String name) {
-        this.id = 0;
-        this.name = name;
+        this(0, name);
     }
 
     public int getId() {

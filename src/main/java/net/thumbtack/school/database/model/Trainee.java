@@ -20,10 +20,7 @@ public class Trainee {
     }
 
     public Trainee(String firstName, String lastName, int rating) {
-        this.id = 0;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.rating = rating;
+        this(0, firstName, lastName, rating);
     }
 
     public int getId() {
