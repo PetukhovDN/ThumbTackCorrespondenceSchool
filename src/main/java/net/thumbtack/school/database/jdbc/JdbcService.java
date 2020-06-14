@@ -15,9 +15,10 @@ import java.util.List;
 public class JdbcService {
 
     public static void insertTrainee(Trainee trainee) throws SQLException {
+        // REVU Указывайте имена колонок. Без них код тяжело читать.
         String insertQuery = "INSERT INTO trainee VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement preparedStatement = JdbcUtils.getConnection().prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS)) {
-            preparedStatement.setNull(1, java.sql.Types.INTEGER);
+            preparedStatement.setNull(1, java.sql.Types.INTEGER); // REVU Импортируйте класс java.sql.Types
             preparedStatement.setString(2, trainee.getFirstName());
             preparedStatement.setString(3, trainee.getLastName());
             preparedStatement.setInt(4, trainee.getRating());
@@ -43,11 +44,12 @@ public class JdbcService {
     }
 
     public static Trainee getTraineeByIdUsingColNames(int traineeId) throws SQLException {
+        // REVU Лучше всегда использовать параметры "?"
         String selectQuery = "SELECT * FROM trainee WHERE id = " + traineeId;
         Trainee trainee = null;
         try (PreparedStatement preparedStatement = JdbcUtils.getConnection().prepareStatement(selectQuery);
              ResultSet resultSet = preparedStatement.executeQuery()) {
-            while (resultSet.next()) {
+            while (resultSet.next()) { // REVU Зачем здесь цикл?
                 trainee = new Trainee(
                         resultSet.getInt("id"),
                         resultSet.getString("firstName"),
@@ -59,6 +61,7 @@ public class JdbcService {
     }
 
     public static Trainee getTraineeByIdUsingColNumbers(int traineeId) throws SQLException {
+        // REVU Результат запроса зависит от порядка колонок в базе данных
         String selectQuery = "SELECT * FROM trainee WHERE id = " + traineeId;
         Trainee trainee = null;
         try (PreparedStatement preparedStatement = JdbcUtils.getConnection().prepareStatement(selectQuery);
@@ -243,6 +246,7 @@ public class JdbcService {
     }
 
     public static School getSchoolByIdWithGroups(int id) throws SQLException {
+        // REVU Будет ли работать, если у школы нет ни одной группы?
         String selectQuery = "SELECT * FROM school JOIN groups ON school_id = school.id WHERE school.id = " + id;
         School school = null;
         Group group;
