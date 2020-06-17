@@ -11,6 +11,7 @@ public class Subject {
     }
 
     public Subject(int id, String name) {
+        super();
         this.id = id;
         this.name = name;
     }
@@ -37,19 +38,15 @@ public class Subject {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof Subject)) {
-            return false;
-        }
+        if (this == o) return true;
+        if (!(o instanceof Subject)) return false;
         Subject subject = (Subject) o;
-        return id == subject.id &&
-                Objects.equals(name, subject.name);
+        return getId() == subject.getId() &&
+                Objects.equals(getName(), subject.getName());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name);
+        return Objects.hash(getId(), getName());
     }
 }

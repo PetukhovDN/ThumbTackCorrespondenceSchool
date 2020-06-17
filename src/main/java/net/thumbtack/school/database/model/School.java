@@ -15,6 +15,7 @@ public class School {
     }
 
     public School(int id, String name, int year, List<Group> groups) {
+        super();
         this.id = id;
         this.name = name;
         this.year = year;
@@ -71,21 +72,17 @@ public class School {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof School)) {
-            return false;
-        }
+        if (this == o) return true;
+        if (!(o instanceof School)) return false;
         School school = (School) o;
-        return id == school.id &&
-                year == school.year &&
-                Objects.equals(name, school.name) &&
-                Objects.equals(groups, school.groups);
+        return getId() == school.getId() &&
+                getYear() == school.getYear() &&
+                Objects.equals(getName(), school.getName()) &&
+                Objects.equals(getGroups(), school.getGroups());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, year, groups);
+        return Objects.hash(getId(), getName(), getYear(), getGroups());
     }
 }

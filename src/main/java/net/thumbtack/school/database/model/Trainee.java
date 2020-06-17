@@ -13,6 +13,7 @@ public class Trainee {
     }
 
     public Trainee(int id, String firstName, String lastName, int rating) {
+        super();
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -57,21 +58,17 @@ public class Trainee {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof Trainee)) {
-            return false;
-        }
+        if (this == o) return true;
+        if (!(o instanceof Trainee)) return false;
         Trainee trainee = (Trainee) o;
-        return id == trainee.id &&
-                rating == trainee.rating &&
-                Objects.equals(firstName, trainee.firstName) &&
-                Objects.equals(lastName, trainee.lastName);
+        return getId() == trainee.getId() &&
+                getRating() == trainee.getRating() &&
+                Objects.equals(getFirstName(), trainee.getFirstName()) &&
+                Objects.equals(getLastName(), trainee.getLastName());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, lastName, rating);
+        return Objects.hash(getId(), getFirstName(), getLastName(), getRating());
     }
 }
