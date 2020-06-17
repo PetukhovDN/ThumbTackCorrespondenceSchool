@@ -17,7 +17,7 @@ import static java.sql.Types.*;
 public class JdbcService {
 
     public static void insertTrainee(Trainee trainee) throws SQLException {
-        String insertQuery = "INSERT INTO trainee VALUES (?, ?, ?, ?, ?)";
+        String insertQuery = "INSERT INTO trainee (id, firstName, lastName, rating, group_id) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement preparedStatement = JdbcUtils.getConnection().prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setNull(1, INTEGER);
             preparedStatement.setString(2, trainee.getFirstName());
@@ -34,11 +34,7 @@ public class JdbcService {
     }
 
     public static void updateTrainee(Trainee trainee) throws SQLException {
-        String updateQuery = "UPDATE trainee SET " +
-                "firstName = ? , " +
-                "lastName = ?, " +
-                "rating = ? " +
-                "WHERE id = ?";
+        String updateQuery = "UPDATE trainee SET firstName = ? , lastName = ?, rating = ? WHERE id = ?";
         try (PreparedStatement preparedStatement = JdbcUtils.getConnection().prepareStatement(updateQuery)) {
             preparedStatement.setString(1, trainee.getFirstName());
             preparedStatement.setString(2, trainee.getLastName());
@@ -119,8 +115,9 @@ public class JdbcService {
     }
 
     public static void deleteTrainee(Trainee trainee) throws SQLException {
-        String deleteQuery = "DELETE FROM trainee WHERE id = " + trainee.getId();
+        String deleteQuery = "DELETE FROM trainee WHERE id = ?";
         try (PreparedStatement preparedStatement = JdbcUtils.getConnection().prepareStatement(deleteQuery)) {
+            preparedStatement.setInt(1, trainee.getId());
             preparedStatement.executeUpdate();
         }
     }
@@ -133,7 +130,7 @@ public class JdbcService {
     }
 
     public static void insertSubject(Subject subject) throws SQLException {
-        String insertQuery = "INSERT INTO subject VALUES (?, ?)";
+        String insertQuery = "INSERT INTO subject (id, name) VALUES (?, ?)";
         try (PreparedStatement preparedStatement = JdbcUtils.getConnection().prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setNull(1, INTEGER);
             preparedStatement.setString(2, subject.getName());
@@ -184,7 +181,7 @@ public class JdbcService {
     }
 
     public static void insertSchool(School school) throws SQLException {
-        String insertQuery = "INSERT INTO school VALUES (?, ?, ?)";
+        String insertQuery = "INSERT INTO school (id, name, year) VALUES (?, ?, ?)";
         try (PreparedStatement preparedStatement = JdbcUtils.getConnection().prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setNull(1, INTEGER);
             preparedStatement.setString(2, school.getName());
@@ -238,7 +235,7 @@ public class JdbcService {
     }
 
     public static void insertGroup(School school, Group group) throws SQLException {
-        String insertQuery = "INSERT INTO groups VALUES (?, ?, ?, ?)";
+        String insertQuery = "INSERT INTO groups (id, name, room, school_id) VALUES (?, ?, ?, ?)";
         try (PreparedStatement preparedStatement = JdbcUtils.getConnection().prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setNull(1, INTEGER);
             preparedStatement.setString(2, group.getName());
@@ -254,18 +251,13 @@ public class JdbcService {
     }
 
     public static School getSchoolByIdWithGroups(int id) throws SQLException {
-        String selectQuery = "SELECT " +
-                "school.id, " +
-                "school.name, " +
-                "school.year, " +
-                "groups.id, " +
-                "groups.name, " +
-                "groups.room " +
-                "FROM school LEFT JOIN groups ON school_id = school.id WHERE school.id = " + id;
+        String selectQuery = "SELECT school.id, school.name, school.year, groups.id, groups.name, groups.room "
+                + "FROM school LEFT JOIN groups ON school_id = school.id WHERE school.id = ?";
         School school = null;
         Group group;
-        try (PreparedStatement preparedStatement = JdbcUtils.getConnection().prepareStatement(selectQuery);
-             ResultSet resultSet = preparedStatement.executeQuery()) {
+        try (PreparedStatement preparedStatement = JdbcUtils.getConnection().prepareStatement(selectQuery)) {
+            preparedStatement.setInt(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 if (school == null) {
                     school = new School(
@@ -284,14 +276,8 @@ public class JdbcService {
     }
 
     public static List<School> getSchoolsWithGroups() throws SQLException {
-        String selectQuery = "SELECT " +
-                "school.id, " +
-                "school.name, " +
-                "school.year, " +
-                "groups.id, " +
-                "groups.name, " +
-                "groups.room " +
-                "FROM school LEFT JOIN groups ON school_id = school.id";
+        String selectQuery = "SELECT school.id, school.name, school.year, groups.id, groups.name, groups.room "
+                + "FROM school LEFT JOIN groups ON school_id = school.id";
         List<School> schools = new ArrayList<>();
         try (PreparedStatement preparedStatement = JdbcUtils.getConnection().prepareStatement(selectQuery);
              ResultSet resultSet = preparedStatement.executeQuery()) {
