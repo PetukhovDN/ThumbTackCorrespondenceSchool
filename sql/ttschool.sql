@@ -14,6 +14,7 @@ CREATE TABLE groups (
     name VARCHAR(50) NOT NULL,
     room VARCHAR(50),
     school_id INT(11) NOT NULL,
+    KEY name (name),
     KEY room (room),
     FOREIGN KEY (school_id) REFERENCES school (id) ON UPDATE CASCADE ON DELETE CASCADE)
     ENGINE=INNODB DEFAULT CHARSET=utf8;
@@ -39,7 +40,7 @@ CREATE TABLE subject_group (
     subject_id INT(11) NOT NULL,
     PRIMARY KEY (id),
     UNIQUE KEY subject_group (group_id,subject_id),
-    KEY subject_id (subject_id),
+    KEY group_id (group_id),
     FOREIGN KEY (group_id) REFERENCES groups (id) ON DELETE CASCADE,
     FOREIGN KEY (subject_id) REFERENCES subject (id) ON DELETE CASCADE)
     ENGINE=INNODB DEFAULT CHARSET=utf8;
